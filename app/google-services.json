@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "967984404721",
+    "project_id": "sese-coffee",
+    "storage_bucket": "sese-coffee.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:967984404721:android:322fdcb32b1c7a52aa7150",
+        "android_client_info": {
+          "package_name": "com.example.sesecoffee"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBSsw1E4RKifR3zWsCszsLAWPSJuqipNr0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

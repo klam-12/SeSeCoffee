@@ -1,4 +1,4 @@
-package com.example.sesecoffee
+package com.example.sesecoffee.model
 
 import java.util.Date
 import java.util.UUID
