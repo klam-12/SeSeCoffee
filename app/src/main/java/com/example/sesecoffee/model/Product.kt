@@ -3,18 +3,19 @@ package com.example.sesecoffee.model
 import java.util.Date
 import java.util.UUID
 
-class Product(
-    val id:String = UUID.randomUUID().toString(),
+data class Product(
+    val id:String,
     var name:String,
-    var image:String,
+    var imageUrl:Int,
+    var price : Int,
     var description:String,
     var category: String,
     val createdAt: Date,
     var updatedAt: Date,
     ) {
     constructor() :
-            this(UUID.randomUUID().toString(),"","","","",Date(),Date()) {}
+            this(UUID.randomUUID().toString(),"",0,10000,"","",Date(),Date()) {}
 
     constructor(proName:String) :
-            this(UUID.randomUUID().toString(),proName,"","","",Date(),Date()) {}
+            this(UUID.randomUUID().toString(),proName,0,10000,"","",Date(),Date()) {}
 }

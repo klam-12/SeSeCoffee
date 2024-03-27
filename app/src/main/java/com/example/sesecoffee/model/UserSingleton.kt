@@ -1,0 +1,27 @@
+package com.example.sesecoffee.model
+
+import android.app.Application
+import java.util.Date
+
+class UserSingleton : Application() {
+    val id:String? = null
+    var fullName:String? = null
+    var email:String? = null
+    var password:String? = null
+    var address: String? = null
+    var isAdmin : Int? = null
+    val createdAt: Date? = null
+    var updatedAt: Date? = null
+
+    companion object{
+        var instance : UserSingleton? = null
+            get(){
+                if(field == null){
+                    field = UserSingleton()
+                }
+                return field
+            }
+
+            private set
+    }
+}
