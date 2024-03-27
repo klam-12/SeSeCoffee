@@ -10,7 +10,7 @@
     tools:context=".ProfileActivity">
 
     <TextView
-        android:id="@+id/main_student_title"
+        android:id="@+id/profile_text_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
@@ -33,7 +33,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.093"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/main_student_title" />
+        app:layout_constraintTop_toBottomOf="@+id/profile_text_title" />
 
     <EditText
         android:id="@+id/profile_input_fullName"

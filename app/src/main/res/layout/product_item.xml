@@ -11,7 +11,7 @@
     </data>
 
     <androidx.cardview.widget.CardView
-        android:layout_width="wrap_content"
+        android:layout_width="180dp"
         android:layout_height="wrap_content"
         android:background="@color/white"
         app:cardCornerRadius="10dp"
@@ -25,31 +25,32 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:orientation="vertical"
-            android:padding="20dp">
+            android:padding="10dp">
 
             <ImageView
-                android:background="@{product.imageUrl}"
                 android:id="@+id/proImg"
                 android:layout_width="165dp"
                 android:layout_height="165dp"
                 android:layout_marginTop="0dp"
+                android:adjustViewBounds="true"
+                android:scaleType="fitXY"
                 app:srcCompat="@drawable/latte" />
 
             <TextView
                 android:id="@+id/proName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="8dp"
                 android:text="@{product.name}"
-                android:textSize="16sp"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/proPrice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="@{product.price}"
+                android:layout_marginTop="4dp"
+                android:text="@{product.price.toString()}"
                 android:textSize="16sp" />
 
         </LinearLayout>

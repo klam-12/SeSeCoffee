@@ -77,9 +77,20 @@
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
+            <ProgressBar
+                android:id="@+id/homeProgressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="invisible"
+                android:layout_gravity="center"
+                android:layout_centerInParent="true"
+                android:indeterminate="true"
+                android:progressDrawable="@drawable/progressbar_bg"
+                android:progress="0" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvListProducts"
-                android:layout_marginHorizontal="20dp"
+                android:layout_marginHorizontal="10dp"
 
                 android:layout_marginTop="40dp"
                 android:layout_width="match_parent"
@@ -118,6 +129,8 @@
         app:layout_constraintTop_toTopOf="@+id/cartButton"
         app:srcCompat="@drawable/ic_person"
         tools:ignore="SpeakableTextPresentCheck"/>
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

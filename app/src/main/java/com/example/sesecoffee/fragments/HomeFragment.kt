@@ -4,17 +4,25 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.sesecoffee.ProfileActivity
 import com.example.sesecoffee.R
 import com.example.sesecoffee.adapters.ProductAdapter
 import com.example.sesecoffee.databinding.FragmentHomeBinding
 import com.example.sesecoffee.model.Product
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.CollectionReference
@@ -53,14 +61,16 @@ class HomeFragment : Fragment(R.layout.fragment_home){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        binding.homeProgressBar.visibility = View.VISIBLE
+        binding.homeProgressBar.progress
         // Products arrayList
         productList = arrayListOf<Product>()
         binding.rvListProducts.setHasFixedSize(true)
-        binding.rvListProducts.layoutManager = LinearLayoutManager(binding.root.context)
-
+        binding.rvListProducts.layoutManager = GridLayoutManager(
+            binding.root.context,2
+        )
         setUp()
-
+        binding.homeProgressBar.visibility = View.INVISIBLE
     }
 
     override fun onStart() {
@@ -77,14 +87,14 @@ class HomeFragment : Fragment(R.layout.fragment_home){
         try {
             collectionReference.get()
                 .addOnSuccessListener {
-
+                    productList.clear()
                     if (!it.isEmpty) {
                         it.forEach {
                             // convert snapshots to product
                             var product = it.toObject(Product::class.java)
-
                             productList.add(product)
                         }
+
                         productAdapter = ProductAdapter(binding.root.context, productList)
                         binding.rvListProducts.adapter = productAdapter
                         productAdapter.notifyDataSetChanged()

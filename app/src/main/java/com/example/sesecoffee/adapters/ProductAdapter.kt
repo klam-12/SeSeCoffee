@@ -1,10 +1,12 @@
 package com.example.sesecoffee.adapters
 
 import android.content.Context
+import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.sesecoffee.databinding.ProductItemBinding
 import com.example.sesecoffee.model.Product
 
@@ -15,13 +17,15 @@ class ProductAdapter(val context: Context ,val itemList: List<Product>)
         inner class ProductViewHolder(var binding: ProductItemBinding) : RecyclerView.ViewHolder(binding.root){
             fun bind(product: Product){
                 binding.product = product
+                binding.apply {
+                    Glide.with(itemView).load(product.imageUrl).into(proImg)
+                }
             }
         }
         override fun onCreateViewHolder(
             parent: ViewGroup,
             viewType: Int
         ): ProductViewHolder {
-//                val view : View = LayoutInflater.from(context).inflate(R.layout.product_item,parent,false)
             binding = ProductItemBinding.inflate(LayoutInflater.from(parent.context),
                 parent,
                 false)
@@ -29,16 +33,14 @@ class ProductAdapter(val context: Context ,val itemList: List<Product>)
         }
 
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
-//            val product : Product = itemList.get(position)
-//            val imageUrl : String = ""
-
             val product = itemList[position]
             holder.bind(product)
-        }
 
-        override fun getItemCount(): Int {
-            return itemList.size
-        }
+    }
+
+    override fun getItemCount(): Int {
+        return itemList.size
+    }
 
 
 }
