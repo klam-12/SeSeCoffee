@@ -13,6 +13,18 @@
         android:theme="@style/Theme.SeSeCoffee"
         tools:targetApi="31">
         <activity
+            android:name=".CartOrderActivity"
+            android:exported="false" />
+        <activity
+            android:name=".PaymentActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ProductOrderActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SuccessOrderActivity"
+            android:exported="false" />
+        <activity
             android:name=".HomeActivity"
             android:exported="false" />
         <activity
