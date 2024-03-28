@@ -1,20 +1,22 @@
 package com.example.sesecoffee.model
 
+import android.net.Uri
+import com.google.firebase.Timestamp
 import java.util.Date
 import java.util.UUID
 
-class Product(
-    val id:String = UUID.randomUUID().toString(),
-    var name:String,
-    var image:String,
-    var description:String,
-    var category: String,
-    val createdAt: Date,
-    var updatedAt: Date,
+data class Product(
+//    val id:String,
+    var name:String? = null,
+    var price : Int? = null,
+    var imageUrl: String? = null,
+    var description:String? = null,
+    val createdAt: Timestamp? = null,
     ) {
-    constructor() :
-            this(UUID.randomUUID().toString(),"","","","",Date(),Date()) {}
+//    constructor() :
+//            this(UUID.randomUUID().toString(),"",0,10000,"","",Date(),Date()) {}
+//
+//    constructor(proName:String) :
+//            this(UUID.randomUUID().toString(),proName,0,10000,"","",Date(),Date()) {}
 
-    constructor(proName:String) :
-            this(UUID.randomUUID().toString(),proName,"","","",Date(),Date()) {}
 }
