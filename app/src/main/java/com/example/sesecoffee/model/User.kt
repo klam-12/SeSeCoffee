@@ -3,7 +3,7 @@ package com.example.sesecoffee.model
 import java.util.Date
 import java.util.UUID
 
-class User(
+data class User(
     val id:String,
     var fullName:String,
     var email:String,

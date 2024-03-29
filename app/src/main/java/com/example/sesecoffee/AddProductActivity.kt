@@ -1,11 +1,9 @@
 package com.example.sesecoffee
 
 import android.content.Intent
-import android.graphics.Bitmap
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.MediaStore
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
@@ -16,6 +14,7 @@ import com.example.sesecoffee.databinding.ActivityAddProductBinding
 import com.example.sesecoffee.databinding.ActivityMainBinding
 import com.example.sesecoffee.model.Product
 import com.example.sesecoffee.model.UserSingleton
+import com.example.sesecoffee.utils.Constant.PRODUCT_COLLECTION
 import com.google.firebase.Firebase
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
@@ -25,7 +24,6 @@ import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import java.io.ByteArrayOutputStream
 import java.util.Date
 
 class AddProductActivity : AppCompatActivity() {
@@ -43,7 +41,7 @@ class AddProductActivity : AppCompatActivity() {
     var db : FirebaseFirestore = FirebaseFirestore.getInstance()
     lateinit var storageReference: StorageReference
 
-    var collectionReference : CollectionReference = db.collection("Products")
+    var collectionReference : CollectionReference = db.collection(PRODUCT_COLLECTION)
     private var imageUri: Uri? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -89,7 +87,6 @@ class AddProductActivity : AppCompatActivity() {
     private fun addNewProduct() {
         var proName = binding.productInputName.text.toString().trim()
         var proPrice = binding.productInputPrice.text.toString().trim()
-        var proDescription = binding.productInputDescription.toString().trim()
 
         binding.progressBarNewPro.visibility = View.VISIBLE
 
@@ -110,7 +107,7 @@ class AddProductActivity : AppCompatActivity() {
                             var proPriceInt = proPrice.toInt()
 
                             // Creating the object of product
-                            var product : Product = Product(proName,proPriceInt,imageUriString,proDescription,timeStamp)
+                            var product : Product = Product(proName,proPriceInt,imageUriString,timeStamp)
                             collectionReference.add(product)
                                 .addOnSuccessListener {
                                     binding.progressBarNewPro.visibility = View.INVISIBLE

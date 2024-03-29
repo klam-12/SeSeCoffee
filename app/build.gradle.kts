@@ -5,6 +5,10 @@ plugins {
     id("kotlin-kapt")
     id("androidx.navigation.safeargs.kotlin")
     id("kotlin-parcelize")
+
+//    kotlin("kapt")
+//    id("com.google.dagger.hilt.android")
+    id("dagger.hilt.android.plugin")
 }
 
 android {
@@ -58,7 +62,7 @@ dependencies {
     implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
 
     // Corourtines
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 
 
     // Import the Firebase BoM
@@ -74,6 +78,11 @@ dependencies {
     // Glide library
     implementation("com.github.bumptech.glide:glide:4.12.0")
     annotationProcessor("com.github.bumptech.glide:compiler:4.12.0")
+
+    // Dagger Hilt
+    implementation("com.google.dagger:hilt-android:2.51")
+//    kapt("com.google.dagger:hilt-android-compiler:2.44")
+    annotationProcessor("com.google.dagger:hilt-compiler:2.51")
 
     //RecyclerView Decorator
     implementation("it.xabaras.android:recyclerview-swipedecorator:1.4")
