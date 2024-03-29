@@ -2,32 +2,26 @@ package com.example.sesecoffee.fragments
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.SearchView
-import android.widget.TextView
 import android.widget.Toast
-import androidx.core.view.MenuHost
-import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.sesecoffee.MainActivity
 import com.example.sesecoffee.ProfileActivity
 import com.example.sesecoffee.R
 import com.example.sesecoffee.adapters.ProductAdapter
 import com.example.sesecoffee.databinding.FragmentHomeBinding
 import com.example.sesecoffee.model.Product
-import com.google.firebase.Timestamp
+import com.example.sesecoffee.utils.Resource
+import com.example.sesecoffee.viewModel.ProductsViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.storage.StorageReference
+import kotlinx.coroutines.flow.collectLatest
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -44,10 +38,9 @@ class HomeFragment : Fragment(R.layout.fragment_home){
     var db = FirebaseFirestore.getInstance()
     var collectionReference: CollectionReference = db.collection("Products")
 
-    lateinit var storageReference: StorageReference
     lateinit var productList : MutableList<Product>
     lateinit var productAdapter: ProductAdapter
-    lateinit var noProductTextView : TextView
+    lateinit var productsViewModel: ProductsViewModel
 
 
     override fun onCreateView(
@@ -61,55 +54,51 @@ class HomeFragment : Fragment(R.layout.fragment_home){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.homeProgressBar.visibility = View.VISIBLE
-        binding.homeProgressBar.progress
-        // Products arrayList
-        productList = arrayListOf<Product>()
-        binding.rvListProducts.setHasFixedSize(true)
-        binding.rvListProducts.layoutManager = GridLayoutManager(
-            binding.root.context,2
-        )
-        setUp()
-        binding.homeProgressBar.visibility = View.INVISIBLE
-    }
+        productsViewModel = (activity as MainActivity).productsViewModel
 
-    override fun onStart() {
-        super.onStart()
         setUpRecyclerViewProducts()
+        lifecycleScope.launchWhenStarted {
+            productsViewModel.products.collectLatest {
+                when(it){
+                    is Resource.Loading -> {
+                        showLoading()
+                    }
+                    is Resource.Success -> {
+                        productAdapter.differ.submitList(it.data)
+                        hideLoading()
+                    }
+                    is Resource.Error -> {
+                        hideLoading()
+                        Toast.makeText(requireContext(),it.message,Toast.LENGTH_SHORT).show()
+                    }
+                    else -> Unit
+                }
+            }
+        }
+
+        setUpButtons()
     }
 
-    private fun setUp(){
+    private fun hideLoading() {
+        binding.homeProgressBar.visibility = View.GONE
+
+    }
+
+    private fun showLoading() {
+        binding.homeProgressBar.visibility = View.VISIBLE
+    }
+
+    private fun setUpButtons(){
         navigateToCart()
         navigateToProfile()
     }
     private fun setUpRecyclerViewProducts(){
         // Set up the recyclerview products
-        try {
-            collectionReference.get()
-                .addOnSuccessListener {
-                    productList.clear()
-                    if (!it.isEmpty) {
-                        it.forEach {
-                            // convert snapshots to product
-                            var product = it.toObject(Product::class.java)
-                            productList.add(product)
-                        }
-
-                        productAdapter = ProductAdapter(binding.root.context, productList)
-                        binding.rvListProducts.adapter = productAdapter
-                        productAdapter.notifyDataSetChanged()
-                    } else {
-                        binding.tvNoProduct.visibility = View.VISIBLE
-                    }
-                }.addOnFailureListener() {
-                    Toast.makeText(
-                        binding.root.context,
-                        "Errors happen when loading the database",
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
-        }catch (t:Throwable){
-            Log.i("Err", "$t")
+        productAdapter = ProductAdapter()
+        binding.rvListProducts.apply {
+            setHasFixedSize(true)
+            layoutManager = GridLayoutManager(requireContext(),2)
+            adapter = productAdapter
         }
     }
 

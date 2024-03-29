@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.databinding.DataBindingUtil
 import com.example.sesecoffee.databinding.ActivityProfileBinding
+import dagger.hilt.android.AndroidEntryPoint
+
 
 class ProfileActivity : AppCompatActivity() {
 
