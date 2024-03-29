@@ -26,7 +26,8 @@ class ProductAdapter(val context: Context ,val itemList: List<Product>)
             parent: ViewGroup,
             viewType: Int
         ): ProductViewHolder {
-            binding = ProductItemBinding.inflate(LayoutInflater.from(parent.context),
+            binding = ProductItemBinding.inflate(
+                LayoutInflater.from(parent.context),
                 parent,
                 false)
             return ProductViewHolder(binding)
@@ -41,6 +42,4 @@ class ProductAdapter(val context: Context ,val itemList: List<Product>)
     override fun getItemCount(): Int {
         return itemList.size
     }
-
-
 }

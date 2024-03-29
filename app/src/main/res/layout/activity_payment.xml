@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-        <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-           xmlns:app="http://schemas.android.com/apk/res-auto"
-           xmlns:tools="http://schemas.android.com/tools"
-           android:layout_width="match_parent"
-           android:layout_height="match_parent"
-           tools:context=".PaymentActivity">
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PaymentActivity">
 
-           <ImageButton
-               android:id="@+id/paymentBackBtn"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:layout_marginLeft="24dp"
-               android:layout_marginTop="28dp"
-               android:backgroundTint="#00FFFFFF"
-               app:layout_constraintEnd_toEndOf="parent"
-               app:layout_constraintHorizontal_bias="0.0"
-               app:layout_constraintStart_toStartOf="parent"
-               app:layout_constraintTop_toTopOf="parent"
-               app:srcCompat="@drawable/backbtn" />
+    <ImageButton
+        android:id="@+id/paymentBackBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="28dp"
+        android:backgroundTint="#00FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/backbtn" />
 
     <TextView
         android:id="@+id/paymentLabel"
@@ -38,10 +38,10 @@
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginBottom="56dp"
         android:scaleType="centerCrop"
+        app:layout_constraintBottom_toTopOf="@+id/paymentMethodChoice"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/paymentLabel"
         app:shapeAppearanceOverlay="@style/circle"
         app:srcCompat="@drawable/order" />
 
@@ -50,13 +50,13 @@
         android:layout_width="220dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="144dp"
         android:layout_marginEnd="56dp"
+        android:layout_marginBottom="60dp"
         android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/paymentMethodChoice"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/paymentAvatar"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintStart_toEndOf="@+id/paymentAvatar">
 
         <TextView
             android:id="@+id/paymentName"
@@ -105,8 +105,8 @@
             android:drawableRight="@drawable/cash"
             android:padding="16dp"
             android:text="Cash"
-            android:textStyle="bold"
-            android:textSize="18dp" />
+            android:textSize="18dp"
+            android:textStyle="bold" />
 
         <RadioButton
             android:id="@+id/creditCard"
@@ -118,8 +118,8 @@
             android:drawableRight="@drawable/credit_card"
             android:padding="16dp"
             android:text="Credit Card"
-            android:textStyle="bold"
-            android:textSize="18dp" />
+            android:textSize="18dp"
+            android:textStyle="bold" />
 
         <RadioButton
             android:id="@+id/eWallet"
@@ -130,23 +130,10 @@
             android:drawableRight="@drawable/momo"
             android:padding="16dp"
             android:text="E-Wallet"
-            android:textStyle="bold"
-            android:textSize="18dp" />
+            android:textSize="18dp"
+            android:textStyle="bold" />
 
     </RadioGroup>
-
-    <TextView
-        android:id="@+id/paymentTotalPrice"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="44dp"
-        android:layout_marginTop="100dp"
-        android:text="Total Price"
-        android:textColor="#40000000"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/paymentMethodChoice" />
 
     <TextView
         android:id="@+id/paymentPrice"
@@ -178,6 +165,20 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/paymentMethodChoice"
-        app:layout_constraintVertical_bias="0.888" />
+        app:layout_constraintVertical_bias="0.813" />
+
+    <TextView
+        android:id="@+id/paymentTotalPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="44dp"
+        android:text="Total Price"
+        android:textColor="#40000000"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.855" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

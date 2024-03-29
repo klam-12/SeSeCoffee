@@ -47,13 +47,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="44dp"
-        android:layout_marginTop="28dp"
         android:text="Total Price"
         android:textColor="#40000000"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.014"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cartItemList" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.858" />
 
     <TextView
         android:id="@+id/cartPrice"
@@ -74,7 +75,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="44dp"
-        android:layout_marginBottom="44dp"
+        android:layout_marginBottom="72dp"
         android:backgroundTint="@color/brown"
         android:drawableLeft="@drawable/cart"
         android:drawableTint="@color/white"
@@ -85,7 +86,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/cartPrice"
-        app:layout_constraintTop_toBottomOf="@+id/cartItemList"
-        app:layout_constraintVertical_bias="0.708" />
+        app:layout_constraintStart_toEndOf="@+id/cartPrice" />
 </androidx.constraintlayout.widget.ConstraintLayout>

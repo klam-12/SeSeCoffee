@@ -29,13 +29,13 @@ class MainActivity : AppCompatActivity() {
 //        val product = Product("Example Product")
 //        Log.i("hdLog","Product ID: ${product.id}")
 
-        findViewById<Button>(R.id.order).setOnClickListener {
-            val intent = Intent(
-                applicationContext,
-                ProductOrderActivity::class.java
-            )
-            startActivity(intent)
-        }
+//        findViewById<Button>(R.id.order).setOnClickListener {
+//            val intent = Intent(
+//                applicationContext,
+//                ProductOrderActivity::class.java
+//            )
+//            startActivity(intent)
+//        }
 
         binding.bottomNavigationView.setOnItemSelectedListener {
             when(it.itemId){

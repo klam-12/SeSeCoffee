@@ -1,4 +1,6 @@
 package com.example.sesecoffee.enums
 
-class HotCold {
+enum class HotCold(val value: String) {
+    HOT("Hot"),
+    COLD("Cold")
 }

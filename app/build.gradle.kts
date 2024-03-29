@@ -75,7 +75,8 @@ dependencies {
     implementation("com.github.bumptech.glide:glide:4.12.0")
     annotationProcessor("com.github.bumptech.glide:compiler:4.12.0")
 
-
+    //RecyclerView Decorator
+    implementation("it.xabaras.android:recyclerview-swipedecorator:1.4")
 
     // Add the dependencies for any other desired Firebase products
     // https://firebase.google.com/docs/android/setup#available-libraries
