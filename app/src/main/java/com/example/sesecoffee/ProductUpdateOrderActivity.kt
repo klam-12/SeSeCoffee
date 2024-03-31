@@ -1,9 +1,11 @@
 package com.example.sesecoffee
 
 import android.content.Intent
+import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -11,7 +13,7 @@ import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.TextView
 import android.widget.Toast
-import com.bumptech.glide.Glide
+import com.example.sesecoffee.adapters.ProductAdapter
 import com.example.sesecoffee.enums.HotCold
 import com.example.sesecoffee.enums.Milk
 import com.example.sesecoffee.enums.Size
@@ -19,11 +21,12 @@ import com.example.sesecoffee.model.FirebaseSingleton
 import com.example.sesecoffee.model.OrderItem
 import com.example.sesecoffee.model.Product
 import com.example.sesecoffee.viewModel.OrderItemsViewModel
+import com.example.sesecoffee.viewModel.ProductsViewModel
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
-import com.example.sesecoffee.utils.Constant.PRODUCT_COLLECTION
+import com.google.firebase.storage.FirebaseStorage
 
-class ProductOrderActivity : AppCompatActivity() {
+class ProductUpdateOrderActivity : AppCompatActivity() {
     private var quantity = 1
     private var price = 0
     private var sizeFee = 0
@@ -31,15 +34,21 @@ class ProductOrderActivity : AppCompatActivity() {
 
     private lateinit var product : Product
     var db = FirebaseFirestore.getInstance()
-    var collectionReference: CollectionReference = db.collection(PRODUCT_COLLECTION)
+    var collectionReference: CollectionReference = db.collection("Products")
 
     val firebaseSingleton = FirebaseSingleton.getInstance()
     lateinit var viewModel: OrderItemsViewModel
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_product_order)
         viewModel = OrderItemsViewModel(firebaseSingleton, application)
+
+        val intent = intent
+        val message = intent.getStringExtra("Order")
+        val tokens = message?.split(" ")
+        for (token in tokens!!) {
+            Log.i("Token", token)
+        }
 
         val productImage = findViewById<ImageView>(R.id.orderImageView)
         val productNameTextView = findViewById<TextView>(R.id.orderItem)
@@ -57,32 +66,55 @@ class ProductOrderActivity : AppCompatActivity() {
         val smallMilkRadio = findViewById<RadioButton>(R.id.smallMilk)
         val largeMilkRadio = findViewById<RadioButton>(R.id.largeMilk)
 
-        try {
-            collectionReference
-                .whereEqualTo("name", "Test 1")
-                .get()
-                .addOnSuccessListener {
-                    if (!it.isEmpty) {
-                        it.forEach {
-                            product = it.toObject(Product::class.java)
+//        try {
+//            collectionReference
+//                .whereEqualTo("name", tokens?.get(0))
+//                .get()
+//                .addOnSuccessListener {
+//                    if (!it.isEmpty) {
+//                        it.forEach {
+//                            product = it.toObject(Product::class.java)
+//                            Glide.with(this).load(product.imageUrl).into(productImage)
+//                        }
+//                    }
+//                }.addOnFailureListener() {
+//                    Toast.makeText(
+//                        this,
+//                        "Errors happen when loading the database",
+//                        Toast.LENGTH_LONG
+//                    ).show()
+//                }
+//        }catch (t:Throwable){
+//            Log.i("Err", "$t")
+//        }
 
-                            productNameTextView.setText(product.name)
-                            Glide.with(this).load(product.imageUrl).into(productImage)
-                            price = product.price!!
-                            quantityTextView.setText("$quantity")
-                            priceTextView.setText("${price * quantity}VNĐ")
-                        }
-                    }
-                }.addOnFailureListener() {
-                    Toast.makeText(
-                        this,
-                        "Errors happen when loading the database",
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
-        }catch (t:Throwable){
-            Log.i("Err", "$t")
-        }
+//        productNameTextView.setText(tokens?.get(0) ?: "Product Name")
+//        price = tokens.get(5).toInt()
+//        quantity = tokens.get(4).toInt()
+//        quantityTextView.setText("$quantity")
+//        priceTextView.setText("${price * quantity}VNĐ")
+
+//        if(tokens?.get(1) == "Hot"){
+//            hotColdRadioGroup.check(R.id.hot)
+//        } else {
+//            hotColdRadioGroup.check(R.id.cold)
+//        }
+//
+//        if(tokens?.get(2) == "S"){
+//            sizeRadioGroup.check(R.id.smallSize)
+//        } else if(tokens?.get(2) == "M"){
+//            sizeRadioGroup.check(R.id.mediumSize)
+//        } else {
+//            sizeRadioGroup.check(R.id.largeSize)
+//        }
+//
+//        if(tokens?.get(3) == "No milk"){
+//            milkRadioGroup.check(R.id.noMilk)
+//        } else if(tokens?.get(3) == "Small milk"){
+//            milkRadioGroup.check(R.id.smallMilk)
+//        } else {
+//            milkRadioGroup.check(R.id.largeMilk)
+//        }
 
         handleRadioButton(smallSizeRadio, 0, 0)
         handleRadioButton(mediumSizeRadio, 1000, 0)
@@ -118,29 +150,9 @@ class ProductOrderActivity : AppCompatActivity() {
 
             val quantity = quantityTextView.text.toString().toInt()
             val totalPrice = price * quantity
-            var temperature : String
-            var size : String
-            var milk : String
-
-            temperature = when(resources.getResourceEntryName(hotColdChoice)){
-                "hot" -> HotCold.HOT.value
-                else -> HotCold.COLD.value
-            }
-
-            size = when(resources.getResourceEntryName(sizeChoice)){
-                "smallSize" -> Size.SMALL.value
-                "mediumSize" -> Size.MEDIUM.value
-                else -> Size.LARGE.value
-            }
-
-            milk = when(resources.getResourceEntryName(milkChoice)){
-                "noMilk" -> Milk.NOMILK.value
-                "smallMilk" -> Milk.SMALLMILK.value
-                else -> Milk.LARGEMILK.value
-            }
-
-            val newOrder = OrderItem("", productNameTextView.text.toString(), product.imageUrl, temperature, size, milk, quantity, totalPrice, false)
-            viewModel.addOrderItem(newOrder)
+            var temperature = resources.getResourceEntryName(hotColdChoice)
+            var size = resources.getResourceEntryName(sizeChoice)
+            var milk = resources.getResourceEntryName(milkChoice)
 
             val intent = Intent(
                 applicationContext,

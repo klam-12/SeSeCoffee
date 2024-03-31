@@ -8,36 +8,49 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sesecoffee.adapters.OrderAdapter
-import com.example.sesecoffee.enums.HotCold
-import com.example.sesecoffee.enums.Milk
-import com.example.sesecoffee.enums.Size
+import com.example.sesecoffee.model.FirebaseSingleton
 import com.example.sesecoffee.model.OrderItem
+import com.example.sesecoffee.utils.Resource
+import com.example.sesecoffee.viewModel.OrderItemsViewModel
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
+import kotlinx.coroutines.flow.collectLatest
 
 class CartOrderActivity : AppCompatActivity() {
+    val firebaseSingleton = FirebaseSingleton.getInstance()
+    lateinit var viewModel : OrderItemsViewModel
     lateinit var orderAdapter: OrderAdapter
-    var orderItemList : MutableList<OrderItem> = mutableListOf()
-    val totalPrice = 10.0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_cart_order)
+        viewModel = OrderItemsViewModel(firebaseSingleton, application)
 
-        orderItemList.add(OrderItem("", "", "Capuccino", HotCold.HOT, Size.SMALL, Milk.NOMILK, 2, 30000, false))
-        orderItemList.add(OrderItem("", "", "Latte", HotCold.COLD, Size.MEDIUM, Milk.SMALLMILK, 1, 20000, false))
-        orderItemList.add(OrderItem("", "", "Mocha", HotCold.HOT, Size.LARGE, Milk.LARGEMILK, 1, 25000, false))
-        orderItemList.add(OrderItem("", "", "Americano", HotCold.COLD, Size.SMALL, Milk.NOMILK, 1, 15000, false))
-        orderItemList.add(OrderItem("", "", "Espresso", HotCold.HOT, Size.MEDIUM, Milk.SMALLMILK, 1, 10000, false))
+        val price = findViewById<TextView>(R.id.cartPrice)
 
         val orderRecyclerView = findViewById<RecyclerView>(R.id.cartItemList) as RecyclerView
         orderRecyclerView.setHasFixedSize(true)
         orderRecyclerView.layoutManager = LinearLayoutManager(this)
 
-        orderAdapter = OrderAdapter(this, orderItemList)
+        lifecycleScope.launchWhenStarted {
+            viewModel.orderItems.collectLatest {
+                when(it){
+                    is Resource.Success -> {
+                        price.setText("${calculateTotalPrice(it.data!!)}VNĐ")
+                        orderAdapter.differ.submitList(it.data)
+                    }
+                    else -> {
+                        Unit
+                    }
+                }
+            }
+        }
+
+        orderAdapter = OrderAdapter(this)
         orderRecyclerView.adapter = orderAdapter
 
         val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT){
@@ -83,9 +96,6 @@ class CartOrderActivity : AppCompatActivity() {
 
         itemTouchHelper.attachToRecyclerView(orderRecyclerView)
 
-        val price = findViewById<TextView>(R.id.cartPrice)
-        price.setText("$${this.totalPrice}")
-
         findViewById<ImageButton>(R.id.cartBackBtn).setOnClickListener {
             finish()
         }
@@ -100,14 +110,11 @@ class CartOrderActivity : AppCompatActivity() {
         }
     }
 
-
-
-    private fun setUpRecyclerViewProducts(){
-        if(orderItemList.isNotEmpty()){
-            orderItemList.clear()
+    private fun calculateTotalPrice(itemList : List<OrderItem>) : Int {
+        var price = 0
+        itemList.forEach {
+            price += it.price!!
         }
-
-
-//        orderAdapter.notifyDataSetChanged()
+        return price
     }
 }

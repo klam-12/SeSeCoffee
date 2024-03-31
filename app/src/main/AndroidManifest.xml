@@ -37,6 +37,9 @@
             android:name=".ProductOrderActivity"
             android:exported="false" />
         <activity
+            android:name=".ProductUpdateOrderActivity"
+            android:exported="false" />
+        <activity
             android:name=".SuccessOrderActivity"
             android:exported="false" />
         <activity
