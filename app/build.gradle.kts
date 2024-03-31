@@ -77,8 +77,11 @@ dependencies {
     implementation("com.google.firebase:firebase-auth")
 
     // Glide library
+//    implementation("com.github.bumptech.glide:glide:4.11.0")
+//    annotationProcessor("com.github.bumptech.glide:compiler:4.11.0")
+//    implementation("com.github.bumptech.glide:glide:4.16.0")
     implementation("com.github.bumptech.glide:glide:4.12.0")
-    annotationProcessor("com.github.bumptech.glide:compiler:4.12.0")
+    kapt("com.github.bumptech.glide:compiler:4.12.0")
 
     // Dagger Hilt
     implementation("com.google.dagger:hilt-android:2.51")

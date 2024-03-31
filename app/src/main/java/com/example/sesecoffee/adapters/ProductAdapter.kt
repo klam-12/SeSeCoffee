@@ -30,6 +30,7 @@ class ProductAdapter()
         }
     }
 
+
     private val diffCallback = object : DiffUtil.ItemCallback<Product>(){
         override fun areItemsTheSame(oldItem: Product, newItem: Product): Boolean {
             return oldItem.name == newItem.name &&
@@ -74,6 +75,7 @@ class ProductAdapter()
     override fun getItemCount(): Int {
         return differ.currentList.size
     }
+
 
 
 }

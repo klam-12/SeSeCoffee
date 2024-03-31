@@ -1,5 +1,6 @@
 package com.example.sesecoffee.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,12 +9,14 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.sesecoffee.AddProductActivity
 import com.example.sesecoffee.AdminMainActivity
 import com.example.sesecoffee.R
 import com.example.sesecoffee.adapters.ProductAdapter
 import com.example.sesecoffee.databinding.FragmentAdminHomeBinding
 import com.example.sesecoffee.utils.Resource
 import com.example.sesecoffee.viewModel.ProductsViewModel
+import com.google.firebase.firestore.firestoreSettings
 import kotlinx.coroutines.flow.collectLatest
 
 /**
@@ -43,6 +46,7 @@ class AdminHomeFragment : Fragment(R.layout.fragment_admin_home) {
 
         setUpRecyclerViewProducts()
         lifecycleScope.launchWhenStarted {
+            productsViewModel.fetchAllProducts()
             productsViewModel.products.collectLatest {
                 when(it){
                     is Resource.Loading -> {
@@ -59,6 +63,14 @@ class AdminHomeFragment : Fragment(R.layout.fragment_admin_home) {
                     else -> Unit
                 }
             }
+        }
+
+        Toast.makeText(requireContext(),"AdminHomeFragment restart",Toast.LENGTH_LONG).show()
+
+
+        binding.addProductBtn.setOnClickListener(){
+            val intent = Intent(requireContext(), AddProductActivity::class.java)
+            startActivity(intent)
         }
 
     }
