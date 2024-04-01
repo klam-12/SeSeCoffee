@@ -12,12 +12,14 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class OrderItemsViewModel(private val fbSingleton: FirebaseSingleton, app: Application) : AndroidViewModel(
+class OrderItemsViewModel(app: Application) : AndroidViewModel(
     app
 ) {
 
     private val _orderItems = MutableStateFlow<Resource<List<OrderItem>>>(Resource.Unspecified())
     val orderItems : StateFlow<Resource<List<OrderItem>>> = _orderItems
+
+    private val fbSingleton = FirebaseSingleton.getInstance()
 
     init {
         fetchAllOrderItems()

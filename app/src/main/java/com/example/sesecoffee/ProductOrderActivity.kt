@@ -33,13 +33,12 @@ class ProductOrderActivity : AppCompatActivity() {
     var db = FirebaseFirestore.getInstance()
     var collectionReference: CollectionReference = db.collection(PRODUCT_COLLECTION)
 
-    val firebaseSingleton = FirebaseSingleton.getInstance()
     lateinit var viewModel: OrderItemsViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_product_order)
-        viewModel = OrderItemsViewModel(firebaseSingleton, application)
+        viewModel = OrderItemsViewModel(application)
 
         val productImage = findViewById<ImageView>(R.id.orderImageView)
         val productNameTextView = findViewById<TextView>(R.id.orderItem)

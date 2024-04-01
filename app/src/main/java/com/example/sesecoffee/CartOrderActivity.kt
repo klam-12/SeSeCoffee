@@ -21,14 +21,13 @@ import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 import kotlinx.coroutines.flow.collectLatest
 
 class CartOrderActivity : AppCompatActivity() {
-    val firebaseSingleton = FirebaseSingleton.getInstance()
     lateinit var viewModel : OrderItemsViewModel
     lateinit var orderAdapter: OrderAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_cart_order)
-        viewModel = OrderItemsViewModel(firebaseSingleton, application)
+        viewModel = OrderItemsViewModel(application)
 
         val price = findViewById<TextView>(R.id.cartPrice)
 
