@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
             when(it.itemId){
                 R.id.homeFragment -> replaceFragment(HomeFragment())
                 R.id.rewardFragment -> replaceFragment(RewardFragment())
-                R.id.orderTrackingFragment -> replaceFragment(OrderTrackingFragment())
+//                R.id.orderTrackingFragment -> replaceFragment(OrderTrackingFragment)
 
                 else -> {
                     Toast.makeText(this,"Invalid navigation",Toast.LENGTH_SHORT).show()

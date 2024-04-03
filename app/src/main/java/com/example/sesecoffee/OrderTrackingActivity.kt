@@ -1,24 +1,21 @@
-package com.example.sesecoffee.fragments
+package com.example.sesecoffee
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import android.view.View
-import androidx.databinding.DataBindingUtil
-import androidx.databinding.DataBindingUtil.setContentView
-import com.example.sesecoffee.R
 import com.example.sesecoffee.databinding.ActivityMainBinding
-import dagger.hilt.android.AndroidEntryPoint
-
-
-class OrderTrackingFragment : Fragment(R.layout.fragment_order_tracking){
+import com.example.sesecoffee.fragments.HistoryFragment
+import com.example.sesecoffee.fragments.OnGoingFragment
+import android.view.View
+class OrderTrackingActivity : AppCompatActivity() {
     private lateinit var  fragmentManager: FragmentManager
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstantState: Bundle?){
         super.onCreate(savedInstantState)
-//        binding = DataBindingUtil.setContentView(R.layout.fragment_order_tracking)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
 //        binding.onGoingBtn.setOnClickListener{
 //            goToFragment(OnGoingFragment())
@@ -29,7 +26,7 @@ class OrderTrackingFragment : Fragment(R.layout.fragment_order_tracking){
     }
 
     private fun goToFragment(fragment: Fragment){
-        fragmentManager;// = supportFragmentManager
+        fragmentManager = supportFragmentManager
         fragmentManager.beginTransaction().replace(R.id.fragmentContainerView, fragment).commit()
     }
     fun onGoingBtnClick(view: View) {
@@ -44,4 +41,5 @@ class OrderTrackingFragment : Fragment(R.layout.fragment_order_tracking){
         fragmentTransaction.addToBackStack(null)
         fragmentTransaction.commit()
     }
+
 }
