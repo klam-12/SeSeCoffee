@@ -35,6 +35,10 @@ class SignInActivity : AppCompatActivity() {
         signUp=findViewById(R.id.signup_login)
         nextStep=findViewById(R.id.next_step_login)
 
+        forgotPassword.setOnClickListener(){
+            val intent = Intent(this, ForgotPasswordActivity::class.java)
+            startActivity(intent)
+        }
         signUp.setOnClickListener(){
             val intent = Intent(this, SignUpActivity::class.java)
             startActivity(intent)
@@ -48,6 +52,7 @@ class SignInActivity : AppCompatActivity() {
                         Log.d("LoginActivity", "signInWithEmail:success")
                         val user = auth.currentUser
                         val userId= user?.uid.toString()
+
                         db.collection("USER").document(userId)
                             .get()
                             .addOnSuccessListener { document->
