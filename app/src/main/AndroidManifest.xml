@@ -23,13 +23,25 @@
         </activity>
         <activity
             android:name=".AddProductActivity"
-            android:exported="false">
-
-        </activity>
+            android:exported="false" />
         <activity
             android:name=".ProfileActivity"
             android:exported="false" />
-
+        <activity
+            android:name=".CartOrderActivity"
+            android:exported="false" />
+        <activity
+            android:name=".PaymentActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ProductOrderActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ProductUpdateOrderActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SuccessOrderActivity"
+            android:exported="false" />
         <activity
             android:name=".SignUpActivity"
             android:exported="false" />
@@ -41,6 +53,8 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+
         </activity>
         <activity
             android:name=".MainActivity"

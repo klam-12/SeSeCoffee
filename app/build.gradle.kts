@@ -58,7 +58,6 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 
-
     // Navigation
     val nav_version = "2.7.7"
     implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
@@ -86,6 +85,9 @@ dependencies {
     implementation("com.google.dagger:hilt-android:2.51")
 //    kapt("com.google.dagger:hilt-android-compiler:2.44")
     annotationProcessor("com.google.dagger:hilt-compiler:2.51")
+
+    //RecyclerView Decorator
+    implementation("it.xabaras.android:recyclerview-swipedecorator:1.4")
 
     // Add the dependencies for any other desired Firebase products
     // https://firebase.google.com/docs/android/setup#available-libraries

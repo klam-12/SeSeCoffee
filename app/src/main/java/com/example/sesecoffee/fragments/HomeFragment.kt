@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.sesecoffee.CartOrderActivity
 import com.example.sesecoffee.MainActivity
 import com.example.sesecoffee.ProfileActivity
 import com.example.sesecoffee.R
@@ -115,7 +116,8 @@ class HomeFragment : Fragment(R.layout.fragment_home){
         binding.cartButton.setOnClickListener(){
 //            if(user != null && firebaseAuth != null){
             // Link to cart
-            Toast.makeText(binding.root.context,"Go to cart implementation", Toast.LENGTH_LONG).show()
+            val intent = Intent(binding.root.context, CartOrderActivity::class.java)
+            startActivity(intent)
 //            }
         }
     }

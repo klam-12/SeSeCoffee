@@ -13,10 +13,11 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.sesecoffee.ProductOrderActivity
 import com.example.sesecoffee.databinding.ProductItemBinding
 import com.example.sesecoffee.fragments.AdminHomeFragmentDirections
 import com.example.sesecoffee.model.Product
-import java.util.Random
+
 
 class ProductAdapter()
     : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>()
@@ -63,6 +64,10 @@ class ProductAdapter()
             Toast.makeText(holder.itemView.context,"Item click",Toast.LENGTH_SHORT).show()
 
             // If normal user
+            val intent = Intent(it.context,ProductOrderActivity::class.java)
+//            intent.putExtra("productId",currentProduct)
+            it.context.startActivity(intent)
+
 
             // If admin
 //            val direction = AdminHomeFragmentDirections.actionAdminHomeToEditProductFragment(currentProduct)
@@ -74,6 +79,4 @@ class ProductAdapter()
     override fun getItemCount(): Int {
         return differ.currentList.size
     }
-
-
 }
