@@ -34,9 +34,7 @@ class MainActivity : AppCompatActivity() {
             true
 
         }
-//
-        val firebaseSingleton = FirebaseSingleton.getInstance()
-        productsViewModel = ProductsViewModel(firebaseSingleton,application)
+        productsViewModel = ProductsViewModel(application)
 
     }
 

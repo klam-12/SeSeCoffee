@@ -65,9 +65,6 @@ class AdminHomeFragment : Fragment(R.layout.fragment_admin_home) {
             }
         }
 
-        Toast.makeText(requireContext(),"AdminHomeFragment restart",Toast.LENGTH_LONG).show()
-
-
         binding.addProductBtn.setOnClickListener(){
             val intent = Intent(requireContext(), AddProductActivity::class.java)
             startActivity(intent)
@@ -97,5 +94,6 @@ class AdminHomeFragment : Fragment(R.layout.fragment_admin_home) {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+
     }
 }

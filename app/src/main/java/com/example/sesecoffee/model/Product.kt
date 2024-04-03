@@ -9,7 +9,7 @@ import java.util.UUID
 
 @Parcelize
 data class Product(
-//    val id:String,
+    val id:String? = null,
     var name:String? = null,
     var price : Int? = null,
     var imageUrl: String? = null,

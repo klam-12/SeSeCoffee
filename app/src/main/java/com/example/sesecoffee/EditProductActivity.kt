@@ -1,64 +1,53 @@
 package com.example.sesecoffee
 
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.TextUtils
-import android.util.AttributeSet
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
+import androidx.annotation.RequiresApi
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewModelScope
-import com.example.sesecoffee.databinding.ActivityAddProductBinding
-import com.example.sesecoffee.model.FirebaseSingleton
+import com.bumptech.glide.Glide
+import com.example.sesecoffee.databinding.ActivityEditProductBinding
 import com.example.sesecoffee.model.Product
-import com.example.sesecoffee.model.UserSingleton
-import com.example.sesecoffee.utils.Constant.PRODUCT_COLLECTION
 import com.example.sesecoffee.utils.Resource
 import com.example.sesecoffee.viewModel.ProductsViewModel
 import com.google.firebase.Timestamp
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.firestore.CollectionReference
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.storage.StorageReference
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
-import java.security.AccessController.getContext
 import java.util.Date
-import java.util.UUID
 
-
-class AddProductActivity : AppCompatActivity() {
-    lateinit var binding : ActivityAddProductBinding
-
-    // Credentials
-    var currentUserId : String = ""
-    var currentUserName : String = ""
-
+class EditProductActivity : AppCompatActivity() {
+    lateinit var binding : ActivityEditProductBinding
     private var imageUri: Uri? = null
     lateinit var productsViewModel: ProductsViewModel
+    private var oldProduct : Product? = null
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this,R.layout.activity_add_product)
+        binding = DataBindingUtil.setContentView(this,R.layout.activity_edit_product)
         productsViewModel = ProductsViewModel(application)
 
+        oldProduct = intent.getParcelableExtra("product")!!
+        binding.product = oldProduct
+
         lifecycleScope.launchWhenStarted {
-            productsViewModel.products.collectLatest {
+            productsViewModel.updateProduct.collectLatest {
                 when(it){
                     is Resource.Loading -> {
                         showLoading()
                     }
                     is Resource.Success -> {
                         hideLoading()
+                        if (it.data == null){
+                            Toast.makeText(applicationContext,"Delete product successfully", Toast.LENGTH_SHORT).show()
+                        } else {
+                            Toast.makeText(applicationContext,"Edit product successfully", Toast.LENGTH_SHORT).show()
+                        }
                         val intent = Intent(applicationContext,AdminMainActivity::class.java)
                         startActivity(intent)
                     }
@@ -77,16 +66,17 @@ class AddProductActivity : AppCompatActivity() {
             }
         }
 
-
         binding.apply {
+            Glide.with(applicationContext).load(oldProduct?.imageUrl).into(productImage)
+
             val selectImageActivityForResult =
                 registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
-                    if(result.resultCode == RESULT_OK){
+                    if(result.resultCode == AppCompatActivity.RESULT_OK){
                         val intent = result.data
                         imageUri = intent?.data
 
                         imageUri?.let {
-                            contentResolver.takePersistableUriPermission(
+                            root.context.contentResolver.takePersistableUriPermission(
                                 it,
                                 Intent.FLAG_GRANT_READ_URI_PERMISSION
                             )
@@ -94,7 +84,7 @@ class AddProductActivity : AppCompatActivity() {
                         binding.productImage.setImageURI(imageUri)
 
                     }
-            }
+                }
 
             // Get image from Gallery
             productImageBtn.setOnClickListener(){
@@ -106,51 +96,39 @@ class AddProductActivity : AppCompatActivity() {
                 selectImageActivityForResult.launch(intent)
             }
 
-            // Check user and get info
-            if(UserSingleton.instance != null){
-                // User info : Bug
-//                currentUserId = UserSingleton.instance!!.id.toString()
-//                currentUserName = UserSingleton.instance!!.fullName.toString()
-
+            productSaveBtn.setOnClickListener(){
+                updateProduct()
             }
 
-            productSaveBtn.setOnClickListener(){
-                addNewProduct()
+            productDeleteBtn.setOnClickListener(){
+                // not testing yet
+                if(oldProduct != null){
+                    oldProduct?.id?.let { it1 -> productsViewModel.deleteProduct(it1) }
+                }
             }
         }
     }
 
     private fun showLoading(){
-        binding.progressBarNewPro.visibility = View.VISIBLE
+        binding.progressBarEditPro.visibility = View.VISIBLE
     }
 
     private fun hideLoading(){
-        binding.progressBarNewPro.visibility = View.INVISIBLE
+        binding.progressBarEditPro.visibility = View.INVISIBLE
     }
 
+    private fun updateProduct() {
+        if (oldProduct!= null) {
+            val id = oldProduct?.id
+            var proName = binding.productInputName.text.toString()
+            var proPrice = binding.productInputPrice.text.toString()
+            var imageUriString: String = imageUri.toString()
+            var timeStamp: Timestamp = Timestamp(Date())
+            var proPriceInt = if (proPrice.isNotEmpty()) proPrice.toInt() else 0
+            var product = Product(id, proName, proPriceInt, imageUriString, timeStamp)
 
-    private fun addNewProduct() {
-        val id = UUID.randomUUID().toString()
-        var proName = binding.productInputName.text.toString()
-        var proPrice = binding.productInputPrice.text.toString()
-        var imageUriString: String = if (imageUri == null) "" else imageUri.toString()
-        var timeStamp: Timestamp = Timestamp(Date())
-        var proPriceInt = if (proPrice.isNotEmpty()) proPrice.toInt() else 0
-        var product: Product = Product(id,proName, proPriceInt, imageUriString, timeStamp)
-
-        productsViewModel.addAProduct(product, imageUri)
-    }
-
-    override fun onStart() {
-        super.onStart()
-//        user = auth.currentUser!!
-    }
-
-    override fun onStop() {
-        super.onStop()
-//        if(auth != null){
-            // Do some remove,...
-//        }
+            productsViewModel.updateProduct(product, imageUri, oldProduct?.imageUrl)
+        }
     }
 
     override fun onDestroy() {

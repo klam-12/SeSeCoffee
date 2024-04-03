@@ -1,20 +1,19 @@
 package com.example.sesecoffee.adapters
 
-import android.content.Context
 import android.content.Intent
-import android.graphics.BitmapFactory
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.sesecoffee.AdminMainActivity
+import com.example.sesecoffee.EditProductActivity
+import com.example.sesecoffee.R
+import com.example.sesecoffee.databinding.ActivityAdminMainBinding
 import com.example.sesecoffee.databinding.ProductItemBinding
-import com.example.sesecoffee.fragments.AdminHomeFragmentDirections
 import com.example.sesecoffee.model.Product
 import java.util.Random
 
@@ -33,8 +32,7 @@ class ProductAdapter()
 
     private val diffCallback = object : DiffUtil.ItemCallback<Product>(){
         override fun areItemsTheSame(oldItem: Product, newItem: Product): Boolean {
-            return oldItem.name == newItem.name &&
-                    oldItem.price == newItem.price
+            return oldItem.id == newItem.id && oldItem.name == newItem.name
         }
 
         override fun areContentsTheSame(oldItem: Product, newItem: Product): Boolean {
@@ -61,14 +59,12 @@ class ProductAdapter()
         holder.bind(currentProduct)
 
         holder.itemView.setOnClickListener(){
-            Toast.makeText(holder.itemView.context,"Item click",Toast.LENGTH_SHORT).show()
-
             // If normal user
 
             // If admin
-//            val direction = AdminHomeFragmentDirections.actionAdminHomeToEditProductFragment(currentProduct)
-//            it.findNavController().navigate(direction)
-
+            val intent = Intent(it.context,EditProductActivity::class.java)
+            intent.putExtra("product",currentProduct)
+            it.context.startActivity(intent)
         }
     }
 
