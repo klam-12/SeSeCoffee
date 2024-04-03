@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
             when(it.itemId){
                 R.id.homeFragment -> replaceFragment(HomeFragment())
                 R.id.rewardFragment -> replaceFragment(RewardFragment())
-//                R.id.orderTrackingFragment -> replaceFragment(OrderTrackingFragment)
+//                R.id.orderTrackingFragment -> replaceFragment(RewardFragment())
 
                 else -> {
                     Toast.makeText(this,"Invalid navigation",Toast.LENGTH_SHORT).show()
@@ -37,12 +37,9 @@ class MainActivity : AppCompatActivity() {
 
         }
 
-        val firebaseSingleton = FirebaseSingleton.getInstance()
-        productsViewModel = ProductsViewModel(firebaseSingleton,application)
-
         val user = UserSingleton.instance
         Log.i("User",user.toString())
-
+        productsViewModel = ProductsViewModel(application)
     }
 
     private fun replaceFragment(fragment: Fragment){
