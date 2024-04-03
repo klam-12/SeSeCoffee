@@ -27,7 +27,7 @@ class SignUpActivity : AppCompatActivity() {
     lateinit var username: EditText
     lateinit var phone: EditText
     var db= FirebaseFirestore.getInstance()
-
+    var auth= FirebaseAuth.getInstance()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
@@ -48,7 +48,9 @@ class SignUpActivity : AppCompatActivity() {
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
                         Log.d("MainActivity", "createUserWithEmail:success")
-                        val user = firebaseAuth.currentUser
+                        val user = auth.currentUser
+
+
                         val newuser = hashMapOf(
                             "UID" to user?.uid.toString(),
                             "fullname" to username.text.toString(),

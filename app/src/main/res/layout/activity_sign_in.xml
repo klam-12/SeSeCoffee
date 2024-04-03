@@ -11,7 +11,7 @@
         android:id="@+id/login_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="80dp"
         android:text="Sign in"
         android:textSize="32dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -42,13 +42,13 @@
         android:drawableLeft="@drawable/ic_mail"
         android:ems="10"
         android:inputType="text"
-        android:text="Username"
-        android:textColor="#66000000"
+        android:hint="Your email"
+        android:drawablePadding="8dp"
+        android:textColor="#000000"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.619"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/welcome" />
-
     <EditText
         android:id="@+id/password_login"
         android:layout_width="340dp"
@@ -56,10 +56,11 @@
         android:layout_marginTop="40dp"
         android:drawableLeft="@drawable/ic_lock"
         android:drawableRight="@drawable/ic_eye"
+        android:drawablePadding="8dp"
         android:ems="10"
-        android:inputType="text"
-        android:text="Password"
-        android:textColor="#66000000"
+        android:inputType="textPassword"
+        android:hint="Password"
+        android:textColor="#000000"
 
 
         app:layout_constraintEnd_toEndOf="parent"
@@ -70,12 +71,12 @@
     <Button
         android:id="@+id/next_step_login"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="160dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="156dp"
+        android:backgroundTint="@color/primary"
         android:text="next"
-
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.809"
+        app:layout_constraintHorizontal_bias="0.811"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/password_login" />
 
@@ -86,6 +87,7 @@
         android:layout_marginTop="16dp"
         android:text="@string/forgot_pass"
         android:textSize="14dp"
+        android:textColor="#000000"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
 
@@ -113,6 +115,7 @@
         android:layout_marginStart="4dp"
         android:text="Sign up"
         android:textSize="12dp"
+        android:textColor="#4E2602"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@+id/newmember_login"
         app:layout_constraintStart_toEndOf="@+id/newmember_login"
