@@ -48,8 +48,10 @@ class OrderItemsViewModel(app: Application) : AndroidViewModel(
             }
     }
 
-    fun addOrderItem(orderItem: OrderItem){
-        fbSingleton.db.collection(ORDER_ITEM_COLLECTION).add(orderItem)
+    fun addOrderItem(orderItem: OrderItem, OrderID:String){
+        val parentDocumentRef=fbSingleton.db.collection("Orders").document(OrderID)
+        val subCollectionRef=parentDocumentRef.collection("OrderItem")
+        subCollectionRef.add(orderItem)
             .addOnSuccessListener {
                 Toast.makeText(
                     getApplication(),

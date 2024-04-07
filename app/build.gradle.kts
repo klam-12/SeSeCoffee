@@ -92,6 +92,7 @@ dependencies {
     //RecyclerView Decorator
     implementation("it.xabaras.android:recyclerview-swipedecorator:1.4")
 
+
     // Add the dependencies for any other desired Firebase products
     // https://firebase.google.com/docs/android/setup#available-libraries
 }
