@@ -35,7 +35,6 @@ import java.util.UUID
 class ProductsViewModel(app: Application) : AndroidViewModel(
     app
 ) {
-
     private var productsList : MutableList<Product>? = null
     private  val fbSingleton = FirebaseSingleton.getInstance()
 

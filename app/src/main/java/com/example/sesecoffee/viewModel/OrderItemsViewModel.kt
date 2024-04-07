@@ -21,7 +21,6 @@ import kotlinx.coroutines.launch
 class OrderItemsViewModel(app: Application) : AndroidViewModel(
     app
 ) {
-
     private val _orderItems = MutableStateFlow<Resource<List<OrderItem>>>(Resource.Unspecified())
     val orderItems : StateFlow<Resource<List<OrderItem>>> = _orderItems
 
