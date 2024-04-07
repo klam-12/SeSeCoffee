@@ -34,11 +34,6 @@ class HomeFragment : Fragment(R.layout.fragment_home){
     private val binding get() = _binding!!
 
     // Firebase References
-    lateinit var firebaseAuth : FirebaseAuth
-    lateinit var user : FirebaseUser
-    var db = FirebaseFirestore.getInstance()
-    var collectionReference: CollectionReference = db.collection("Products")
-
     lateinit var productList : MutableList<Product>
     lateinit var productAdapter: ProductAdapter
     lateinit var productsViewModel: ProductsViewModel
@@ -95,6 +90,7 @@ class HomeFragment : Fragment(R.layout.fragment_home){
     }
     private fun setUpRecyclerViewProducts(){
         // Set up the recyclerview products
+        productsViewModel.fetchAllProducts()
         productAdapter = ProductAdapter()
         binding.rvListProducts.apply {
             setHasFixedSize(true)

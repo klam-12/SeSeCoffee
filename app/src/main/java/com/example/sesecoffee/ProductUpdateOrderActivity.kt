@@ -13,6 +13,7 @@ import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.TextView
 import android.widget.Toast
+import com.bumptech.glide.Glide
 import com.example.sesecoffee.adapters.ProductAdapter
 import com.example.sesecoffee.enums.HotCold
 import com.example.sesecoffee.enums.Milk
@@ -20,21 +21,25 @@ import com.example.sesecoffee.enums.Size
 import com.example.sesecoffee.model.FirebaseSingleton
 import com.example.sesecoffee.model.OrderItem
 import com.example.sesecoffee.model.Product
+import com.example.sesecoffee.model.UserSingleton
 import com.example.sesecoffee.viewModel.OrderItemsViewModel
 import com.example.sesecoffee.viewModel.ProductsViewModel
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import java.util.UUID
 
 class ProductUpdateOrderActivity : AppCompatActivity() {
     private var quantity = 1
     private var price = 0
     private var sizeFee = 0
     private var milkFee = 0
+    private var image = ""
 
-    private lateinit var product : Product
+    private lateinit var userId : String
+    private lateinit var orderItem : OrderItem
     var db = FirebaseFirestore.getInstance()
-    var collectionReference: CollectionReference = db.collection("Products")
+    var collectionReference: CollectionReference = db.collection("OrderItems")
 
     lateinit var viewModel: OrderItemsViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,11 +48,8 @@ class ProductUpdateOrderActivity : AppCompatActivity() {
         viewModel = OrderItemsViewModel(application)
 
         val intent = intent
-        val message = intent.getStringExtra("Order")
-        val tokens = message?.split(" ")
-        for (token in tokens!!) {
-            Log.i("Token", token)
-        }
+        val message = intent.getStringExtra("order")
+        userId = UserSingleton.instance!!.id!!
 
         val productImage = findViewById<ImageView>(R.id.orderImageView)
         val productNameTextView = findViewById<TextView>(R.id.orderItem)
@@ -65,55 +67,66 @@ class ProductUpdateOrderActivity : AppCompatActivity() {
         val smallMilkRadio = findViewById<RadioButton>(R.id.smallMilk)
         val largeMilkRadio = findViewById<RadioButton>(R.id.largeMilk)
 
-//        try {
-//            collectionReference
-//                .whereEqualTo("name", tokens?.get(0))
-//                .get()
-//                .addOnSuccessListener {
-//                    if (!it.isEmpty) {
-//                        it.forEach {
-//                            product = it.toObject(Product::class.java)
-//                            Glide.with(this).load(product.imageUrl).into(productImage)
-//                        }
-//                    }
-//                }.addOnFailureListener() {
-//                    Toast.makeText(
-//                        this,
-//                        "Errors happen when loading the database",
-//                        Toast.LENGTH_LONG
-//                    ).show()
-//                }
-//        }catch (t:Throwable){
-//            Log.i("Err", "$t")
-//        }
+        try {
+            collectionReference
+                .whereEqualTo("id", message)
+                .get()
+                .addOnSuccessListener {
+                    if (!it.isEmpty) {
+                        it.forEach {
+                            orderItem = it.toObject(OrderItem::class.java)
 
-//        productNameTextView.setText(tokens?.get(0) ?: "Product Name")
-//        price = tokens.get(5).toInt()
-//        quantity = tokens.get(4).toInt()
-//        quantityTextView.setText("$quantity")
-//        priceTextView.setText("${price * quantity}VNĐ")
+                            productNameTextView.setText(orderItem.productName)
+                            Glide.with(this).load(orderItem.productImage).into(productImage)
 
-//        if(tokens?.get(1) == "Hot"){
-//            hotColdRadioGroup.check(R.id.hot)
-//        } else {
-//            hotColdRadioGroup.check(R.id.cold)
-//        }
-//
-//        if(tokens?.get(2) == "S"){
-//            sizeRadioGroup.check(R.id.smallSize)
-//        } else if(tokens?.get(2) == "M"){
-//            sizeRadioGroup.check(R.id.mediumSize)
-//        } else {
-//            sizeRadioGroup.check(R.id.largeSize)
-//        }
-//
-//        if(tokens?.get(3) == "No milk"){
-//            milkRadioGroup.check(R.id.noMilk)
-//        } else if(tokens?.get(3) == "Small milk"){
-//            milkRadioGroup.check(R.id.smallMilk)
-//        } else {
-//            milkRadioGroup.check(R.id.largeMilk)
-//        }
+                            when(orderItem.hotCold){
+                                HotCold.HOT.value -> hotColdRadioGroup.check(R.id.hot)
+                                HotCold.COLD.value -> hotColdRadioGroup.check(R.id.cold)
+                            }
+                            when(orderItem.size){
+                                Size.SMALL.value -> sizeRadioGroup.check(R.id.smallSize)
+                                Size.MEDIUM.value -> sizeRadioGroup.check(R.id.mediumSize)
+                                Size.LARGE.value -> sizeRadioGroup.check(R.id.largeSize)
+                            }
+                            when(orderItem.milk) {
+                                Milk.NOMILK.value -> milkRadioGroup.check(R.id.noMilk)
+                                Milk.SMALLMILK.value -> milkRadioGroup.check(R.id.smallMilk)
+                                Milk.LARGEMILK.value -> milkRadioGroup.check(R.id.largeMilk)
+                            }
+
+                            if(orderItem.size == Size.SMALL.value){
+                                sizeFee = 0
+                            } else if(orderItem.size == Size.MEDIUM.value){
+                                sizeFee = 1000
+                            } else {
+                                sizeFee = 2000
+                            }
+
+                            if(orderItem.milk == Milk.NOMILK.value){
+                                milkFee = 0
+                            } else if(orderItem.milk == Milk.SMALLMILK.value){
+                                milkFee = 1000
+                            } else {
+                                milkFee = 2000
+                            }
+
+                            image = orderItem.productImage!!
+                            price = orderItem.price!! / orderItem.quantity!!
+                            quantity = orderItem.quantity!!
+                            quantityTextView.setText("${orderItem.quantity}")
+                            priceTextView.setText("${orderItem.price}VNĐ")
+                        }
+                    }
+                }.addOnFailureListener() {
+                    Toast.makeText(
+                        this,
+                        "Errors happen when loading the database",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+        }catch (t:Throwable){
+            Log.i("Err", "$t")
+        }
 
         handleRadioButton(smallSizeRadio, 0, 0)
         handleRadioButton(mediumSizeRadio, 1000, 0)
@@ -149,9 +162,29 @@ class ProductUpdateOrderActivity : AppCompatActivity() {
 
             val quantity = quantityTextView.text.toString().toInt()
             val totalPrice = price * quantity
-            var temperature = resources.getResourceEntryName(hotColdChoice)
-            var size = resources.getResourceEntryName(sizeChoice)
-            var milk = resources.getResourceEntryName(milkChoice)
+            var temperature : String
+            var size : String
+            var milk : String
+
+            temperature = when(resources.getResourceEntryName(hotColdChoice)){
+                "hot" -> HotCold.HOT.value
+                else -> HotCold.COLD.value
+            }
+
+            size = when(resources.getResourceEntryName(sizeChoice)){
+                "smallSize" -> Size.SMALL.value
+                "mediumSize" -> Size.MEDIUM.value
+                else -> Size.LARGE.value
+            }
+
+            milk = when(resources.getResourceEntryName(milkChoice)){
+                "noMilk" -> Milk.NOMILK.value
+                "smallMilk" -> Milk.SMALLMILK.value
+                else -> Milk.LARGEMILK.value
+            }
+
+            val newOrder = OrderItem(message, userId, productNameTextView.text.toString(), image, temperature, size, milk, quantity, totalPrice, false)
+            viewModel.updateOrderItemInfo(newOrder)
 
             val intent = Intent(
                 applicationContext,

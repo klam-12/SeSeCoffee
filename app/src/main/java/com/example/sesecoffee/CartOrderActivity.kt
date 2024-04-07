@@ -3,9 +3,11 @@ package com.example.sesecoffee
 import android.content.Intent
 import android.graphics.Canvas
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
@@ -15,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.sesecoffee.adapters.OrderAdapter
 import com.example.sesecoffee.model.FirebaseSingleton
 import com.example.sesecoffee.model.OrderItem
+import com.example.sesecoffee.model.UserSingleton
 import com.example.sesecoffee.utils.Resource
 import com.example.sesecoffee.viewModel.OrderItemsViewModel
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
@@ -23,6 +26,7 @@ import kotlinx.coroutines.flow.collectLatest
 class CartOrderActivity : AppCompatActivity() {
     lateinit var viewModel : OrderItemsViewModel
     lateinit var orderAdapter: OrderAdapter
+    lateinit var cartList : List<OrderItem>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +34,7 @@ class CartOrderActivity : AppCompatActivity() {
         viewModel = OrderItemsViewModel(application)
 
         val price = findViewById<TextView>(R.id.cartPrice)
+        Toast.makeText(applicationContext, UserSingleton.instance!!.id, Toast.LENGTH_LONG).show()
 
         val orderRecyclerView = findViewById<RecyclerView>(R.id.cartItemList) as RecyclerView
         orderRecyclerView.setHasFixedSize(true)
@@ -41,6 +46,7 @@ class CartOrderActivity : AppCompatActivity() {
                     is Resource.Success -> {
                         price.setText("${calculateTotalPrice(it.data!!)}VNĐ")
                         orderAdapter.differ.submitList(it.data)
+                        cartList = it.data
                     }
                     else -> {
                         Unit
@@ -58,7 +64,7 @@ class CartOrderActivity : AppCompatActivity() {
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                orderAdapter.deleteItem(viewHolder.adapterPosition)
+                orderAdapter.deleteItem(viewHolder.adapterPosition, application)
             }
 
             override fun onChildDraw(
@@ -96,7 +102,12 @@ class CartOrderActivity : AppCompatActivity() {
         itemTouchHelper.attachToRecyclerView(orderRecyclerView)
 
         findViewById<ImageButton>(R.id.cartBackBtn).setOnClickListener {
-            finish()
+            val intent = Intent(
+                applicationContext,
+                MainActivity::class.java
+            )
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            startActivity(intent)
         }
 
         findViewById<Button>(R.id.cartNextBtn).setOnClickListener {

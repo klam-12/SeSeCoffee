@@ -1,9 +1,11 @@
 package com.example.sesecoffee.adapters
 
+import android.app.Application
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -11,11 +13,15 @@ import com.bumptech.glide.Glide
 import com.example.sesecoffee.ProductUpdateOrderActivity
 import com.example.sesecoffee.databinding.OrderItemBinding
 import com.example.sesecoffee.model.OrderItem
+import com.example.sesecoffee.utils.Resource
+import com.example.sesecoffee.viewModel.OrderItemsViewModel
+import kotlinx.coroutines.flow.collectLatest
 
 class OrderAdapter(val context: Context)
     : RecyclerView.Adapter<OrderAdapter.OrderViewHolder>()
 {
     lateinit var binding : OrderItemBinding
+    lateinit var viewModel : OrderItemsViewModel
 
     inner class OrderViewHolder(var binding: OrderItemBinding) : RecyclerView.ViewHolder(binding.root){
         fun bind(orderItem: OrderItem){
@@ -25,7 +31,7 @@ class OrderAdapter(val context: Context)
             }
             binding.orderItemCardView.setOnClickListener {
                 val intent = Intent(context, ProductUpdateOrderActivity::class.java)
-                intent.putExtra("Order", orderItem.toString())
+                intent.putExtra("order", orderItem.id)
                 context.startActivity(intent)
             }
         }
@@ -33,7 +39,7 @@ class OrderAdapter(val context: Context)
 
     private val diffCallback = object : DiffUtil.ItemCallback<OrderItem>(){
         override fun areItemsTheSame(oldItem: OrderItem, newItem: OrderItem): Boolean {
-            return oldItem.productId == newItem.productId
+            return oldItem.id == newItem.id
         }
 
         override fun areContentsTheSame(oldItem: OrderItem, newItem: OrderItem): Boolean {
@@ -64,8 +70,12 @@ class OrderAdapter(val context: Context)
         return differ.currentList.size
     }
 
-    fun deleteItem(position: Int){
-//        differ.currentList.removeAt(position)
-//        notifyItemRemoved(position)
+    fun deleteItem(position: Int, application: Application){
+        viewModel = OrderItemsViewModel(application)
+        viewModel.deleteOrderItem(differ.currentList[position].id!!)
+        val orderList = differ.currentList.toMutableList()
+        orderList.removeAt(position)
+        differ.submitList(orderList)
+        notifyItemRemoved(position)
     }
 }

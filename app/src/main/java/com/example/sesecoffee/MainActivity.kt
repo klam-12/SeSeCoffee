@@ -2,6 +2,7 @@ package com.example.sesecoffee
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -10,6 +11,7 @@ import com.example.sesecoffee.fragments.HomeFragment
 import com.example.sesecoffee.fragments.OrderTrackingFragment
 import com.example.sesecoffee.fragments.RewardFragment
 import com.example.sesecoffee.model.FirebaseSingleton
+import com.example.sesecoffee.model.UserSingleton
 import com.example.sesecoffee.viewModel.ProductsViewModel
 
 class MainActivity : AppCompatActivity() {
@@ -25,7 +27,7 @@ class MainActivity : AppCompatActivity() {
             when(it.itemId){
                 R.id.homeFragment -> replaceFragment(HomeFragment())
                 R.id.rewardFragment -> replaceFragment(RewardFragment())
-                R.id.orderTrackingFragment -> replaceFragment(OrderTrackingFragment())
+//                R.id.orderTrackingFragment -> replaceFragment(RewardFragment())
 
                 else -> {
                     Toast.makeText(this,"Invalid navigation",Toast.LENGTH_SHORT).show()
@@ -35,8 +37,9 @@ class MainActivity : AppCompatActivity() {
 
         }
 
-        val firebaseSingleton = FirebaseSingleton.getInstance()
-        productsViewModel = ProductsViewModel(firebaseSingleton,application)
+        val user = UserSingleton.instance
+        Log.i("User",user.toString())
+        productsViewModel = ProductsViewModel(application)
     }
 
     private fun replaceFragment(fragment: Fragment){

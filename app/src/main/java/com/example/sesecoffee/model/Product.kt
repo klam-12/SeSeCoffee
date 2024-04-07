@@ -9,16 +9,35 @@ import java.util.UUID
 
 @Parcelize
 data class Product(
-//    val id:String,
+    val id:String? = null,
     var name:String? = null,
     var price : Int? = null,
     var imageUrl: String? = null,
     val createdAt: Timestamp? = null,
     ) : Parcelable {
-//    constructor() :
-//            this(UUID.randomUUID().toString(),"",0,10000,"","",Date(),Date()) {}
+//    val productName: String
+//        get() = name ?: ""
 //
-//    constructor(proName:String) :
-//            this(UUID.randomUUID().toString(),proName,0,10000,"","",Date(),Date()) {}
+//    val productPrice: Int
+//        get() = price ?: 0
+//
+//    val productImageUrl: String
+//        get() = imageUrl ?: ""
+//
+//    val productCreatedAt: Timestamp
+//        get() = createdAt ?: Timestamp.now()
+
+//    fun setName(name: String?) {
+//        this.name = name
+//    }
+//
+//    fun setPrice(price: Int?) {
+//        this.price = price
+//    }
+//
+//    fun setImageUrl(imageUrl: String?) {
+//        this.imageUrl = imageUrl
+//    }
+
 
 }

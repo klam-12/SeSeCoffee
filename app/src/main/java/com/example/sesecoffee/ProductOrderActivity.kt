@@ -18,10 +18,12 @@ import com.example.sesecoffee.enums.Size
 import com.example.sesecoffee.model.FirebaseSingleton
 import com.example.sesecoffee.model.OrderItem
 import com.example.sesecoffee.model.Product
+import com.example.sesecoffee.model.UserSingleton
 import com.example.sesecoffee.viewModel.OrderItemsViewModel
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.example.sesecoffee.utils.Constant.PRODUCT_COLLECTION
+import java.util.UUID
 
 class ProductOrderActivity : AppCompatActivity() {
     private var quantity = 1
@@ -29,6 +31,7 @@ class ProductOrderActivity : AppCompatActivity() {
     private var sizeFee = 0
     private var milkFee = 0
 
+    private lateinit var userId : String
     private lateinit var product : Product
     var db = FirebaseFirestore.getInstance()
     var collectionReference: CollectionReference = db.collection(PRODUCT_COLLECTION)
@@ -39,6 +42,10 @@ class ProductOrderActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_product_order)
         viewModel = OrderItemsViewModel(application)
+
+        val intent = intent
+        val message = intent.getStringExtra("product")
+        userId = UserSingleton.instance!!.id!!
 
         val productImage = findViewById<ImageView>(R.id.orderImageView)
         val productNameTextView = findViewById<TextView>(R.id.orderItem)
@@ -58,7 +65,7 @@ class ProductOrderActivity : AppCompatActivity() {
 
         try {
             collectionReference
-                .whereEqualTo("name", "Test 1")
+                .whereEqualTo("name", message)
                 .get()
                 .addOnSuccessListener {
                     if (!it.isEmpty) {
@@ -138,7 +145,7 @@ class ProductOrderActivity : AppCompatActivity() {
                 else -> Milk.LARGEMILK.value
             }
 
-            val newOrder = OrderItem("", productNameTextView.text.toString(), product.imageUrl, temperature, size, milk, quantity, totalPrice, false)
+            val newOrder = OrderItem(UUID.randomUUID().toString(), userId, productNameTextView.text.toString(), product.imageUrl, temperature, size, milk, quantity, totalPrice, false)
             viewModel.addOrderItem(newOrder)
 
             val intent = Intent(
