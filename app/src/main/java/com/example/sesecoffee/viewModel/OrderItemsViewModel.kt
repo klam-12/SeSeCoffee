@@ -82,23 +82,42 @@ class OrderItemsViewModel(app: Application) : AndroidViewModel(
             }
     }
 
-    fun addOrderItem(orderItem: OrderItem){
-        viewModelScope.launch { _orderItems.emit(Resource.Loading()) }
-        val collectionReference : CollectionReference = fbSingleton.db.collection(ORDER_ITEM_COLLECTION)
-
-        collectionReference.document(orderItem.id!!).set(orderItem)
-        .addOnSuccessListener {
-            orderItemList?.add(orderItem)
-            viewModelScope.launch {
-                _orderItems.emit(Resource.Success(orderItemList))
+    fun addOrderItem(orderItem: OrderItem, OrderID:String){
+        val parentDocumentRef=fbSingleton.db.collection("Orders").document(OrderID)
+        val subCollectionRef=parentDocumentRef.collection("OrderItem")
+        subCollectionRef.add(orderItem)
+            .addOnSuccessListener {
+                Toast.makeText(
+                    getApplication(),
+                    "Order item added successfully",
+                    Toast.LENGTH_LONG
+                ).show()
+            }.addOnFailureListener() {
+                Toast.makeText(
+                    getApplication(),
+                    "Errors happen when adding the order item",
+                    Toast.LENGTH_LONG
+                ).show()
             }
-        }
-        .addOnFailureListener(){
-            viewModelScope.launch {
-                _orderItems.emit(Resource.Error(it.message.toString()))
-            }
-        }
     }
+
+//    fun addOrderItem(orderItem: OrderItem){
+//        viewModelScope.launch { _orderItems.emit(Resource.Loading()) }
+//        val collectionReference : CollectionReference = fbSingleton.db.collection(ORDER_ITEM_COLLECTION)
+//
+//        collectionReference.document(orderItem.id!!).set(orderItem)
+//        .addOnSuccessListener {
+//            orderItemList?.add(orderItem)
+//            viewModelScope.launch {
+//                _orderItems.emit(Resource.Success(orderItemList))
+//            }
+//        }
+//        .addOnFailureListener(){
+//            viewModelScope.launch {
+//                _orderItems.emit(Resource.Error(it.message.toString()))
+//            }
+//        }
+//    }
 
     fun updateOrderItemInfo(newOrderItem: OrderItem) {
         viewModelScope.launch { _updateOrderItem.emit(Resource.Loading()) }

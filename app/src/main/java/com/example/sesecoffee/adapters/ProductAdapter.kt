@@ -65,6 +65,7 @@ class ProductAdapter()
             // If normal user
             if(UserSingleton.instance?.isAdmin == 0){
                 val intent = Intent(it.context,ProductOrderActivity::class.java)
+                intent.putExtra("productId",currentProduct.id.toString())
                 intent.putExtra("product", currentProduct.name)
                 it.context.startActivity(intent)
             } else{
