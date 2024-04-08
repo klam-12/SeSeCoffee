@@ -16,7 +16,7 @@ import com.bumptech.glide.Glide
 import com.example.sesecoffee.databinding.ProductItemBinding
 import com.example.sesecoffee.fragments.AdminHomeFragmentDirections
 import com.example.sesecoffee.model.Product
-import java.util.Random
+
 
 class ProductAdapter()
     : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>()
@@ -74,6 +74,4 @@ class ProductAdapter()
     override fun getItemCount(): Int {
         return differ.currentList.size
     }
-
-
 }

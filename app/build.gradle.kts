@@ -8,7 +8,7 @@ plugins {
 
 //    kotlin("kapt")
 //    id("com.google.dagger.hilt.android")
-    id("dagger.hilt.android.plugin")
+//    id("dagger.hilt.android.plugin")
 }
 
 android {
@@ -58,7 +58,6 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 
-
     // Navigation
     val nav_version = "2.7.7"
     implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
@@ -77,15 +76,21 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore")
     implementation("com.google.firebase:firebase-storage")
     implementation("com.google.firebase:firebase-auth")
-
+    implementation ("com.google.firebase:firebase-messaging:20.2.3")
+//    implementation ("com.google.firebase:firebase-crashlytics:17.2.2")
+//    implementation ("com.google.android.gms:play-services-analytics:17.0.0")
     // Glide library
+
     implementation("com.github.bumptech.glide:glide:4.12.0")
     annotationProcessor("com.github.bumptech.glide:compiler:4.12.0")
 
     // Dagger Hilt
-    implementation("com.google.dagger:hilt-android:2.51")
+//    implementation("com.google.dagger:hilt-android:2.51")
 //    kapt("com.google.dagger:hilt-android-compiler:2.44")
-    annotationProcessor("com.google.dagger:hilt-compiler:2.51")
+//    annotationProcessor("com.google.dagger:hilt-compiler:2.51")
+
+    //RecyclerView Decorator
+    implementation("it.xabaras.android:recyclerview-swipedecorator:1.4")
 
     // Add the dependencies for any other desired Firebase products
     // https://firebase.google.com/docs/android/setup#available-libraries

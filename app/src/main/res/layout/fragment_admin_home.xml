@@ -48,7 +48,7 @@
             app:cardBackgroundColor="@color/primary"
             app:cardCornerRadius="30dp"
 
-            app:cardElevation="8dp"
+            app:cardElevation="10dp"
             tools:layout_editor_absoluteX="1dp"
             tools:layout_editor_absoluteY="337dp">
 

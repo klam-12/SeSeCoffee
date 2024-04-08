@@ -103,7 +103,7 @@ class AddProductActivity : AppCompatActivity() {
                         .addOnSuccessListener {
                             var imageUriString : String = it.toString()
 
-                            var timeStamp : Timestamp = Timestamp(Date())
+                            var timeStamp: Timestamp = Timestamp(Date())
                             var proPriceInt = proPrice.toInt()
 
                             // Creating the object of product
