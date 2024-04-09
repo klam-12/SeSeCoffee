@@ -3,6 +3,8 @@ package com.example.sesecoffee.model
 import com.example.sesecoffee.enums.HotCold
 import com.example.sesecoffee.enums.Milk
 import com.example.sesecoffee.enums.Size
+import java.text.SimpleDateFormat
+import java.util.Date
 
 
 data class OrderItem(
@@ -33,6 +35,9 @@ data class OrderItem(
         return "$productName $hotCold $size $milk $quantity $price"
     }
     fun getReward(): Int? {
-        return price?.div(1000) ?: null
+        return (price?.toDouble() )?.div(1000)?.let { Math.round(it).toInt() }
     }
+
+
+
 }

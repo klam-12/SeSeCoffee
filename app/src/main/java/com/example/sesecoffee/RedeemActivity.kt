@@ -40,6 +40,7 @@ class RedeemActivity : AppCompatActivity() {
                 when(it){
                     is Resource.Success -> {
 //                        price.setText("${calculateTotalPrice(it.data!!)}VNĐ")
+                        print(it.data)
                         redeemAdapter.differ.submitList(it.data)
                     }
                     else -> {
@@ -99,6 +100,7 @@ class RedeemActivity : AppCompatActivity() {
         }
 
     }
+
 
 
 

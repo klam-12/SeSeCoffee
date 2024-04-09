@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.sesecoffee.databinding.OrderItemBinding
 import com.example.sesecoffee.databinding.RedeemItemBinding
 import com.example.sesecoffee.model.Redeem
 
@@ -17,9 +16,11 @@ class RedeemAdapter (val context: Context?)
     lateinit var binding : RedeemItemBinding
     inner class RedeemViewHolder(var binding: RedeemItemBinding) : RecyclerView.ViewHolder(binding.root){
     fun bind(redeemItem: Redeem){
-//        binding.imageView = redeemItem
+        binding.redeemItem = redeemItem
         binding.apply {
+            print(redeemItem)
             Glide.with(itemView).load(redeemItem.imageUrl).into(imageView)
+
         }
         binding.pointsBtn.setOnClickListener {
 //            Chuyển đến trang thanh toán

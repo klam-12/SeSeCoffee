@@ -10,6 +10,7 @@ import com.example.sesecoffee.model.Redeem
 import com.example.sesecoffee.utils.Constant
 import kotlinx.coroutines.flow.MutableStateFlow
 import com.example.sesecoffee.utils.Resource
+import com.google.firebase.Timestamp
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
@@ -20,29 +21,34 @@ class RedeemItemViewModel(app: Application) : AndroidViewModel(app){
     private val fbSingleton = FirebaseSingleton.getInstance()
 
     init {
-        fetchAllRedeem()
+        fetchAllRedeemWithValidDate()
     }
 
-    fun fetchAllRedeem() {
+    fun fetchAllRedeemWithValidDate() {
         viewModelScope.launch { _redeem.emit(Resource.Loading()) }
 
-        fbSingleton.db.collection(Constant.REDEEM_COLLECTION).get()
-            .addOnSuccessListener {
-                    result ->
-                val redeemList = result.toObjects(Redeem::class.java)
+        val nowTimestamp = Timestamp.now()
+        fbSingleton.db.collection(Constant.REDEEM_COLLECTION)
+            .whereGreaterThan("untilAt", nowTimestamp)
+            .get()
+            .addOnSuccessListener { result ->
+                println("RESULT AFTER GET: ${result.toObjects(Redeem::class.java)}")
+
+                val redeemList = result?.toObjects(Redeem::class.java)
                 viewModelScope.launch {
                     _redeem.emit(Resource.Success(redeemList))
                 }
-
-            }.addOnFailureListener() {
+            }
+            .addOnFailureListener { exception ->
                 Toast.makeText(
                     getApplication(),
-                    "Errors happen when loading the database",
+                    "Errors happen when loading the database: ${exception.message}",
                     Toast.LENGTH_LONG
                 ).show()
                 viewModelScope.launch {
-                    _redeem.emit(Resource.Error(it.message.toString()))
+                    _redeem.emit(Resource.Error(exception.message.toString()))
                 }
             }
+
     }
 }

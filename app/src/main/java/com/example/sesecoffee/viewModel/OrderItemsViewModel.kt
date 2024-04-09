@@ -6,6 +6,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.sesecoffee.model.FirebaseSingleton
 import com.example.sesecoffee.model.OrderItem
+import com.example.sesecoffee.model.Redeem
 import com.example.sesecoffee.utils.Constant.ORDER_ITEM_COLLECTION
 import com.example.sesecoffee.utils.Resource
 import kotlinx.coroutines.flow.MutableStateFlow
