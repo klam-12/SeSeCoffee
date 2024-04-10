@@ -104,6 +104,5 @@ class AdminHomeFragment : Fragment(R.layout.fragment_admin_home) {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
-
     }
 }
