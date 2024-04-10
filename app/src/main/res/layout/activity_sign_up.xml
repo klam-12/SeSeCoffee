@@ -5,13 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".SignInActivity">
-
-
     <TextView
         android:id="@+id/signup_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="80dp"
         android:text="Sign up"
         android:textSize="32dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -37,11 +35,12 @@
         android:id="@+id/username_signup"
         android:layout_width="340dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:drawableLeft="@drawable/ic_mail"
+        android:layout_marginTop="30dp"
+        android:drawableLeft="@drawable/ic_person_2"
         android:ems="10"
-        android:text="Username"
-        android:textColor="#66000000"
+        android:hint="Username"
+        android:textColor="#000000"
+        android:drawablePadding="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.619"
         app:layout_constraintStart_toStartOf="parent"
@@ -51,12 +50,14 @@
         android:id="@+id/phone_signup"
         android:layout_width="340dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:drawableLeft="@drawable/ic_mail"
+        android:layout_marginTop="30dp"
+        android:drawableLeft="@drawable/ic_phone"
+        android:drawablePadding="8dp"
+
         android:ems="10"
         android:inputType="text"
-        android:text="Phone"
-        android:textColor="#66000000"
+        android:hint="Phone number"
+        android:textColor="#000000"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.619"
         app:layout_constraintStart_toStartOf="parent"
@@ -65,12 +66,14 @@
         android:id="@+id/email_signup"
         android:layout_width="340dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="30dp"
         android:drawableLeft="@drawable/ic_mail"
         android:ems="10"
         android:inputType="text"
-        android:text="Email address"
-        android:textColor="#66000000"
+        android:drawablePadding="8dp"
+
+        android:hint="Email"
+        android:textColor="#000000"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.619"
         app:layout_constraintStart_toStartOf="parent"
@@ -80,13 +83,15 @@
         android:id="@+id/password_signup"
         android:layout_width="340dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="30dp"
         android:drawableLeft="@drawable/ic_lock"
         android:drawableRight="@drawable/ic_eye"
         android:ems="10"
-        android:inputType="text"
-        android:text="Password"
-        android:textColor="#66000000"
+        android:inputType="textPassword"
+        android:hint="Password"
+        android:drawablePadding="8dp"
+
+        android:textColor="#000000"
 
 
         app:layout_constraintEnd_toEndOf="parent"
@@ -100,6 +105,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="80dp"
         android:text="next"
+        android:backgroundTint="@color/primary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.811"
         app:layout_constraintStart_toStartOf="parent"
@@ -114,7 +120,6 @@
         android:textSize="14dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/password_signup" />
 
@@ -124,6 +129,7 @@
         android:layout_height="wrap_content"
         android:text="New Member? "
         android:textSize="12dp"
+
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -137,13 +143,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
-        android:text="Sign up"
+        android:text="Sign in"
         android:textSize="12dp"
+        android:textColor="@color/primary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@+id/newmember_signup"
         app:layout_constraintStart_toEndOf="@+id/newmember_signup"
         app:layout_constraintTop_toBottomOf="@+id/agree"
         app:layout_constraintVertical_bias="0.784" />
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

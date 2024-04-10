@@ -1,0 +1,384 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ProductOrderActivity">
+
+    <ImageView
+        android:id="@+id/orderImageView"
+        android:layout_width="320dp"
+        android:layout_height="140dp"
+        android:layout_marginTop="100dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <androidx.constraintlayout.widget.Group
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="orderItem,orderQuantityGroup" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/orderQuantityGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="orderQuantityPlus,orderQuantity,orderQuantityMinus" />
+
+    <TextView
+        android:id="@+id/orderItem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="25dp"
+        android:layout_marginStart="44dp"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/orderImageView" />
+
+    <TextView
+        android:id="@+id/orderQuantity"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginVertical="16dp"
+        android:layout_marginTop="16dp"
+        android:gravity="center_vertical"
+        android:inputType="number"
+        android:text="1"
+        android:textAlignment="center"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toStartOf="@+id/orderQuantityPlus"
+        app:layout_constraintTop_toBottomOf="@+id/orderImageView" />
+
+    <Button
+        android:id="@+id/orderQuantityPlus"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginVertical="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="48dp"
+        android:backgroundTint="@color/brown"
+        android:paddingLeft="0dp"
+        android:paddingRight="0dp"
+        android:text="+"
+        app:cornerRadius="40dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/orderImageView" />
+
+    <Button
+        android:id="@+id/orderQuantityMinus"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginVertical="16dp"
+        android:layout_marginTop="216dp"
+        android:backgroundTint="@color/brown"
+        android:paddingLeft="0dp"
+        android:paddingRight="0dp"
+        android:text="-"
+        app:layout_constraintEnd_toStartOf="@+id/orderQuantity"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/orderItem"
+        app:layout_constraintTop_toBottomOf="@+id/orderImageView" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/orderHotColdGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="orderHotCold,orderHotColdChoice" />
+
+    <TextView
+        android:id="@+id/orderHotCold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="25dp"
+        android:layout_marginStart="44dp"
+        android:text="Hot / Cold"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider" />
+
+    <RadioGroup
+        android:id="@+id/orderHotColdChoice"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginVertical="12dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="40dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/orderHotCold"
+        app:layout_constraintTop_toBottomOf="@+id/divider">
+
+        <RadioButton
+            android:id="@+id/hot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:background="@null"
+            android:button="@drawable/hot"
+            tools:layout_editor_absoluteX="157dp"
+            tools:layout_editor_absoluteY="426dp" />
+
+        <RadioButton
+            android:id="@+id/cold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:button="@drawable/cold"
+            tools:layout_editor_absoluteX="157dp"
+            tools:layout_editor_absoluteY="426dp" />
+    </RadioGroup>
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/orderSizeGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="orderSize,orderSizeChoice" />
+
+    <TextView
+        android:id="@+id/orderSize"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="25dp"
+        android:layout_marginStart="44dp"
+        android:text="Size"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider2" />
+
+    <RadioGroup
+        android:id="@+id/orderSizeChoice"
+        android:layout_width="wrap_content"
+        android:layout_height="65dp"
+        android:layout_centerVertical="true"
+        android:layout_marginVertical="4dp"
+        android:layout_marginEnd="44dp"
+        android:gravity="end|bottom"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/orderSize"
+        app:layout_constraintTop_toBottomOf="@+id/divider2">
+
+        <RadioButton
+            android:id="@+id/smallSize"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:button="@drawable/small"
+            android:paddingBottom="15dp"
+            tools:layout_editor_absoluteX="157dp"
+            tools:layout_editor_absoluteY="426dp" />
+
+        <RadioButton
+            android:id="@+id/mediumSize"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:background="@null"
+            android:button="@drawable/medium"
+            android:paddingBottom="6dp"
+            tools:layout_editor_absoluteX="157dp"
+            tools:layout_editor_absoluteY="426dp" />
+
+        <RadioButton
+            android:id="@+id/largeSize"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:button="@drawable/large"
+            tools:layout_editor_absoluteX="157dp"
+            tools:layout_editor_absoluteY="426dp" />
+    </RadioGroup>
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/orderMilkGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="orderMilk,orderMilkChoice" />
+
+    <TextView
+        android:id="@+id/orderMilk"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="25dp"
+        android:layout_marginStart="44dp"
+        android:text="Milk"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider3" />
+
+    <RadioGroup
+        android:id="@+id/orderMilkChoice"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_centerVertical="true"
+        android:layout_marginVertical="4dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="40dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.986"
+        app:layout_constraintStart_toEndOf="@+id/orderMilk"
+        app:layout_constraintTop_toBottomOf="@+id/divider3">
+
+        <RadioButton
+            android:id="@+id/noMilk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:background="@null"
+            android:button="@drawable/cancel"
+            android:paddingBottom="20dp"
+            tools:layout_editor_absoluteX="157dp"
+            tools:layout_editor_absoluteY="426dp" />
+
+        <RadioButton
+            android:id="@+id/smallMilk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="6dp"
+            android:background="@null"
+            android:button="@drawable/milk_small"
+            android:paddingBottom="9dp"
+            tools:layout_editor_absoluteX="157dp"
+            tools:layout_editor_absoluteY="426dp" />
+
+        <RadioButton
+            android:id="@+id/largeMilk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:button="@drawable/milk_large"
+            tools:layout_editor_absoluteX="157dp"
+            tools:layout_editor_absoluteY="426dp" />
+    </RadioGroup>
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/orderPriceGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="orderTotalAmount,orderPrice" />
+
+    <Button
+        android:id="@+id/orderNextBtn"
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/brown"
+        android:text="Next"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.483"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.931" />
+
+    <TextView
+        android:id="@+id/orderTotalAmount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="36dp"
+        android:text="Total Amount"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.845" />
+
+    <TextView
+        android:id="@+id/orderPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="48dp"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.845" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="320dp"
+        android:layout_height="1dp"
+        android:layout_marginVertical="25dp"
+        android:background="?android:attr/listDivider"
+        android:backgroundTint="@color/divider_color"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/orderItem" />
+
+    <View
+        android:id="@+id/divider2"
+        android:layout_width="320dp"
+        android:layout_height="1dp"
+        android:layout_marginVertical="25dp"
+        android:background="?android:attr/listDivider"
+        android:backgroundTint="@color/divider_color"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/orderHotCold" />
+
+    <View
+        android:id="@+id/divider3"
+        android:layout_width="320dp"
+        android:layout_height="1dp"
+        android:layout_marginVertical="25dp"
+        android:background="?android:attr/listDivider"
+        android:backgroundTint="@color/divider_color"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/orderSize" />
+
+    <ImageButton
+        android:id="@+id/orderBackBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="28dp"
+        android:backgroundTint="#00FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.012"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/backbtn" />
+
+    <ImageButton
+        android:id="@+id/orderCartBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="36dp"
+        android:backgroundTint="#00FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/cart" />
+
+    <TextView
+        android:id="@+id/orderLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:text="Order"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/orderCartBtn"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/orderBackBtn"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

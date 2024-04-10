@@ -2,6 +2,7 @@ package com.example.sesecoffee
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -29,8 +30,7 @@ class AdminMainActivity : AppCompatActivity() {
             true
 
         }
-        val firebaseSingleton = FirebaseSingleton.getInstance()
-        productsViewModel = ProductsViewModel(firebaseSingleton,application)
+        productsViewModel = ProductsViewModel(application)
     }
 
     private fun replaceFragment(fragment: Fragment){

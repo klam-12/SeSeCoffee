@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.sesecoffee.CartOrderActivity
 import com.example.sesecoffee.MainActivity
 import com.example.sesecoffee.ProfileActivity
 import com.example.sesecoffee.R
@@ -33,11 +34,6 @@ class HomeFragment : Fragment(R.layout.fragment_home){
     private val binding get() = _binding!!
 
     // Firebase References
-    lateinit var firebaseAuth : FirebaseAuth
-    lateinit var user : FirebaseUser
-    var db = FirebaseFirestore.getInstance()
-    var collectionReference: CollectionReference = db.collection("Products")
-
     lateinit var productList : MutableList<Product>
     lateinit var productAdapter: ProductAdapter
     lateinit var productsViewModel: ProductsViewModel
@@ -94,6 +90,7 @@ class HomeFragment : Fragment(R.layout.fragment_home){
     }
     private fun setUpRecyclerViewProducts(){
         // Set up the recyclerview products
+        productsViewModel.fetchAllProducts()
         productAdapter = ProductAdapter()
         binding.rvListProducts.apply {
             setHasFixedSize(true)
@@ -115,7 +112,8 @@ class HomeFragment : Fragment(R.layout.fragment_home){
         binding.cartButton.setOnClickListener(){
 //            if(user != null && firebaseAuth != null){
             // Link to cart
-            Toast.makeText(binding.root.context,"Go to cart implementation", Toast.LENGTH_LONG).show()
+            val intent = Intent(binding.root.context, CartOrderActivity::class.java)
+            startActivity(intent)
 //            }
         }
     }

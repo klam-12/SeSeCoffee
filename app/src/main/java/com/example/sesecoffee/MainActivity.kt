@@ -12,12 +12,14 @@ import com.example.sesecoffee.fragments.OrderTrackingFragment
 import com.example.sesecoffee.fragments.RewardFragment
 import com.example.sesecoffee.model.FirebaseSingleton
 import com.example.sesecoffee.model.UserSingleton
+import com.example.sesecoffee.viewModel.OrderItemsViewModel
 import com.example.sesecoffee.viewModel.ProductsViewModel
 
 class MainActivity : AppCompatActivity() {
 
     lateinit var binding : ActivityMainBinding
     lateinit var productsViewModel: ProductsViewModel
+    lateinit var orderItemViewModel: OrderItemsViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -36,13 +38,11 @@ class MainActivity : AppCompatActivity() {
             true
 
         }
-//
-        val firebaseSingleton = FirebaseSingleton.getInstance()
-        productsViewModel = ProductsViewModel(firebaseSingleton,application)
 
         val user = UserSingleton.instance
         Log.i("User",user.toString())
-
+        productsViewModel = ProductsViewModel(application)
+        orderItemViewModel = OrderItemsViewModel(application)
     }
 
     private fun replaceFragment(fragment: Fragment){

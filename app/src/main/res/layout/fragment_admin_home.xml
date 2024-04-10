@@ -6,6 +6,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".fragments.AdminHomeFragment">
 
     <TextView
@@ -48,7 +49,7 @@
             app:cardBackgroundColor="@color/primary"
             app:cardCornerRadius="30dp"
 
-            app:cardElevation="8dp"
+            app:cardElevation="10dp"
             tools:layout_editor_absoluteX="1dp"
             tools:layout_editor_absoluteY="337dp">
 
@@ -99,6 +100,21 @@
         </androidx.cardview.widget.CardView>
 
     </LinearLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/addProductBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="248dp"
+        android:clickable="true"
+        app:backgroundTint="#FFF7F1"
+        app:elevation="1dp"
+        tools:ignore="SpeakableTextPresentCheck"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintStart_toEndOf="@+id/textView2"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.516"
+        app:srcCompat="@android:drawable/ic_input_add" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
