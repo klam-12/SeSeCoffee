@@ -74,7 +74,7 @@
         android:layout_height="60dp"
         android:layout_marginTop="156dp"
         android:backgroundTint="@color/primary"
-        android:text="next"
+        android:text="Next"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.811"
         app:layout_constraintStart_toStartOf="parent"

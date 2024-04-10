@@ -18,6 +18,9 @@
         android:theme="@style/Theme.SeSeCoffee"
         tools:targetApi="31">
         <activity
+            android:name=".RedeemPaymentActivity"
+            android:exported="false" />
+        <activity
             android:name=".EditRedeemActivity"
             android:exported="false" />
         <activity
@@ -30,11 +33,15 @@
             android:name=".ForgotPasswordActivity"
             android:exported="false" />
         <activity
+            android:name=".RatingActivity"
+            android:exported="false" />
+        <activity
             android:name=".AdminMainActivity"
             android:exported="false" />
         <activity
             android:name=".AddProductActivity"
-            android:exported="false" />
+            android:exported="false">
+        </activity>
         <activity
             android:name=".ProfileActivity"
             android:exported="false" />

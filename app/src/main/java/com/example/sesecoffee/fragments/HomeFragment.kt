@@ -67,7 +67,7 @@ class HomeFragment : Fragment(R.layout.fragment_home){
                         hideLoading()
                         Toast.makeText(requireContext(),it.message,Toast.LENGTH_SHORT).show()
                     }
-                    else -> Unit
+                else -> Unit
                 }
             }
         }

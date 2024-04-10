@@ -8,9 +8,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.example.sesecoffee.databinding.ActivityMainBinding
 import com.example.sesecoffee.fragments.HomeFragment
-import com.example.sesecoffee.fragments.OrderTrackingFragment
 import com.example.sesecoffee.fragments.RewardFragment
-import com.example.sesecoffee.model.FirebaseSingleton
 import com.example.sesecoffee.model.UserSingleton
 import com.example.sesecoffee.viewModel.ProductsViewModel
 
