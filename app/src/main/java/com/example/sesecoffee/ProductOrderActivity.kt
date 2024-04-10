@@ -4,9 +4,11 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.TextView
@@ -15,15 +17,14 @@ import com.bumptech.glide.Glide
 import com.example.sesecoffee.enums.HotCold
 import com.example.sesecoffee.enums.Milk
 import com.example.sesecoffee.enums.Size
-import com.example.sesecoffee.model.FirebaseSingleton
 import com.example.sesecoffee.model.Order
 import com.example.sesecoffee.model.OrderItem
-import com.example.sesecoffee.model.Product
 import com.example.sesecoffee.model.UserSingleton
 import com.example.sesecoffee.viewModel.OrderItemsViewModel
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.example.sesecoffee.utils.Constant.PRODUCT_COLLECTION
+import com.example.sesecoffee.utils.Constant.ORDER_COLLECTION
 import com.example.sesecoffee.viewModel.OrderViewModel
 import java.util.UUID
 
@@ -32,30 +33,25 @@ class ProductOrderActivity : AppCompatActivity() {
     private var price = 0
     private var sizeFee = 0
     private var milkFee = 0
-    private  var productName=""
-    private  var productImg=""
-    lateinit var idOrder:String
+    private  var productName = ""
+    private  var productImg = ""
+    lateinit var idOrder : String
 
-    private lateinit var userId : String
-    private lateinit var product : Product
+    private lateinit var orderItemViewModel: OrderItemsViewModel
+    private lateinit var orderViewModel: OrderViewModel
 
     var db = FirebaseFirestore.getInstance()
     var collectionReference: CollectionReference = db.collection(PRODUCT_COLLECTION)
-    var collectionOrders:CollectionReference=db.collection("Orders")
-
-    lateinit var viewModel: OrderItemsViewModel
-    lateinit var orderViewModel: OrderViewModel
+    var collectionOrders:CollectionReference = db.collection(ORDER_COLLECTION)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_product_order)
-        viewModel = OrderItemsViewModel(application)
+        orderItemViewModel = OrderItemsViewModel(application)
         orderViewModel = OrderViewModel(application)
 
         val intent = intent
-        val message = intent.getStringExtra("product")
-        userId = UserSingleton.instance!!.id!!
-
         val productId = intent.getStringExtra("productId")
+
         val productImage = findViewById<ImageView>(R.id.orderImageView)
         val productNameTextView = findViewById<TextView>(R.id.orderItem)
         val quantityTextView = findViewById<TextView>(R.id.orderQuantity)
@@ -78,14 +74,16 @@ class ProductOrderActivity : AppCompatActivity() {
                 .get()
                 .addOnSuccessListener {
                     if (it.exists()) {
-                        productName=it.getString("name").toString()
-                        val priceTemp=it.get("price").toString().toInt()
-                        productImg=it.getString("imageUrl").toString()
+                        showLoading()
+                        val priceTemp = it.get("price").toString().toInt()
+                        productName = it.getString("name").toString()
+                        productImg = it.getString("imageUrl").toString()
+                        price = priceTemp
                         productNameTextView.setText(productName)
                         Glide.with(this).load(productImg).into(productImage)
-                        price=priceTemp
                         quantityTextView.setText("$quantity")
                         priceTextView.setText("${price * quantity}VNĐ")
+                        hideLoading()
                     }
                 }.addOnFailureListener() {
                     Toast.makeText(
@@ -152,46 +150,36 @@ class ProductOrderActivity : AppCompatActivity() {
                 "smallMilk" -> Milk.SMALLMILK.value
                 else -> Milk.LARGEMILK.value
             }
-            Log.d("YourActivity", "Your variable value: $productName")
-            val tempName=productName
-            val tempImg=productImg
 
-            //doc du lieu tren bang ordersHoang kiem tra co dong nao chua userid va done ==false
-
-            val newOrder = OrderItem(UUID.randomUUID().toString(), userId, productNameTextView.text.toString(), product.imageUrl, temperature, size, milk, quantity, totalPrice, false)
-            viewModel.addOrderItem(newOrder)
-
-
-
-            val query=collectionOrders.whereEqualTo("userId", UserSingleton.instance?.id.toString())
+            val tempName = productName
+            val tempImg = productImg
+            val query = collectionOrders.whereEqualTo("userId", UserSingleton.instance?.id.toString())
                 .whereEqualTo("done",false)
             query.get()
                 .addOnSuccessListener { documentSnapshot->
                     if(documentSnapshot.isEmpty){
-                        //neu khong co thi tao moi
                         val id = UUID.randomUUID().toString()
-                        val newOrders= Order(id,0,
+                        val newOrders = Order(id,0,
                             null,
                             UserSingleton.instance?.address,
                             UserSingleton.instance?.id,
                             "",
                             "",
                             "",
-                            false,
                             false
                         )
                         orderViewModel.addOrders(newOrders)
-                        idOrder=id
+                        idOrder = id
                     }
                     else{
-                        //lay id cua ordersHoang sau do tao orderItem
                         for(document in documentSnapshot){
                             idOrder= document.getString("id").toString()
                         }
                         Log.i("R","sai oi")
                     }
-                    val newOrder = OrderItem(productId, tempName, tempImg, temperature, size, milk, quantity, totalPrice, false)
-                    viewModel.addOrderItem(newOrder,idOrder)
+                    val newOrder = OrderItem(UUID.randomUUID().toString(), productId, tempName, tempImg, temperature, size, milk, quantity, totalPrice, false)
+                    orderItemViewModel.addOrderItem(newOrder,idOrder)
+
                     val intent = Intent(
                         applicationContext,
                         CartOrderActivity::class.java
@@ -200,13 +188,8 @@ class ProductOrderActivity : AppCompatActivity() {
                     startActivity(intent)
 
                 }.addOnFailureListener { exception ->
-                    // Handle any errors that occur
                     println("Error getting documents: $exception")
                 }
-
-
-
-
         }
 
         findViewById<ImageButton>(R.id.orderBackBtn).setOnClickListener {
@@ -221,6 +204,14 @@ class ProductOrderActivity : AppCompatActivity() {
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             startActivity(intent)
         }
+    }
+
+    private fun hideLoading() {
+        findViewById<ProgressBar>(R.id.orderProgressBar).visibility = View.GONE
+    }
+
+    private fun showLoading() {
+        findViewById<ProgressBar>(R.id.orderProgressBar).visibility = View.VISIBLE
     }
 
     fun handleRadioButton(radio: RadioButton, fee: Int, type: Int) {

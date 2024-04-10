@@ -6,7 +6,7 @@ import com.example.sesecoffee.enums.Size
 
 data class OrderItem(
     val id:String? = null,
-    var userId:String? = null,
+    val productId:String? = null,
     var productName : String? = null,
     var productImage: String? = null,
     var hotCold : String? = null,
@@ -18,7 +18,7 @@ data class OrderItem(
 ) {
     constructor(
         id: String?,
-        userId: String?,
+        productId: String?,
         productName : String?,
         productImage : String?,
         hotCold : HotCold?,
@@ -28,7 +28,7 @@ data class OrderItem(
         price : Int?,
         isDelivered : Boolean?
     ) :
-            this(id, userId, productName, productImage, hotCold.toString(), size.toString(), milk.toString(), quantity, price, isDelivered) {}
+            this(id, productId, productName, productImage, hotCold.toString(), size.toString(), milk.toString(), quantity, price, isDelivered) {}
 
     override fun toString() : String {
         return "$productName $hotCold $size $milk $quantity $price"

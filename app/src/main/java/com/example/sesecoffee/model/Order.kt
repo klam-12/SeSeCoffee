@@ -9,13 +9,13 @@ data class Order(
     var address : String? = null,
     var userId : String? = null,
     var phoneNumber : String? = null,
-    var paymentId: String?=null,
+    var paymentMethod : String? = null,
     var code : String? = null,
     var done: Boolean= false,
     var delivered: Boolean=false
 ) {
- //   constructor() :
-    //        this(id,0, null, "", "","", "", "",false,false) {}
-//    constructor(total: Int, paymentId: String, address: String, userId: String, phoneNumber: String, code: String) :
-//            this(total, Timestamp.now(), paymentId, address, userId, phoneNumber, code) {}
+//    constructor() :
+//            this("",0, null, "", "","", "", "",false,false) {}
+//    constructor(id: String, total: Int, timestamp: Timestamp, address: String, userId: String, phoneNumber: String, code: String, done: Boolean) :
+//            this(id, total, timestamp, address, userId, phoneNumber, code, done) {}
 }

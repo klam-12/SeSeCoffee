@@ -1,18 +1,14 @@
 package com.example.sesecoffee.viewModel
 
 import android.app.Application
-import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.sesecoffee.model.FirebaseSingleton
 import com.example.sesecoffee.model.OrderItem
-import com.example.sesecoffee.model.UserSingleton
-import com.example.sesecoffee.utils.Constant
 import com.example.sesecoffee.utils.Constant.ORDER_ITEM_COLLECTION
 import com.example.sesecoffee.utils.Resource
 import com.google.firebase.firestore.CollectionReference
-import com.google.firebase.storage.StorageReference
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -32,11 +28,7 @@ class OrderItemsViewModel(app: Application) : AndroidViewModel(
 
     private var orderItemList : MutableList<OrderItem>? = null
     private val fbSingleton = FirebaseSingleton.getInstance()
-
-    init {
-        fetchOrderItemByUserId(UserSingleton.instance!!.id!!)
-    }
-
+    var collectionOrders : CollectionReference = fbSingleton.db.collection("Orders")
     fun fetchAllOrderItems()  {
         viewModelScope.launch { _orderItems.emit(Resource.Loading()) }
 
@@ -60,10 +52,10 @@ class OrderItemsViewModel(app: Application) : AndroidViewModel(
             }
     }
 
-    fun fetchOrderItemByUserId(userId: String) {
+    fun fetchOrderItemByOrderId(orderId: String) {
         viewModelScope.launch { _orderItems.emit(Resource.Loading()) }
 
-        fbSingleton.db.collection(ORDER_ITEM_COLLECTION).whereEqualTo("userId", userId).get()
+        collectionOrders.document(orderId).collection("OrderItem").get()
             .addOnSuccessListener {
                     result ->
                 orderItemList = result.toObjects(OrderItem::class.java)
@@ -82,10 +74,10 @@ class OrderItemsViewModel(app: Application) : AndroidViewModel(
             }
     }
 
-    fun addOrderItem(orderItem: OrderItem, OrderID:String){
-        val parentDocumentRef=fbSingleton.db.collection("Orders").document(OrderID)
-        val subCollectionRef=parentDocumentRef.collection("OrderItem")
-        subCollectionRef.add(orderItem)
+    fun addOrderItem(orderItem : OrderItem, orderId : String){
+        viewModelScope.launch { _orderItems.emit(Resource.Loading()) }
+        val subCollectionRef = collectionOrders.document(orderId).collection("OrderItem")
+        subCollectionRef.document(orderItem.id!!).set(orderItem)
             .addOnSuccessListener {
                 Toast.makeText(
                     getApplication(),
@@ -101,27 +93,10 @@ class OrderItemsViewModel(app: Application) : AndroidViewModel(
             }
     }
 
-//    fun addOrderItem(orderItem: OrderItem){
-//        viewModelScope.launch { _orderItems.emit(Resource.Loading()) }
-//        val collectionReference : CollectionReference = fbSingleton.db.collection(ORDER_ITEM_COLLECTION)
-//
-//        collectionReference.document(orderItem.id!!).set(orderItem)
-//        .addOnSuccessListener {
-//            orderItemList?.add(orderItem)
-//            viewModelScope.launch {
-//                _orderItems.emit(Resource.Success(orderItemList))
-//            }
-//        }
-//        .addOnFailureListener(){
-//            viewModelScope.launch {
-//                _orderItems.emit(Resource.Error(it.message.toString()))
-//            }
-//        }
-//    }
-
-    fun updateOrderItemInfo(newOrderItem: OrderItem) {
+    fun updateOrderItemInfo(newOrderItem: OrderItem, orderId : String) {
         viewModelScope.launch { _updateOrderItem.emit(Resource.Loading()) }
-        val documentRef = fbSingleton.db.collection(ORDER_ITEM_COLLECTION).document(newOrderItem.id!!)
+        val subCollectionRef = collectionOrders.document(orderId).collection("OrderItem")
+        val documentRef = subCollectionRef.document(newOrderItem.id!!)
         fbSingleton.db.runTransaction{transaction ->
             val snapshot = transaction.get(documentRef)
             if(snapshot.exists()){
@@ -140,9 +115,10 @@ class OrderItemsViewModel(app: Application) : AndroidViewModel(
         }
     }
 
-    fun deleteOrderItem(orderItemId : String){
+    fun deleteOrderItem(orderItemId : String, orderId : String){
+        val subCollectionRef = collectionOrders.document(orderId).collection("OrderItem")
         viewModelScope.launch {
-            fbSingleton.db.collection(Constant.ORDER_ITEM_COLLECTION).document(orderItemId).delete()
+            subCollectionRef.document(orderItemId).delete()
                 .addOnSuccessListener {
                     viewModelScope.launch {
                         _updateOrderItem.emit(Resource.Success(null))
