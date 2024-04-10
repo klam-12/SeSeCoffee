@@ -11,11 +11,14 @@ import com.example.sesecoffee.fragments.HomeFragment
 import com.example.sesecoffee.fragments.RewardFragment
 import com.example.sesecoffee.model.UserSingleton
 import com.example.sesecoffee.viewModel.ProductsViewModel
+import com.example.sesecoffee.viewModel.RewardItemViewModel
 
 class MainActivity : AppCompatActivity() {
 
     lateinit var binding : ActivityMainBinding
     lateinit var productsViewModel: ProductsViewModel
+    lateinit var  rewardViewModel: RewardItemViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -25,7 +28,7 @@ class MainActivity : AppCompatActivity() {
             when(it.itemId){
                 R.id.homeFragment -> replaceFragment(HomeFragment())
                 R.id.rewardFragment -> replaceFragment(RewardFragment())
-//                R.id.orderTrackingFragment -> replaceFragment(RewardFragment())
+                R.id.orderTrackingFragment -> replaceFragment(HomeFragment())
 
                 else -> {
                     Toast.makeText(this,"Invalid navigation",Toast.LENGTH_SHORT).show()
@@ -35,9 +38,12 @@ class MainActivity : AppCompatActivity() {
 
         }
 
+
         val user = UserSingleton.instance
         Log.i("User",user.toString())
+
         productsViewModel = ProductsViewModel(application)
+        rewardViewModel = RewardItemViewModel(application);
     }
 
     private fun replaceFragment(fragment: Fragment){

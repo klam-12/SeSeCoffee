@@ -9,11 +9,11 @@ import com.example.sesecoffee.R
 
 
 class HistoryFragment : Fragment() {
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_history, container, false)
-    }
+//    override fun onCreateView(
+//        inflater: LayoutInflater, container: ViewGroup?,
+//        savedInstanceState: Bundle?
+//    ): View? {
+//        // Inflate the layout for this fragment
+////        return inflater.inflate(R.layout.fragment_history, container, false)
+//    }
 }

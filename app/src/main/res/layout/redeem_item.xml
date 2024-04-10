@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+    <data>
+        <variable
+            name="redeemItem"
+            type="com.example.sesecoffee.model.Redeem" />
+    </data>
+    <androidx.cardview.widget.CardView
+        android:id="@+id/rewardItemCardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:outlineProvider="none"
+        app:cardCornerRadius="8dp"
+        android:layout_marginBottom="5dp"
+        android:layout_margin="8dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_gravity="center_vertical"
+            android:bottom="1dp"
+            android:orientation="horizontal"
+            android:top="1dp">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                app:cardCornerRadius="10dp"
+                tools:srcCompat="@tools:sample/avatars" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="20dp"
+                android:orientation="vertical">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:text="@{redeemItem.productName}"
+                    android:textColor="@color/textColor"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:text="@{redeemItem.convertToFormattedDate()}"
+                    android:textColor="@color/grey_"
+                    android:textSize="12sp"
+                    android:textStyle="normal" />
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/pointsBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginRight="10dp"
+                android:backgroundTint="@color/primary"
+                android:padding="2sp"
+                android:paddingHorizontal="3sp"
+                android:text='@{redeemItem.point.toString() + " pts"}'
+                android:textSize="14sp"
+                app:cornerRadius="50dp" />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</layout>

@@ -9,7 +9,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.DataBindingUtil.setContentView
 import com.example.sesecoffee.R
 import com.example.sesecoffee.databinding.ActivityMainBinding
-import dagger.hilt.android.AndroidEntryPoint
 
 
 class OrderTrackingFragment : Fragment(R.layout.fragment_order_tracking){

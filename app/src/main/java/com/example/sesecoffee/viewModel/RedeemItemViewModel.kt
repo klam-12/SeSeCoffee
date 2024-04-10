@@ -10,6 +10,7 @@ import com.example.sesecoffee.model.Product
 import com.example.sesecoffee.model.Redeem
 import com.example.sesecoffee.utils.Constant
 import com.example.sesecoffee.utils.Resource
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.CollectionReference
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -33,9 +34,10 @@ class RedeemItemViewModel(app:Application) : AndroidViewModel(app) {
 
     private val fbSingleton = FirebaseSingleton.getInstance()
 
-    init{
-        fetchAllRedeems()
-    }
+//    init{
+//        fetchAllRedeems()
+//        fetchAllRedeemWithValidDate()
+//    }
 
     fun fetchAllRedeems(){
         viewModelScope.launch{_redeems.emit(Resource.Loading())}
@@ -54,6 +56,34 @@ class RedeemItemViewModel(app:Application) : AndroidViewModel(app) {
                     _redeems.emit(Resource.Error(it.message.toString()))
                 }
             }
+    }
+
+    fun fetchAllRedeemWithValidDate() {
+        viewModelScope.launch { _redeems.emit(Resource.Loading()) }
+
+        val nowTimestamp = Timestamp.now()
+        fbSingleton.db.collection(Constant.REDEEM_COLLECTION)
+            .whereGreaterThan("untilAt", nowTimestamp)
+            .get()
+            .addOnSuccessListener { result ->
+                println("RESULT AFTER GET: ${result.toObjects(Redeem::class.java)}")
+
+                val redeemList = result?.toObjects(Redeem::class.java)
+                viewModelScope.launch {
+                    _redeems.emit(Resource.Success(redeemList))
+                }
+            }
+            .addOnFailureListener { exception ->
+                Toast.makeText(
+                    getApplication(),
+                    "Errors happen when loading the database: ${exception.message}",
+                    Toast.LENGTH_LONG
+                ).show()
+                viewModelScope.launch {
+                    _redeems.emit(Resource.Error(exception.message.toString()))
+                }
+            }
+
     }
 
     fun addRedeem(redeem: Redeem){

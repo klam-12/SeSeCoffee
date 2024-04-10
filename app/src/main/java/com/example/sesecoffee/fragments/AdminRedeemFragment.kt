@@ -43,6 +43,7 @@ class AdminRedeemFragment : Fragment(R.layout.fragment_admin_redeem) {
 
         setUpRecyclerViewRedeem()
         lifecycleScope.launchWhenStarted {
+            redeemItemViewModel.fetchAllRedeems()
             redeemItemViewModel.redeems.collectLatest {
                 when(it){
                     is Resource.Loading -> {

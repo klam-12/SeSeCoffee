@@ -3,6 +3,9 @@ package com.example.sesecoffee.model
 import com.example.sesecoffee.enums.HotCold
 import com.example.sesecoffee.enums.Milk
 import com.example.sesecoffee.enums.Size
+import java.text.SimpleDateFormat
+import java.util.Date
+
 
 data class OrderItem(
     val id:String? = null,
@@ -33,4 +36,10 @@ data class OrderItem(
     override fun toString() : String {
         return "$productName $hotCold $size $milk $quantity $price"
     }
+    fun getReward(): Int? {
+        return (price?.toDouble() )?.div(1000)?.let { Math.round(it).toInt() }
+    }
+
+
+
 }

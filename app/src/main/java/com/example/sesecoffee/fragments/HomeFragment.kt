@@ -24,10 +24,6 @@ import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.collectLatest
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
 class HomeFragment : Fragment(R.layout.fragment_home){
     private var _binding : FragmentHomeBinding? = null

@@ -3,8 +3,8 @@
     <string name="select_title">Select your coffee</string>
     <string name="productNotification">No product available</string>
     <string name="profileTitle">Profile</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="forgot_pass">Forgot Password</string>
     <string name="submit_btn">Submit</string>
+    <string name="no_data">No data</string>
 </resources>
