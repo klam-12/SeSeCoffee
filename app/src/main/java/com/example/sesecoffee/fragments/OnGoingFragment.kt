@@ -1,4 +1,7 @@
 package com.example.sesecoffee.fragments
 
-class OnGoingFragment {
+import androidx.fragment.app.Fragment
+import com.example.sesecoffee.R
+
+class OnGoingFragment : Fragment(R.layout.fragment_on_going){
 }

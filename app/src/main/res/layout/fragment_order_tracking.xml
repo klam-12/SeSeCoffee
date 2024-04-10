@@ -14,7 +14,7 @@
         android:layout_marginTop="30dp"
         android:text="My Order"
         android:textColor="@color/textColor"
-        android:textSize="20dp"
+        android:textSize="24dp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -33,7 +33,7 @@
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="92dp"
+        android:layout_marginTop="80dp"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
         app:layout_constraintTop_toBottomOf="@+id/textView"
         tools:layout_editor_absoluteX="0dp">
@@ -42,9 +42,8 @@
             android:id="@+id/tabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/primary"
             app:tabGravity="fill"
-            app:tabIndicatorColor="@color/white"
+            app:tabIndicatorColor="@color/textColor"
             app:tabIndicatorHeight="2dp"
             app:tabMode="fixed" />
     </androidx.viewpager.widget.ViewPager>
