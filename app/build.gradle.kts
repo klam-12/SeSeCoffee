@@ -84,8 +84,10 @@ dependencies {
 
     // Dagger Hilt
     implementation("com.google.dagger:hilt-android:2.51")
+    implementation ("com.google.android.material:material:1.1.0-alpha02")
 //    kapt("com.google.dagger:hilt-android-compiler:2.44")
     annotationProcessor("com.google.dagger:hilt-compiler:2.51")
+
 
     // Add the dependencies for any other desired Firebase products
     // https://firebase.google.com/docs/android/setup#available-libraries
