@@ -2,25 +2,26 @@ package com.example.sesecoffee
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.example.sesecoffee.databinding.ActivityAdminMainBinding
 import com.example.sesecoffee.fragments.AdminHomeFragment
-import com.example.sesecoffee.model.FirebaseSingleton
+import com.example.sesecoffee.fragments.AdminRedeemFragment
 import com.example.sesecoffee.viewModel.ProductsViewModel
+import com.example.sesecoffee.viewModel.RedeemItemViewModel
 
 class AdminMainActivity : AppCompatActivity() {
     lateinit var binding : ActivityAdminMainBinding
     lateinit var productsViewModel: ProductsViewModel
+    lateinit var redeemItemViewModel: RedeemItemViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this,R.layout.activity_admin_main)
         binding.adminBottomNavigationView.setOnItemSelectedListener {
             when(it.itemId){
                 R.id.homeFragment -> replaceFragment(AdminHomeFragment())
-                R.id.rewardFragment -> replaceFragment(AdminHomeFragment())
+                R.id.rewardFragment -> replaceFragment(AdminRedeemFragment())
                 R.id.orderTrackingFragment -> replaceFragment(AdminHomeFragment())
 
                 else -> {
@@ -31,6 +32,7 @@ class AdminMainActivity : AppCompatActivity() {
 
         }
         productsViewModel = ProductsViewModel(application)
+        redeemItemViewModel = RedeemItemViewModel(application)
     }
 
     private fun replaceFragment(fragment: Fragment){

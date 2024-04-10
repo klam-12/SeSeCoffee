@@ -13,7 +13,7 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="29dp"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="20dp"
         android:text="Welcome"
         android:textColor="#AAAAAA"
@@ -105,16 +105,33 @@
         android:id="@+id/addProductBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="248dp"
+        android:layout_marginStart="180dp"
         android:clickable="true"
-        app:backgroundTint="#FFF7F1"
+        app:backgroundTint="@color/pastel_brown"
         app:elevation="1dp"
-        tools:ignore="SpeakableTextPresentCheck"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintStart_toEndOf="@+id/textView2"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.516"
-        app:srcCompat="@android:drawable/ic_input_add" />
+        app:srcCompat="@android:drawable/ic_input_add"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/signOutBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="24dp"
+        android:clickable="true"
+        app:backgroundTint="@color/white"
+        app:elevation="1dp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/addProductBtn"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.516"
+        app:srcCompat="@drawable/ic_log_out"
+        tools:ignore="SpeakableTextPresentCheck" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

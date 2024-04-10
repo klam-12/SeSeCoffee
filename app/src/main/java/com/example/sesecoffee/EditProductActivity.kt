@@ -101,7 +101,6 @@ class EditProductActivity : AppCompatActivity() {
             }
 
             productDeleteBtn.setOnClickListener(){
-                // not testing yet
                 if(oldProduct != null){
                     oldProduct?.id?.let { it1 -> productsViewModel.deleteProduct(it1) }
                 }

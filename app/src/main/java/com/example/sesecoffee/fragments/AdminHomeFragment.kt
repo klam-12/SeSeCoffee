@@ -2,6 +2,7 @@ package com.example.sesecoffee.fragments
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,8 +13,10 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.sesecoffee.AddProductActivity
 import com.example.sesecoffee.AdminMainActivity
 import com.example.sesecoffee.R
+import com.example.sesecoffee.SignInActivity
 import com.example.sesecoffee.adapters.ProductAdapter
 import com.example.sesecoffee.databinding.FragmentAdminHomeBinding
+import com.example.sesecoffee.model.Product
 import com.example.sesecoffee.utils.Resource
 import com.example.sesecoffee.viewModel.ProductsViewModel
 import com.google.firebase.firestore.firestoreSettings
@@ -54,6 +57,7 @@ class AdminHomeFragment : Fragment(R.layout.fragment_admin_home) {
                     }
                     is Resource.Success -> {
                         productAdapter.differ.submitList(it.data)
+
                         hideLoading()
                     }
                     is Resource.Error -> {
@@ -68,6 +72,12 @@ class AdminHomeFragment : Fragment(R.layout.fragment_admin_home) {
         binding.addProductBtn.setOnClickListener(){
             val intent = Intent(requireContext(), AddProductActivity::class.java)
             startActivity(intent)
+        }
+
+        binding.signOutBtn.setOnClickListener(){
+//            val intent = Intent(requireContext(),SignInActivity::class.java);
+//            startActivity(intent);
+            Toast.makeText(requireContext(),"Sign out",Toast.LENGTH_SHORT).show()
         }
 
     }

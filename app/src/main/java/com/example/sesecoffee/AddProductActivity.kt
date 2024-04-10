@@ -3,6 +3,7 @@ package com.example.sesecoffee
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.AttributeSet
@@ -38,10 +39,6 @@ import java.util.UUID
 
 class AddProductActivity : AppCompatActivity() {
     lateinit var binding : ActivityAddProductBinding
-
-    // Credentials
-    var currentUserId : String = ""
-    var currentUserName : String = ""
 
     private var imageUri: Uri? = null
     lateinit var productsViewModel: ProductsViewModel
@@ -106,13 +103,6 @@ class AddProductActivity : AppCompatActivity() {
                 selectImageActivityForResult.launch(intent)
             }
 
-            // Check user and get info
-            if(UserSingleton.instance != null){
-                // User info : Bug
-//                currentUserId = UserSingleton.instance!!.id.toString()
-//                currentUserName = UserSingleton.instance!!.fullName.toString()
-
-            }
 
             productSaveBtn.setOnClickListener(){
                 addNewProduct()

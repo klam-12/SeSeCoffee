@@ -36,7 +36,7 @@ class ProductsViewModel(app: Application) : AndroidViewModel(
     app
 ) {
 
-    private var productsList : MutableList<Product>? = null
+    var productsList : MutableList<Product>? = null
     private  val fbSingleton = FirebaseSingleton.getInstance()
 
     // For list of products
@@ -108,6 +108,7 @@ class ProductsViewModel(app: Application) : AndroidViewModel(
                 .addOnSuccessListener() {
                     filePath.downloadUrl
                         .addOnSuccessListener {
+                            product.imageUrl = it.toString();
                             collectionReference.document(product.id!!).set(product)
                                 .addOnSuccessListener {
 
