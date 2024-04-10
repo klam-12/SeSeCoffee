@@ -75,9 +75,8 @@ class AdminHomeFragment : Fragment(R.layout.fragment_admin_home) {
         }
 
         binding.signOutBtn.setOnClickListener(){
-//            val intent = Intent(requireContext(),SignInActivity::class.java);
-//            startActivity(intent);
-            Toast.makeText(requireContext(),"Sign out",Toast.LENGTH_SHORT).show()
+            val intent = Intent(requireContext(), SignInActivity::class.java)
+            startActivity(intent)
         }
 
     }
