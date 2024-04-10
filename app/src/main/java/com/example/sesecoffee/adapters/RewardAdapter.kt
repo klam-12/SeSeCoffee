@@ -11,10 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView;
-import com.bumptech.glide.Glide
 import com.example.sesecoffee.databinding.HistoryRewardsItemBinding
-import com.example.sesecoffee.databinding.OrderItemBinding
-import com.example.sesecoffee.model.Order
+
 import com.example.sesecoffee.model.OrderItem
 
 import java.util.ArrayList;
@@ -22,20 +20,10 @@ import java.util.ArrayList;
 class RewardAdapter(val context: Context?):  RecyclerView.Adapter<RewardAdapter.RewardViewHolder>(){
     lateinit var binding : HistoryRewardsItemBinding
 
-
-//    var context: Context;
-//
-//    ArrayList<Order> list;
-//
-//
-//    public RewardAdapter(Context context, ArrayList<User> list) {
-////        this.context = context;
-////        this.list = list;
-//    }
-
     inner class RewardViewHolder(var binding: HistoryRewardsItemBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(orderItem: OrderItem){
             binding.orderItem = orderItem
+
 //            binding.apply {
 //                Glide.with(itemView).load(orderItem.)
 //            }
@@ -68,6 +56,7 @@ class RewardAdapter(val context: Context?):  RecyclerView.Adapter<RewardAdapter.
 
     override fun onBindViewHolder(holder: RewardViewHolder, position: Int) {
         val orderItem =  differ.currentList[position]
+
         holder.bind(orderItem)
     }
 

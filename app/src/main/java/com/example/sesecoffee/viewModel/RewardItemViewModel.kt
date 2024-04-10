@@ -9,9 +9,12 @@ import com.example.sesecoffee.model.Order
 import com.example.sesecoffee.model.OrderItem
 import com.example.sesecoffee.utils.Constant
 import com.example.sesecoffee.utils.Resource
+import com.google.firebase.Timestamp
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class RewardItemViewModel ( app: Application) : AndroidViewModel(
     app
@@ -21,31 +24,73 @@ class RewardItemViewModel ( app: Application) : AndroidViewModel(
     private val fbSingleton = FirebaseSingleton.getInstance()
 
     init {
-        fetchAllProducts()
+        fetchAllOrders()
     }
 
-    fun fetchAllProducts()  {
-        viewModelScope.launch { _orderItems.emit(Resource.Loading()) }
+    private fun fetchAllOrders() {
+        viewModelScope.launch {
+            _orderItems.emit(Resource.Loading())
+        }
 
-        fbSingleton.db.collection(Constant.ORDER_ITEM_COLLECTION).get()
-            .addOnSuccessListener {
-                    result ->
-                val ordersList = result.toObjects(OrderItem::class.java)
-                viewModelScope.launch {
-                    _orderItems.emit(Resource.Success(ordersList))
+        fbSingleton.db.collection(Constant.ORDER_COLLECTION)
+            .whereEqualTo("done", true)
+            .whereEqualTo("delivered", false)
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                val ordersList = mutableListOf<Order>()
+                val itemsList = mutableListOf<OrderItem>()
+                println("HELLO $querySnapshot")
+
+                for (document in querySnapshot.documents) {
+                    val order = document.toObject(Order::class.java)
+                    val itemsCollection = document.reference.collection("OrderItem")
+
+                    itemsCollection.get()
+                        .addOnSuccessListener { subCollectionSnapshot ->
+                            for (subDocument in subCollectionSnapshot.documents) {
+                                val item = subDocument.toObject(OrderItem::class.java)
+
+                                item?.productId = order?.createAt?.let {
+                                    timestampToFormattedString(
+                                        it
+                                    )
+                                }
+                                item?.let {
+                                    itemsList.add(it)
+                                }
+                                println(item.toString())
+                            }
+
+                            order?.let {
+                                ordersList.add(it)
+                            }
+
+                            if (ordersList.size == querySnapshot.documents.size) {
+                                viewModelScope.launch {
+                                    _orderItems.emit(Resource.Success(itemsList))
+                                }
+                            }
+                        }
+
                 }
-
-            }.addOnFailureListener() {
+            }
+            .addOnFailureListener { exception ->
                 Toast.makeText(
                     getApplication(),
                     "Errors happen when loading the database",
                     Toast.LENGTH_LONG
                 ).show()
                 viewModelScope.launch {
-                    _orderItems.emit(Resource.Error(it.message.toString()))
+                    _orderItems.emit(Resource.Error(exception.message.toString()))
                 }
             }
     }
+
+    fun timestampToFormattedString(timestamp: Timestamp): String {
+        val sdf = SimpleDateFormat("dd MMMM yyyy | HH:mm", Locale.getDefault())
+        return sdf.format(timestamp.toDate())
+    }
+
 
     fun fetchAProduct(proName: String){
 

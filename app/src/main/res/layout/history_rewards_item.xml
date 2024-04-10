@@ -2,43 +2,40 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     >
-    <data>
-        <variable
-            name="orderItem"
-            type="com.example.sesecoffee.model.OrderItem" />
-        <variable
-            name="order"
-            type="com.example.sesecoffee.model.Order" />
-    </data>
+
     <androidx.cardview.widget.CardView
         android:id="@+id/rewardItemCardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="0dp"
         android:background="@android:color/white"
         app:cardCornerRadius="8dp"
         app:cardElevation="2dp"
         app:cardUseCompatPadding="true">
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="78dp"
             android:layout_gravity="center_vertical"
-            android:top="1dp"
             android:bottom="1dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingBottom="1dp"
+            android:paddingTop="1dp"
+            android:top="1dp">
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="200dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
+                android:layout_marginBottom="10dp"
                 android:layout_marginLeft="16dp"
+                android:layout_marginRight="40dp"
                 android:layout_marginTop="10dp"
                 android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
+                    android:layout_marginBottom="10dp"
                     android:text="@{orderItem.productName}"
                     android:textColor="@color/textColor"
                     android:textSize="18sp"
@@ -48,24 +45,33 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{order.createAt != null ? String.valueOf(order.createAt) : ``}"
-                    android:textColor="@color/grey"
+                    android:text="@{orderItem.productId}"
+                    android:textColor="@color/order_inactive"
                     android:textSize="15sp"
                     android:textStyle="normal" />
 
             </LinearLayout>
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="127dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginEnd="10dp"
-                android:layout_marginLeft="80dp"
-                android:layout_marginStart="180dp"
                 android:text="@{`+ ` + orderItem.getReward() + ` pts`}"
                 android:textColor="@color/textColor"
                 android:textSize="18sp"
                 android:textStyle="bold" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
+
+    <data>
+
+        <variable
+            name="orderItem"
+            type="com.example.sesecoffee.model.OrderItem" />
+
+        <variable
+            name="order"
+            type="com.example.sesecoffee.model.Order" />
+    </data>
 </layout>
