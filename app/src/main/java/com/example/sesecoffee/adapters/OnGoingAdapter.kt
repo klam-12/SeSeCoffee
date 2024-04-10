@@ -8,22 +8,23 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.sesecoffee.databinding.OnGoingItemBinding
 import com.example.sesecoffee.model.Order
+import com.example.sesecoffee.model.OrderItem
 
 class OnGoingAdapter (val context: Context?):  RecyclerView.Adapter<OnGoingAdapter.OnGoingViewHolder>(){
     lateinit var binding : OnGoingItemBinding
 
     inner class OnGoingViewHolder(var binding: OnGoingItemBinding): RecyclerView.ViewHolder(binding.root){
-        fun bind(orderItem: Order){
-            binding.order = orderItem
+        fun bind(orderItem: OrderItem){
+            binding.orderItem = orderItem
         }
     }
 
-    private val diffCallback = object : DiffUtil.ItemCallback<Order>(){
-        override fun areItemsTheSame(oldItem: Order, newItem: Order): Boolean {
-            return oldItem.id == newItem.id
+    private val diffCallback = object : DiffUtil.ItemCallback<OrderItem>(){
+        override fun areItemsTheSame(oldItem: OrderItem, newItem: OrderItem): Boolean {
+            return oldItem.productId == newItem.productId
         }
 
-        override fun areContentsTheSame(oldItem: Order, newItem: Order): Boolean {
+        override fun areContentsTheSame(oldItem: OrderItem, newItem: OrderItem): Boolean {
             return  oldItem == newItem
         }
 

@@ -15,6 +15,7 @@ import com.example.sesecoffee.viewModel.OrderItemsViewModel
 import com.example.sesecoffee.MainActivity
 import kotlinx.coroutines.flow.collectLatest
 import com.example.sesecoffee.utils.Resource
+import com.example.sesecoffee.viewModel.OrderTrackingViewModel
 
 class OnGoingFragment : Fragment(R.layout.fragment_on_going){
 
@@ -22,7 +23,7 @@ class OnGoingFragment : Fragment(R.layout.fragment_on_going){
     private val binding get() = _binding!!
 
     private lateinit var onGoingAdapter: OnGoingAdapter
-    private lateinit var orderItemViewModel: OrderItemsViewModel
+    private lateinit var orderTrackingViewModel: OrderTrackingViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,11 +35,11 @@ class OnGoingFragment : Fragment(R.layout.fragment_on_going){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        orderItemViewModel = (activity as MainActivity).orderItemViewModel
+        orderTrackingViewModel = (activity as MainActivity).orderTrackingViewModel
 
         setUpRecyclerViewOrders()
         lifecycleScope.launchWhenStarted {
-            orderItemViewModel.orderItems.collectLatest {
+            orderTrackingViewModel.orderItems.collectLatest {
                 when(it) {
                     is Resource.Loading -> {
                         showLoading()

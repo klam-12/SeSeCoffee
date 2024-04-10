@@ -5,18 +5,14 @@
 
     <data>
         <variable
-            name="order"
-            type="com.example.sesecoffee.model.Order" />
+            name="orderItem"
+            type="com.example.sesecoffee.model.OrderItem" />
     </data>
 
     <androidx.cardview.widget.CardView
         android:id="@+id/rewardItemCardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:background="@android:color/white"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="2dp"
         app:cardUseCompatPadding="true">
         <LinearLayout
             android:layout_width="match_parent"
@@ -27,18 +23,19 @@
             android:orientation="horizontal">
 
             <LinearLayout
-                android:layout_width="248dp"
+                android:layout_width="222dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="10dp"
                 android:layout_marginBottom="20dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
                 android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp"
-                    android:text="24 June | 12:30 | by 18:10 "
+                    android:text="@{orderItem.productId}"
                     android:textColor="@color/order_inactive"
                     android:textSize="15sp"
                     android:textStyle="normal" />
@@ -51,16 +48,16 @@
                     android:drawableLeft="@drawable/latte"
                     android:drawablePadding="8dp"
 
-                    android:text="@{order.userId}"
+                    android:text="@{orderItem.productName}"
                     android:textColor="@color/textColor"
                     android:textSize="18sp" />
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableStart="@drawable/address"
                     android:drawablePadding="8dp"
-                    android:text="Bradford BD1 1PR"
+                    android:drawableStart="@drawable/address"
+                    android:text="227 Nguyễn Văn Cừ, Quận 5, TP Hồ Chí Minh"
                     android:textColor="@color/textColor"
                     android:textSize="15sp"
                     android:textStyle="normal" />
@@ -68,14 +65,13 @@
             </LinearLayout>
 
             <TextView
-                android:layout_width="128dp"
+                android:layout_width="183dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginStart="20dp"
                 android:layout_marginEnd="10dp"
-                android:text="30000 VND"
+                android:text="@{orderItem.productImage}"
                 android:textColor="@color/textColor"
-                android:textSize="20sp"
+                android:textSize="16sp"
                 android:textStyle="bold" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
