@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="orderItem"
+            type="com.example.sesecoffee.model.OrderItem" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/rewardItemCardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:top="1dp"
+            android:bottom="1dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="222dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:text="@{orderItem.productId}"
+                    android:textColor="@color/order_inactive"
+                    android:textSize="15sp"
+                    android:textStyle="normal" />
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:drawableLeft="@drawable/latte"
+                    android:drawablePadding="8dp"
+
+                    android:text="@{orderItem.productName}"
+                    android:textColor="@color/textColor"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="8dp"
+                    android:drawableStart="@drawable/address"
+                    android:text="227 Nguyễn Văn Cừ, Quận 5, TP Hồ Chí Minh"
+                    android:textColor="@color/textColor"
+                    android:textSize="15sp"
+                    android:textStyle="normal" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingTop="23dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="6dp"
+                    android:layout_marginEnd="10dp"
+                    android:gravity="center"
+                    android:text="@{orderItem.productImage}"
+                    android:textColor="@color/textColor"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/pointsBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:backgroundTint="@color/primary"
+                    android:padding="2sp"
+                    android:paddingHorizontal="3sp"
+                    android:text='Re-order'
+                    android:textSize="14sp"
+                    app:cornerRadius="50dp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+</layout>

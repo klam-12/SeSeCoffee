@@ -39,7 +39,7 @@ class OnGoingFragment : Fragment(R.layout.fragment_on_going){
 
         setUpRecyclerViewOrders()
         lifecycleScope.launchWhenStarted {
-            orderTrackingViewModel.orderItems.collectLatest {
+            orderTrackingViewModel.onGoingOrderItems.collectLatest {
                 when(it) {
                     is Resource.Loading -> {
                         showLoading()
