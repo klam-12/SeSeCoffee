@@ -20,8 +20,9 @@ import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 
 class PaymentActivity : AppCompatActivity() {
-    private lateinit var userName : String
     private lateinit var userOrderId : String
+    private lateinit var userName : String
+    private lateinit var userPhone : String
     private lateinit var userAddress : String
     private var totalPrice = 0
 
@@ -33,7 +34,7 @@ class PaymentActivity : AppCompatActivity() {
 
         val avatar = findViewById<ShapeableImageView>(R.id.paymentAvatar)
         val name = findViewById<TextView>(R.id.paymentName)
-        val orderId = findViewById<TextView>(R.id.paymentOrderId)
+        val phone = findViewById<TextView>(R.id.paymentPhone)
         val address = findViewById<TextView>(R.id.paymentAddress)
         val price = findViewById<TextView>(R.id.paymentPrice)
         val paymentRadioGroup = findViewById<RadioGroup>(R.id.paymentMethodChoice)
@@ -45,7 +46,8 @@ class PaymentActivity : AppCompatActivity() {
                 if(!documentSnapshot.isEmpty){
                     var order = documentSnapshot.toObjects(Order::class.java)
                     userName = UserSingleton.instance?.fullName.toString()
-                    userOrderId = order[0].id!!
+                    userOrderId = order[0].id.toString()
+                    userPhone = UserSingleton.instance?.phone.toString()
                     userAddress = UserSingleton.instance?.address.toString()
 
                     collectionOrders.document(userOrderId).collection(ORDER_ITEM_COLLECTION).get()
@@ -58,13 +60,17 @@ class PaymentActivity : AppCompatActivity() {
                         }
 
                     name.setText(this.userName)
-                    orderId.setText("Order ID: ${this.userOrderId}")
-                    address.setText(this.userAddress)
+                    phone.setText("Phone: ${this.userPhone}")
+                    address.setText("Address: ${this.userAddress}")
 
                     findViewById<Button>(R.id.paymentProceedBtn).setOnClickListener {
                         val paymentMethodChoice = paymentRadioGroup.checkedRadioButtonId
                         if(paymentMethodChoice == -1) {
                             Toast.makeText(this, "Please select a payment method", Toast.LENGTH_SHORT).show()
+                            return@setOnClickListener
+                        }
+                        if(userAddress == "") {
+                            Toast.makeText(this, "Please update your address in Profile", Toast.LENGTH_SHORT).show()
                             return@setOnClickListener
                         }
 

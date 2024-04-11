@@ -16,6 +16,7 @@ import com.example.sesecoffee.R
 import com.example.sesecoffee.adapters.ProductAdapter
 import com.example.sesecoffee.databinding.FragmentHomeBinding
 import com.example.sesecoffee.model.Product
+import com.example.sesecoffee.model.UserSingleton
 import com.example.sesecoffee.utils.Resource
 import com.example.sesecoffee.viewModel.ProductsViewModel
 import com.google.firebase.auth.FirebaseAuth
@@ -49,6 +50,7 @@ class HomeFragment : Fragment(R.layout.fragment_home){
         productsViewModel = (activity as MainActivity).productsViewModel
 
         setUpRecyclerViewProducts()
+        binding.username.text = UserSingleton.instance?.fullName
         lifecycleScope.launchWhenStarted {
             productsViewModel.products.collectLatest {
                 when(it){

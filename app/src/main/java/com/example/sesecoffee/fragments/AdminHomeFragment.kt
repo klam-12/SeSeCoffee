@@ -17,6 +17,7 @@ import com.example.sesecoffee.SignInActivity
 import com.example.sesecoffee.adapters.ProductAdapter
 import com.example.sesecoffee.databinding.FragmentAdminHomeBinding
 import com.example.sesecoffee.model.Product
+import com.example.sesecoffee.model.UserSingleton
 import com.example.sesecoffee.utils.Resource
 import com.example.sesecoffee.viewModel.ProductsViewModel
 import com.google.firebase.firestore.firestoreSettings
@@ -48,6 +49,7 @@ class AdminHomeFragment : Fragment(R.layout.fragment_admin_home) {
         productsViewModel = (activity as AdminMainActivity).productsViewModel
 
         setUpRecyclerViewProducts()
+        binding.username.text = UserSingleton.instance?.fullName
         lifecycleScope.launchWhenStarted {
             productsViewModel.fetchAllProducts()
             productsViewModel.products.collectLatest {

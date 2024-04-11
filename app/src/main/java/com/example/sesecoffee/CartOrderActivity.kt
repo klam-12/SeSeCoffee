@@ -8,8 +8,10 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -18,13 +20,17 @@ import com.example.sesecoffee.model.OrderItem
 import com.example.sesecoffee.model.UserSingleton
 import com.example.sesecoffee.utils.Constant.ORDER_COLLECTION
 import com.example.sesecoffee.utils.Constant.ORDER_ITEM_COLLECTION
+import com.example.sesecoffee.utils.Resource
+import com.example.sesecoffee.viewModel.OrderItemsViewModel
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
+import kotlinx.coroutines.flow.collectLatest
 
 class CartOrderActivity : AppCompatActivity() {
     lateinit var orderAdapter: OrderAdapter
     lateinit var idOrder : String
+    lateinit var orderItemsViewModel: OrderItemsViewModel
 
     var db = FirebaseFirestore.getInstance()
     var collectionOrders: CollectionReference = db.collection(ORDER_COLLECTION)
@@ -32,6 +38,7 @@ class CartOrderActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_cart_order)
         orderAdapter = OrderAdapter(this)
+        orderItemsViewModel = OrderItemsViewModel(application)
 
         val price = findViewById<TextView>(R.id.cartPrice)
         val orderRecyclerView = findViewById<RecyclerView>(R.id.cartItemList) as RecyclerView
@@ -49,72 +56,92 @@ class CartOrderActivity : AppCompatActivity() {
                         idOrder = document.getString("id").toString()
                     }
 
-                    collectionOrders.document(idOrder).collection(ORDER_ITEM_COLLECTION).get()
-                        .addOnSuccessListener { result ->
-                            val orderItemList = result.toObjects(OrderItem::class.java)
-                            if(orderItemList.isEmpty()){
-                                findViewById<TextView>(R.id.cartEmpty).visibility = View.VISIBLE
-                            }
-                            else{
-                                findViewById<TextView>(R.id.cartEmpty).visibility = View.GONE
-                            }
+                    orderItemsViewModel.fetchOrderItemByOrderId(idOrder)
 
-                            price.setText("${calculateTotalPrice(orderItemList)}VNĐ")
-                            orderAdapter.differ.submitList(orderItemList)
-                            orderRecyclerView.adapter = orderAdapter
-
-                            hideLoading()
-
-                            val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT){
-                                override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
-                                    return false
+                    lifecycleScope.launchWhenStarted {
+                        orderItemsViewModel.orderItems.collectLatest {
+                            when(it){
+                                is Resource.Loading -> {
+                                    showLoading()
                                 }
+                                is Resource.Success -> {
+                                    hideLoading()
 
-                                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                                    val position = viewHolder.adapterPosition
-                                    orderAdapter.deleteItem(position, application, idOrder)
-                                    orderAdapter.notifyItemRemoved(position);
-                                    orderItemList.removeAt(position)
-                                    price.setText("${calculateTotalPrice(orderItemList)}VNĐ")
-                                }
+                                    if(it.data!!.isEmpty()){
+                                        findViewById<TextView>(R.id.cartEmpty).visibility = View.VISIBLE
+                                    }
+                                    else{
+                                        findViewById<TextView>(R.id.cartEmpty).visibility = View.GONE
+                                    }
 
-                                override fun onChildDraw(
-                                    c: Canvas,
-                                    recyclerView: RecyclerView,
-                                    viewHolder: RecyclerView.ViewHolder,
-                                    dX: Float,
-                                    dY: Float,
-                                    actionState: Int,
-                                    isCurrentlyActive: Boolean
-                                ) {
+                                    val orderItems = it.data.toMutableList()
+                                    price.setText("${calculateTotalPrice(it.data)}VNĐ")
 
-                                    RecyclerViewSwipeDecorator.Builder(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
-                                        .addBackgroundColor(
-                                            ContextCompat.getColor(
-                                                this@CartOrderActivity,
-                                                R.color.item_delete
+                                    val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT){
+                                        override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
+                                            return false
+                                        }
+
+                                        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                                            val position = viewHolder.adapterPosition
+                                            orderAdapter.deleteItem(position, application, idOrder)
+                                            orderAdapter.notifyItemRemoved(position)
+
+                                            val deleteItem = orderItems[position]
+                                            orderItems.remove(deleteItem)
+                                            if(orderItems.isEmpty()){
+                                                price.setText("0VNĐ")
+                                            }
+                                            else{
+                                                price.setText("${calculateTotalPrice(orderItems)}VNĐ")
+                                            }
+                                        }
+
+                                        override fun onChildDraw(
+                                            c: Canvas,
+                                            recyclerView: RecyclerView,
+                                            viewHolder: RecyclerView.ViewHolder,
+                                            dX: Float,
+                                            dY: Float,
+                                            actionState: Int,
+                                            isCurrentlyActive: Boolean
+                                        ) {
+
+                                            RecyclerViewSwipeDecorator.Builder(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+                                                .addBackgroundColor(
+                                                    ContextCompat.getColor(
+                                                        this@CartOrderActivity,
+                                                        R.color.item_delete
+                                                    )
+                                                )
+                                                .addActionIcon(R.drawable.delete)
+                                                .create()
+                                                .decorate()
+                                            super.onChildDraw(
+                                                c,
+                                                recyclerView,
+                                                viewHolder,
+                                                dX,
+                                                dY,
+                                                actionState,
+                                                isCurrentlyActive
                                             )
-                                        )
-                                        .addActionIcon(R.drawable.delete)
-                                        .create()
-                                        .decorate()
-                                    super.onChildDraw(
-                                        c,
-                                        recyclerView,
-                                        viewHolder,
-                                        dX,
-                                        dY,
-                                        actionState,
-                                        isCurrentlyActive
-                                    )
-                                }
-                            })
+                                        }
+                                    })
 
-                            itemTouchHelper.attachToRecyclerView(orderRecyclerView)
-                        }.addOnFailureListener { exception ->
-                            println("Error getting documents: $exception")
+                                    orderAdapter.differ.submitList(it.data)
+                                    orderRecyclerView.adapter = orderAdapter
+                                    itemTouchHelper.attachToRecyclerView(orderRecyclerView)
+                                }
+                                is Resource.Error -> {
+                                    hideLoading()
+                                    Toast.makeText(applicationContext,it.message, Toast.LENGTH_SHORT).show()
+                                }
+                                else -> Unit
+                            }
                         }
                     }
+                }
                 else{
                     findViewById<TextView>(R.id.cartEmpty).visibility = View.VISIBLE
                     price.setText("0VNĐ")

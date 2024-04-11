@@ -68,7 +68,7 @@
             tools:layout_editor_absoluteY="153dp" />
 
         <TextView
-            android:id="@+id/paymentOrderId"
+            android:id="@+id/paymentPhone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="14sp"

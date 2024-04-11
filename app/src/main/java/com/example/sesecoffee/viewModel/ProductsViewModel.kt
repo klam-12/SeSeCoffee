@@ -40,7 +40,6 @@ class ProductsViewModel(app: Application) : AndroidViewModel(
 
     // For list of products
     private val _products = MutableStateFlow<Resource<List<Product>>>(Resource.Unspecified())
-//    val products : StateFlow<Resource<List<Product>>> = _products
     val products = _products.asStateFlow()
 
     // For update product

@@ -25,3 +25,4 @@ class UserSingleton : Application() {
             private set
     }
 }
+

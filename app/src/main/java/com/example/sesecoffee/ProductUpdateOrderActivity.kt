@@ -13,6 +13,7 @@ import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.example.sesecoffee.enums.HotCold
 import com.example.sesecoffee.enums.Milk
@@ -21,9 +22,11 @@ import com.example.sesecoffee.model.OrderItem
 import com.example.sesecoffee.model.UserSingleton
 import com.example.sesecoffee.utils.Constant.ORDER_COLLECTION
 import com.example.sesecoffee.utils.Constant.ORDER_ITEM_COLLECTION
+import com.example.sesecoffee.utils.Resource
 import com.example.sesecoffee.viewModel.OrderItemsViewModel
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.flow.collectLatest
 
 class ProductUpdateOrderActivity : AppCompatActivity() {
     private var quantity = 1
@@ -71,6 +74,31 @@ class ProductUpdateOrderActivity : AppCompatActivity() {
                             .addOnSuccessListener {
                                 it.forEach {
                                     showLoading()
+
+                                    lifecycleScope.launchWhenStarted {
+                                        viewModel.updateOrderItem.collectLatest {
+                                            when(it){
+                                                is Resource.Loading -> {
+                                                    showLoading()
+                                                }
+                                                is Resource.Success -> {
+                                                    hideLoading()
+                                                    if (it.data == null){
+                                                        Toast.makeText(applicationContext,"Delete product successfully", Toast.LENGTH_SHORT).show()
+                                                    } else {
+                                                        Toast.makeText(applicationContext,"Edit product successfully", Toast.LENGTH_SHORT).show()
+                                                    }
+                                                    val intent = Intent(applicationContext,AdminMainActivity::class.java)
+                                                    startActivity(intent)
+                                                }
+                                                is Resource.Error -> {
+                                                    hideLoading()
+                                                    Toast.makeText(applicationContext,it.message, Toast.LENGTH_SHORT).show()
+                                                }
+                                                else -> Unit
+                                            }
+                                        }
+                                    }
 
                                     orderItem = it.toObject(OrderItem::class.java)!!
                                     productNameTextView.setText(orderItem.productName)

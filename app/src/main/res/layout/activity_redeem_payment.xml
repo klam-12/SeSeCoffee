@@ -137,11 +137,11 @@
         android:background="@color/white"
         app:cardCornerRadius="10dp"
         app:cardElevation="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/redeemPaymentTotalPrice"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/redeemPaymentLabel"
         app:layout_constraintVertical_bias="0.62">
 
         <LinearLayout

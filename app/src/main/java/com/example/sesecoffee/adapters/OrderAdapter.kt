@@ -29,6 +29,7 @@ class OrderAdapter(val context: Context)
             binding.orderItemCardView.setOnClickListener {
                 val intent = Intent(context, ProductUpdateOrderActivity::class.java)
                 intent.putExtra("order", orderItem.id)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 context.startActivity(intent)
             }
         }

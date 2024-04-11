@@ -17,6 +17,9 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 class RedeemPaymentActivity : AppCompatActivity() {
     val productId = "5eecd988-9d08-495a-9c03-c8fe50d0b51d"
+    private lateinit var userName : String
+    private lateinit var userPhone : String
+    private lateinit var userAddress : String
 
     val db = FirebaseFirestore.getInstance()
     val collectionProducts: CollectionReference = db.collection(PRODUCT_COLLECTION)
@@ -24,9 +27,12 @@ class RedeemPaymentActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_redeem_payment)
 
+        val intent = intent
+        val redeemId = intent.getStringExtra("redeem")
+
         val avatar = findViewById<ShapeableImageView>(R.id.redeemPaymentAvatar)
         val name = findViewById<TextView>(R.id.redeemPaymentName)
-        val phoneNumber = findViewById<TextView>(R.id.redeemPaymentPhone)
+        val phone = findViewById<TextView>(R.id.redeemPaymentPhone)
         val address = findViewById<TextView>(R.id.redeemPaymentAddress)
         val price = findViewById<TextView>(R.id.redeemPaymentPrice)
 
@@ -34,8 +40,13 @@ class RedeemPaymentActivity : AppCompatActivity() {
         val productName = findViewById<TextView>(R.id.redeemProductName)
         val productPrice = findViewById<TextView>(R.id.redeemProductPrice)
 
-        name.setText(UserSingleton.instance?.fullName)
-        address.setText(UserSingleton.instance?.address)
+        userName = UserSingleton.instance?.fullName.toString()
+        userPhone = UserSingleton.instance?.phone.toString()
+        userAddress = UserSingleton.instance?.address.toString()
+
+        name.setText(userName)
+        phone.setText("Phone: $userPhone")
+        address.setText("Address: $userAddress")
 
         collectionProducts.document(productId).get()
             .addOnSuccessListener { documentSnapshot ->

@@ -1,12 +1,15 @@
 package com.example.sesecoffee.adapters
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.sesecoffee.ProductUpdateOrderActivity
+import com.example.sesecoffee.RedeemPaymentActivity
 import com.example.sesecoffee.databinding.RedeemItemBinding
 import com.example.sesecoffee.model.Redeem
 
@@ -23,7 +26,11 @@ class RedeemAdapter (val context: Context?)
 
         }
         binding.pointsBtn.setOnClickListener {
-//            Chuyển đến trang thanh toán
+            //Testing
+            val intent = Intent(context, RedeemPaymentActivity::class.java)
+            intent.putExtra("redeem", redeemItem.id)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            context!!.startActivity(intent)
         }
     }
 }

@@ -55,8 +55,7 @@ class OrderItemsViewModel(app: Application) : AndroidViewModel(
 
     fun fetchOrderItemByOrderId(orderId: String) {
         viewModelScope.launch { _orderItems.emit(Resource.Loading()) }
-
-        collectionOrders.document(orderId).collection("OrderItem").get()
+        collectionOrders.document(orderId).collection(ORDER_ITEM_COLLECTION).get()
             .addOnSuccessListener {
                     result ->
                 orderItemList = result.toObjects(OrderItem::class.java)
@@ -95,7 +94,6 @@ class OrderItemsViewModel(app: Application) : AndroidViewModel(
     }
 
     fun updateOrderItemInfo(newOrderItem: OrderItem, orderId : String) {
-        viewModelScope.launch { _updateOrderItem.emit(Resource.Loading()) }
         val subCollectionRef = collectionOrders.document(orderId).collection("OrderItem")
         val documentRef = subCollectionRef.document(newOrderItem.id!!)
         fbSingleton.db.runTransaction{transaction ->
