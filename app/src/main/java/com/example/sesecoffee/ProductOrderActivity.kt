@@ -166,7 +166,10 @@ class ProductOrderActivity : AppCompatActivity() {
                             "",
                             "",
                             "",
-                            false
+                            false,
+                            false,
+                            0,
+                            ""
                         )
                         orderViewModel.addOrders(newOrders)
                         idOrder = id

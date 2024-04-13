@@ -90,12 +90,16 @@ class PaymentActivity : AppCompatActivity() {
                             paymentMethod,
                             "",
                             true,
+                            false,
+                            0,
+                            ""
                         )
                         collectionOrders.document(userOrderId).set(paidOrder)
                         val intent = Intent(
                             applicationContext,
                             SuccessOrderActivity::class.java
                         )
+                        intent.putExtra("orderId", userOrderId)
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                         startActivity(intent)
                     }

@@ -15,7 +15,9 @@ data class Order(
     var paymentMethod : String? = null,
     var code : String? = null,
     var done: Boolean= false,
-    var delivered: Boolean=false
+    var delivered: Boolean=false,
+    var rating : Int? = null,
+    var comment : String? = null
 ) {
 
 }

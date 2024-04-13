@@ -10,7 +10,7 @@ import com.example.sesecoffee.model.FirebaseSingleton
 import com.example.sesecoffee.model.Order
 import com.example.sesecoffee.model.OrderItem
 import com.example.sesecoffee.model.Product
-import com.example.sesecoffee.utils.Constant
+import com.example.sesecoffee.utils.Constant.ORDER_COLLECTION
 import com.example.sesecoffee.utils.Resource
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.storage.StorageReference
@@ -25,6 +25,9 @@ class OrderViewModel(app: Application) : AndroidViewModel(
     private val fbSingleton = FirebaseSingleton.getInstance()
     private val _order = MutableStateFlow<Resource<List<Order>>>(Resource.Unspecified())
     val order = _order.asStateFlow()
+
+    private val _updateOrder = MutableStateFlow<Resource<Order>>(Resource.Unspecified())
+    val updateOrder = _updateOrder.asStateFlow()
 
     fun fetchAllOrders()  {
         Toast.makeText(getApplication(),"Fetch all products", Toast.LENGTH_LONG).show()
@@ -51,7 +54,7 @@ class OrderViewModel(app: Application) : AndroidViewModel(
     }
     fun addOrders(order: Order) {
         viewModelScope.launch { _order.emit(Resource.Loading()) }
-        val collectionReference: CollectionReference = fbSingleton.db.collection("Orders")
+        val collectionReference: CollectionReference = fbSingleton.db.collection(ORDER_COLLECTION)
 
         // Uploading the image
 
@@ -68,6 +71,26 @@ class OrderViewModel(app: Application) : AndroidViewModel(
                     _order.emit(Resource.Error(it.message.toString()))
                 }
             }
+    }
+
+    fun updateOrder(newOrder: Order, orderId : String) {
+        val documentRef = fbSingleton.db.collection(ORDER_COLLECTION).document(orderId)
+        fbSingleton.db.runTransaction{transaction ->
+            val snapshot = transaction.get(documentRef)
+            if(snapshot.exists()){
+                documentRef.set(newOrder)
+            }
+
+        } .addOnSuccessListener {
+            viewModelScope.launch {
+                _updateOrder.emit(Resource.Success(newOrder))
+            }
+
+        } .addOnFailureListener{
+            viewModelScope.launch {
+                _updateOrder.emit(Resource.Error(it.message.toString()))
+            }
+        }
     }
 
 }

@@ -32,6 +32,7 @@ class CartOrderActivity : AppCompatActivity() {
     lateinit var idOrder : String
     lateinit var orderItemsViewModel: OrderItemsViewModel
 
+    var isEmpty = true
     var db = FirebaseFirestore.getInstance()
     var collectionOrders: CollectionReference = db.collection(ORDER_COLLECTION)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,9 +69,11 @@ class CartOrderActivity : AppCompatActivity() {
                                     hideLoading()
 
                                     if(it.data!!.isEmpty()){
+                                        isEmpty = true
                                         findViewById<TextView>(R.id.cartEmpty).visibility = View.VISIBLE
                                     }
                                     else{
+                                        isEmpty = false
                                         findViewById<TextView>(R.id.cartEmpty).visibility = View.GONE
                                     }
 
@@ -90,6 +93,7 @@ class CartOrderActivity : AppCompatActivity() {
                                             val deleteItem = orderItems[position]
                                             orderItems.remove(deleteItem)
                                             if(orderItems.isEmpty()){
+                                                isEmpty = true
                                                 price.setText("0VNĐ")
                                             }
                                             else{
@@ -161,6 +165,10 @@ class CartOrderActivity : AppCompatActivity() {
         }
 
         findViewById<Button>(R.id.cartNextBtn).setOnClickListener {
+            if(isEmpty){
+                Toast.makeText(this, "Cart is empty", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
             val intent = Intent(
                 applicationContext,
                 PaymentActivity::class.java
