@@ -18,14 +18,17 @@ import com.example.sesecoffee.databinding.ActivityAdminMainBinding
 import com.example.sesecoffee.databinding.ProductItemBinding
 import com.example.sesecoffee.model.Product
 import com.example.sesecoffee.model.UserSingleton
+import com.example.sesecoffee.utils.Format
 import java.util.Random
 
 class ProductAdapter()
     : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>()
 {
     inner class ProductViewHolder(var itemBinding: ProductItemBinding) : RecyclerView.ViewHolder(itemBinding.root){
+        var format : Format = Format()
         fun bind(product: Product){
             itemBinding.product = product
+            itemBinding.proPrice.text = product.price?.let { format.formatNumber(it) }
             itemBinding.apply {
                 Glide.with(itemView).load(product.imageUrl).into(proImg)
             }

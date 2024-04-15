@@ -29,6 +29,8 @@ class MainActivity : AppCompatActivity() {
                 R.id.homeFragment -> replaceFragment(HomeFragment())
                 R.id.rewardFragment -> replaceFragment(RewardFragment())
                 R.id.orderTrackingFragment -> replaceFragment(HomeFragment())
+                R.id.ratingFragment -> replaceFragment(HomeFragment())
+                R.id.chatFragment -> replaceFragment(HomeFragment())
 
                 else -> {
                     Toast.makeText(this,"Invalid navigation",Toast.LENGTH_SHORT).show()

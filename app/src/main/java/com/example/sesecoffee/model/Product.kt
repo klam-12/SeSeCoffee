@@ -11,6 +11,7 @@ import java.util.UUID
 data class Product(
     val id:String? = null,
     var name:String? = null,
+    var description:String?=null,
     var price : Int? = null,
     var imageUrl: String? = null,
     val createdAt: Timestamp? = null,

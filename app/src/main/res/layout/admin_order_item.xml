@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="orderItem"
+            type="com.example.sesecoffee.model.Order" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/rewardItemCardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardUseCompatPadding="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="bottom"
+            android:top="1dp"
+            android:bottom="1dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="12dp"
+                android:orientation="vertical">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipStatus"
+                    style="@style/Widget.MaterialComponents.Chip.Filter"
+                    android:layout_width="100dp"
+                    android:layout_height="40dp"
+                    android:textAlignment="center"
+                    app:chipBackgroundColor="@color/yellow"
+                    android:textColor="@color/white"
+                    android:clickable="false"
+                    android:text="@string/pendingStatus"/>
+
+                <TextView
+                    android:id="@+id/timeOrder"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:text="24/04/2024 | 12:30"
+                    android:textColor="@color/dark_grey"
+                    android:textSize="14sp"
+                    android:textStyle="normal" />
+
+                <TextView
+                    android:id="@+id/username"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:drawableLeft="@drawable/ic_person"
+                    android:drawablePadding="8dp"
+                    android:text="@{orderItem.userId}"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/textColor"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/addressOrder"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="8dp"
+                    android:drawableStart="@drawable/ic_location"
+                    android:gravity="center_vertical"
+                    android:text="@{orderItem.address}"
+                    android:textColor="@color/textColor"
+                    android:textSize="14sp"
+                    android:textStyle="normal" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:layout_marginEnd="12dp"
+                android:layout_marginStart="32dp"
+                android:gravity="center"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/totalBill"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text='BYN'
+                    android:textAlignment="center"
+                    android:textColor="@color/textColor"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/viewDetailBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:textColor="#3358DC"
+                    android:padding="0dp"
+                    android:text="View detail"
+                    android:backgroundTint="#DFE4FF"
+                    android:textStyle="italic"/>
+            </LinearLayout>
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</layout>
