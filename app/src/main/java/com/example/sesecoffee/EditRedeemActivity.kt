@@ -1,6 +1,8 @@
 package com.example.sesecoffee
 
+import android.app.AlertDialog
 import android.app.DatePickerDialog
+import android.content.DialogInterface
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -71,8 +73,28 @@ class EditRedeemActivity : AppCompatActivity() {
             }
 
             delRedeemBtn.setOnClickListener(){
-                if(oldRedeem!= null){
-                    oldRedeem!!.id?.let { it1 -> redeemItemViewModel.deleteRedeem(it1) }
+                val context = it.context
+                val alertDialog: AlertDialog? = this.let {
+                    val builder = AlertDialog.Builder(context)
+                    builder.apply {
+                        setPositiveButton("Yes", DialogInterface.OnClickListener { dialog, id ->
+                            if(oldRedeem!= null){
+                                oldRedeem!!.id?.let { it1 -> redeemItemViewModel.deleteRedeem(it1) }
+                            }
+                        })
+                        setNegativeButton("No", DialogInterface.OnClickListener { dialog, id ->
+
+                        })
+                        // Set other dialog properties
+                        setIcon(R.drawable.ic_warning_yellow)
+                        setTitle("Do you want to delete this redeem?")
+                    }
+                    // Create the AlertDialog
+                    builder.create()
+                }
+
+                if (alertDialog != null) {
+                    alertDialog!!.show()
                 }
             }
         }

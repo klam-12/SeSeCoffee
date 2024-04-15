@@ -1,5 +1,7 @@
 package com.example.sesecoffee.fragments
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -77,8 +79,29 @@ class AdminHomeFragment : Fragment(R.layout.fragment_admin_home) {
         }
 
         binding.signOutBtn.setOnClickListener(){
-            val intent = Intent(requireContext(), SignInActivity::class.java)
-            startActivity(intent)
+            val context = it.context
+            val alertDialog: AlertDialog? = this.let {
+                val builder = AlertDialog.Builder(context)
+                builder.apply {
+                    setPositiveButton("Yes", DialogInterface.OnClickListener { dialog, id ->
+                        val intent = Intent(requireContext(), SignInActivity::class.java)
+                        startActivity(intent)
+                    })
+                    setNegativeButton("No", DialogInterface.OnClickListener { dialog, id ->
+
+                    })
+                    // Set other dialog properties
+                    setIcon(R.drawable.ic_warning_yellow)
+                    setTitle("Do you want to sign out?")
+                }
+                // Create the AlertDialog
+                builder.create()
+            }
+
+            if (alertDialog != null) {
+                alertDialog!!.show()
+            }
+
         }
 
     }
