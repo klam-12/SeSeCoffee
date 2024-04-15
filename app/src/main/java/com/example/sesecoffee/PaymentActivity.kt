@@ -86,7 +86,7 @@ class PaymentActivity : AppCompatActivity() {
                             Timestamp.now(),
                             userAddress,
                             UserSingleton.instance?.id.toString(),
-                            "0123456789",
+                            userPhone,
                             paymentMethod,
                             "",
                             true,
