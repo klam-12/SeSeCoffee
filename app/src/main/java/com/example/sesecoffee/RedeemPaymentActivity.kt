@@ -70,6 +70,32 @@ class RedeemPaymentActivity : AppCompatActivity() {
                     val redeem = documentSnapshot.toObject(Redeem::class.java)
                     productPrice.setText("${redeem?.point} points")
                     price.setText("${redeem?.point} points")
+
+                    findViewById<Button>(R.id.redeemPaymentProceedBtn).setOnClickListener {
+                        val paidOrder = Order(
+                            orderId,
+                            redeem?.point!!,
+                            Timestamp.now(),
+                            userAddress,
+                            UserSingleton.instance?.id.toString(),
+                            userPhone,
+                            PaymentMethod.REDEEM.value,
+                            "",
+                            true,
+                            false,
+                            0,
+                            ""
+                        )
+                        collectionOrders.document(orderId!!).set(paidOrder)
+
+                        val intent = Intent(
+                            applicationContext,
+                            SuccessOrderActivity::class.java
+                        )
+                        intent.putExtra("orderId", orderId)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                        startActivity(intent)
+                    }
                 }
             }
             .addOnFailureListener { exception ->
@@ -88,32 +114,5 @@ class RedeemPaymentActivity : AppCompatActivity() {
             collectionOrders.document(orderId!!).delete()
             finish()
         }
-
-        findViewById<Button>(R.id.redeemPaymentProceedBtn).setOnClickListener {
-            val paidOrder = Order(
-                orderId,
-                productPrice.text.toString().toInt(),
-                Timestamp.now(),
-                userAddress,
-                UserSingleton.instance?.id.toString(),
-                userPhone,
-                PaymentMethod.REDEEM.value,
-                "",
-                true,
-                false,
-                0,
-                ""
-            )
-            collectionOrders.document(orderId!!).set(paidOrder)
-
-            val intent = Intent(
-                applicationContext,
-                SuccessOrderActivity::class.java
-            )
-            intent.putExtra("orderId", orderId)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            startActivity(intent)
-        }
-
     }
 }
