@@ -37,10 +37,8 @@
                     android:layout_width="100dp"
                     android:layout_height="40dp"
                     android:textAlignment="center"
-                    app:chipBackgroundColor="@color/yellow"
                     android:textColor="@color/white"
-                    android:clickable="false"
-                    android:text="@string/pendingStatus"/>
+                    android:clickable="false"/>
 
                 <TextView
                     android:id="@+id/timeOrder"
@@ -59,7 +57,7 @@
                     android:layout_marginBottom="5dp"
                     android:drawableLeft="@drawable/ic_person"
                     android:drawablePadding="8dp"
-                    android:text="@{orderItem.userId}"
+                    android:text="Username"
                     android:gravity="center_vertical"
                     android:textColor="@color/textColor"
                     android:textSize="14sp" />

@@ -8,4 +8,6 @@
     <string name="submit_btn">Submit</string>
     <string name="no_data">No data</string>
     <string name="pendingStatus">Pending</string>
+    <string name="admin_overall_ratings">Overall Ratings</string>
+    <string name="ratings_content">All reviews are from SeSe users that had previously ordered from this store</string>
 </resources>

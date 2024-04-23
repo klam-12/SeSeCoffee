@@ -8,8 +8,8 @@ import androidx.fragment.app.Fragment
 import com.example.sesecoffee.databinding.ActivityAdminMainBinding
 import com.example.sesecoffee.fragments.AdminHomeFragment
 import com.example.sesecoffee.fragments.AdminOrderFragment
+import com.example.sesecoffee.fragments.AdminRatingFragment
 import com.example.sesecoffee.fragments.AdminRedeemFragment
-import com.example.sesecoffee.viewModel.OrderItemsViewModel
 import com.example.sesecoffee.viewModel.OrderViewModel
 import com.example.sesecoffee.viewModel.ProductsViewModel
 import com.example.sesecoffee.viewModel.RedeemItemViewModel

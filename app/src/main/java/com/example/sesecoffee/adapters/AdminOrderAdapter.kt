@@ -3,6 +3,7 @@ package com.example.sesecoffee.adapters
 import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.AsyncListDiffer
@@ -14,35 +15,28 @@ import com.example.sesecoffee.databinding.AdminOrderItemBinding
 import com.example.sesecoffee.model.FirebaseSingleton
 import com.example.sesecoffee.model.Order
 import com.example.sesecoffee.model.User
+import com.example.sesecoffee.utils.Constant
 import com.example.sesecoffee.utils.Format
 
 class AdminOrderAdapter
     : RecyclerView.Adapter<AdminOrderAdapter.OrderViewHolder>()
 {
+    private val fbSingleton = FirebaseSingleton.getInstance()
+
     inner class OrderViewHolder(private val itemBinding: AdminOrderItemBinding):RecyclerView.ViewHolder(itemBinding.root){
         private var format : Format = Format()
-        private val fbSingleton = FirebaseSingleton.getInstance()
-        fun bind(order: Order){
+        fun bind(order: Order,username: String){
             itemBinding.orderItem = order
             itemBinding.timeOrder.text = order.createAt?.let { format.timestampToFormattedString(it) }
             itemBinding.totalBill.text = "BYN: " + order.total?.let { format.formatNumber(it) }
-
-            val userId = order.userId
-            if (userId != null) {
-                fbSingleton.db.collection("USER").document(userId).get()
-                    .addOnSuccessListener { document ->
-                        if (document != null && document.exists()) {
-                            itemBinding.username.text = document.data?.get(key = "fullname").toString()
-                        }
-                    }
-                    .addOnFailureListener {
-                        Log.i("AdminErr", it.message.toString())
-                    }
-            }
+            itemBinding.username.text = username
 
             if(order.delivered){
                 itemBinding.chipStatus.text = "Done"
                 itemBinding.chipStatus.setChipBackgroundColorResource(R.color.dark_grey)
+            }else{
+                itemBinding.chipStatus.text = "Pending"
+                itemBinding.chipStatus.setChipBackgroundColorResource(R.color.yellow)
             }
         }
     }
@@ -70,7 +64,26 @@ class AdminOrderAdapter
 
     override fun onBindViewHolder(holder: OrderViewHolder, position: Int) {
         val currentOrder = differ.currentList[position]
-        holder.bind(currentOrder);
+        var username = ""
+
+        val userId : String = currentOrder.userId!!
+        if (userId != null && userId != "") {
+            fbSingleton.db.collection(Constant.USER_COLLECTION).document(userId).get()
+                .addOnSuccessListener { document ->
+                    if (document != null && document.exists()) {
+                        username = document.data?.get(key = "fullname").toString()
+                        Log.i("KL",username)
+                        holder.bind(currentOrder,username);
+                    }
+                }
+                .addOnFailureListener {
+                    Log.i("AdminErr", it.message.toString())
+                }
+        }else{
+            holder.bind(currentOrder,username);
+        }
+
+
 
         holder.itemView.setOnClickListener(){
             val intent = Intent(it.context,AdminEditOrderActivity::class.java)

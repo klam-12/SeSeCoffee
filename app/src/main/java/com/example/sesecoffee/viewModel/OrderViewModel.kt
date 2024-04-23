@@ -27,13 +27,16 @@ class OrderViewModel(app: Application) : AndroidViewModel(
     app
 ) {
     private var ordersList: MutableList<Order>?=null
-    private var usersList : MutableList<User>?=null
+    private var personalOrderList : MutableList<Order>?=null
     private val fbSingleton = FirebaseSingleton.getInstance()
     private val _order = MutableStateFlow<Resource<List<Order>>>(Resource.Unspecified())
     val order = _order.asStateFlow()
 
     private val _updateOrder = MutableStateFlow<Resource<Order>>(Resource.Unspecified())
     val updateOrder = _updateOrder.asStateFlow()
+
+    private val _personalOrder = MutableStateFlow<Resource<List<Order>>>(Resource.Unspecified())
+    val personalOrder = _personalOrder.asStateFlow()
 
     // Receive Errors
     private val _error = MutableSharedFlow<String>()
@@ -65,6 +68,34 @@ class OrderViewModel(app: Application) : AndroidViewModel(
             }
 
     }
+
+    fun fetchPersonalOrder(userId : String){
+        Log.i("KL",userId)
+        viewModelScope.launch { _personalOrder.emit(Resource.Loading()) }
+
+        fbSingleton.db.collection(Constant.ORDER_COLLECTION)
+            .whereEqualTo("userId",userId)
+            .get()
+            .addOnSuccessListener {
+                    result ->
+                personalOrderList = result.toObjects(Order::class.java)
+                viewModelScope.launch {
+                    _personalOrder.emit(Resource.Success(personalOrderList))
+                }
+            }.addOnFailureListener() {
+                Toast.makeText(
+                    getApplication(),
+                    "Errors happen when loading the database",
+                    Toast.LENGTH_LONG
+                ).show()
+                Log.i("KL",it.message.toString())
+                viewModelScope.launch {
+                    _personalOrder.emit(Resource.Error(it.message.toString()))
+                }
+            }
+
+    }
+
     fun addOrders(order: Order) {
         viewModelScope.launch { _order.emit(Resource.Loading()) }
         val collectionReference: CollectionReference = fbSingleton.db.collection("Orders")
