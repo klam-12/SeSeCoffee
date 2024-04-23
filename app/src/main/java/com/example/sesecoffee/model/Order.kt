@@ -13,7 +13,7 @@ data class Order(
     var userId : String? = null,
     var phoneNumber : String? = null,
     var paymentMethod : String? = null,
-    var code : String? = null,
+    var stripeCustomerId : String? = null,
     var done: Boolean= false,
     var delivered: Boolean=false,
     var rating : Int? = null,

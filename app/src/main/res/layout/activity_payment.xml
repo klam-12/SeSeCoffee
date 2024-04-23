@@ -113,17 +113,7 @@
             android:layout_marginBottom="16dp"
             android:drawableRight="@drawable/credit_card"
             android:padding="16dp"
-            android:text="Credit Card"
-            android:textSize="18dp"
-            android:textStyle="bold" />
-
-        <RadioButton
-            android:id="@+id/eWallet"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:drawableRight="@drawable/momo"
-            android:padding="16dp"
-            android:text="E-Wallet"
+            android:text="Credit/Debit Card"
             android:textSize="18dp"
             android:textStyle="bold" />
 
@@ -141,7 +131,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/paymentTotalPrice"
-        app:layout_constraintVertical_bias="0.02" />
+        app:layout_constraintVertical_bias="0.028" />
 
     <Button
         android:id="@+id/paymentProceedBtn"
