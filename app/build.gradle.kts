@@ -101,4 +101,11 @@ dependencies {
 
     // Add the dependencies for any other desired Firebase products
     // https://firebase.google.com/docs/android/setup#available-libraries
+
+    implementation ("com.stripe:stripe-java:25.0.0")
+    implementation ("com.stripe:stripe-android:20.41.0")
+    implementation ("com.android.volley:volley:1.2.1")
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+//    implementation ("com.paypal.android:card-payments:1.3.0")
+//    implementation ("com.paypal.android:payment-buttons:1.3.0")
 }

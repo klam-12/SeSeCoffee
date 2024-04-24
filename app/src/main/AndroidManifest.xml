@@ -24,6 +24,9 @@
             android:name=".AdminEditOrderActivity"
             android:exported="false" />
         <activity
+            android:name=".ProductRedeemOrderActivity"
+            android:exported="false" />
+        <activity
             android:name=".RedeemPaymentActivity"
             android:exported="false" />
         <activity
@@ -43,7 +46,8 @@
             android:exported="false" />
         <activity
             android:name=".AdminMainActivity"
-            android:exported="false"></activity>
+            android:exported="false">
+        </activity>
         <activity
             android:name=".AddProductActivity"
             android:exported="false" />

@@ -21,9 +21,9 @@ class AdminRatingAdapter
             private var format : Format = Format()
             fun bind(order: Order,username: String){
                 itemBinding.username.text = username;
-                itemBinding.ratings.rating = 4.0F;
+                itemBinding.ratings.rating = order.rating!!
                 itemBinding.time.text = order.createAt?.let { "On " + format.timestampToFormattedString(it) }
-                itemBinding.comments.text = "Service is good. Drinks are good too but there are not many options. Waiting for more..."
+                itemBinding.comments.text = order.comment
             }
         }
 
@@ -60,7 +60,6 @@ class AdminRatingAdapter
                 .addOnSuccessListener { document ->
                     if (document != null && document.exists()) {
                         username = document.data?.get(key = "fullname").toString()
-                        Log.i("KL",username)
                         holder.bind(currentOrder,username);
                     }
                 }

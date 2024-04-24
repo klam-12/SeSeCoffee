@@ -8,15 +8,10 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.sesecoffee.model.FirebaseSingleton
 import com.example.sesecoffee.model.Order
-import com.example.sesecoffee.model.OrderItem
-import com.example.sesecoffee.model.Product
-import com.example.sesecoffee.model.User
 import com.example.sesecoffee.utils.Constant
 import com.example.sesecoffee.utils.Resource
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.Query
-import com.google.firebase.firestore.toObjects
-import com.google.firebase.storage.StorageReference
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -98,7 +93,7 @@ class OrderViewModel(app: Application) : AndroidViewModel(
 
     fun addOrders(order: Order) {
         viewModelScope.launch { _order.emit(Resource.Loading()) }
-        val collectionReference: CollectionReference = fbSingleton.db.collection("Orders")
+        val collectionReference: CollectionReference = fbSingleton.db.collection(Constant.ORDER_COLLECTION)
 
         // Uploading the image
 
@@ -143,6 +138,26 @@ class OrderViewModel(app: Application) : AndroidViewModel(
             }
         }
 
+    }
+
+    fun updateOrder(newOrder: Order, orderId : String) {
+        val documentRef = fbSingleton.db.collection(Constant.ORDER_COLLECTION).document(orderId)
+        fbSingleton.db.runTransaction{transaction ->
+            val snapshot = transaction.get(documentRef)
+            if(snapshot.exists()){
+                documentRef.set(newOrder)
+            }
+
+        } .addOnSuccessListener {
+            viewModelScope.launch {
+                _updateOrder.emit(Resource.Success(newOrder))
+            }
+
+        } .addOnFailureListener{
+            viewModelScope.launch {
+                _updateOrder.emit(Resource.Error(it.message.toString()))
+            }
+        }
     }
 
 }

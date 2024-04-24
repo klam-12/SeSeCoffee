@@ -20,15 +20,14 @@ import com.example.sesecoffee.enums.Size
 import com.example.sesecoffee.model.Order
 import com.example.sesecoffee.model.OrderItem
 import com.example.sesecoffee.model.UserSingleton
+import com.example.sesecoffee.utils.Constant
 import com.example.sesecoffee.viewModel.OrderItemsViewModel
+import com.example.sesecoffee.viewModel.OrderViewModel
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
-import com.example.sesecoffee.utils.Constant.PRODUCT_COLLECTION
-import com.example.sesecoffee.utils.Constant.ORDER_COLLECTION
-import com.example.sesecoffee.viewModel.OrderViewModel
 import java.util.UUID
 
-class ProductOrderActivity : AppCompatActivity() {
+class ProductRedeemOrderActivity : AppCompatActivity() {
     private var quantity = 1
     private var price = 0
     private var sizeFee = 0
@@ -41,8 +40,7 @@ class ProductOrderActivity : AppCompatActivity() {
     private lateinit var orderViewModel: OrderViewModel
 
     var db = FirebaseFirestore.getInstance()
-    var collectionReference: CollectionReference = db.collection(PRODUCT_COLLECTION)
-    var collectionOrders:CollectionReference = db.collection(ORDER_COLLECTION)
+    var collectionReference: CollectionReference = db.collection(Constant.PRODUCT_COLLECTION)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_product_order)
@@ -50,6 +48,7 @@ class ProductOrderActivity : AppCompatActivity() {
         orderViewModel = OrderViewModel(application)
 
         val intent = intent
+        val redeem = intent.getStringExtra("redeem")
         val productId = intent.getStringExtra("productId")
 
         val productImage = findViewById<ImageView>(R.id.orderImageView)
@@ -103,21 +102,6 @@ class ProductOrderActivity : AppCompatActivity() {
         handleRadioButton(smallMilkRadio, 1000, 1)
         handleRadioButton(largeMilkRadio, 2000, 1)
 
-        findViewById<Button>(R.id.orderQuantityPlus).setOnClickListener {
-            quantity++
-            quantityTextView.setText("$quantity")
-            priceTextView.setText("${price * quantity}VNĐ")
-        }
-
-        findViewById<Button>(R.id.orderQuantityMinus).setOnClickListener {
-            quantity--
-            if(quantity < 1){
-                quantity = 1
-            }
-            quantityTextView.setText("$quantity")
-            priceTextView.setText("${price * quantity}VNĐ")
-        }
-
         findViewById<Button>(R.id.orderNextBtn).setOnClickListener {
             val hotColdChoice = hotColdRadioGroup.checkedRadioButtonId
             val sizeChoice = sizeRadioGroup.checkedRadioButtonId
@@ -153,46 +137,35 @@ class ProductOrderActivity : AppCompatActivity() {
 
             val tempName = productName
             val tempImg = productImg
-            val query = collectionOrders.whereEqualTo("userId", UserSingleton.instance?.id.toString())
-                .whereEqualTo("done",false)
-            query.get()
-                .addOnSuccessListener { documentSnapshot->
-                    if(documentSnapshot.isEmpty){
-                        val id = UUID.randomUUID().toString()
-                        val newOrders = Order(id,0,
-                            null,
-                            UserSingleton.instance?.address,
-                            UserSingleton.instance?.id,
-                            "",
-                            "",
-                            "",
-                            false,
-                            false,
-                            0F,
-                            ""
-                        )
-                        orderViewModel.addOrders(newOrders)
-                        idOrder = id
-                    }
-                    else{
-                        for(document in documentSnapshot){
-                            idOrder = document.getString("id").toString()
-                        }
-                        Log.i("R","sai oi")
-                    }
-                    val newOrder = OrderItem(UUID.randomUUID().toString(), productId, tempName, tempImg, temperature, size, milk, quantity, totalPrice, false)
-                    orderItemViewModel.addOrderItem(newOrder,idOrder)
 
-                    val intent = Intent(
-                        applicationContext,
-                        CartOrderActivity::class.java
-                    )
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                    startActivity(intent)
+            val id = UUID.randomUUID().toString()
+            val newOrders = Order(id,0,
+                null,
+                UserSingleton.instance?.address,
+                UserSingleton.instance?.id,
+                "",
+                "",
+                "",
+                false,
+                false,
+                0F,
+                ""
+            )
+            orderViewModel.addOrders(newOrders)
+            idOrder = id
 
-                }.addOnFailureListener { exception ->
-                    println("Error getting documents: $exception")
-                }
+            val newOrder = OrderItem(UUID.randomUUID().toString(), productId, tempName, tempImg, temperature, size, milk, quantity, totalPrice, false)
+            orderItemViewModel.addOrderItem(newOrder, idOrder)
+
+            val intent = Intent(
+                applicationContext,
+                RedeemPaymentActivity::class.java
+            )
+            intent.putExtra("redeem", redeem)
+            intent.putExtra("productId", productId)
+            intent.putExtra("orderId", idOrder)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            startActivity(intent)
         }
 
         findViewById<ImageButton>(R.id.orderBackBtn).setOnClickListener {
@@ -202,7 +175,7 @@ class ProductOrderActivity : AppCompatActivity() {
         findViewById<ImageButton>(R.id.orderCartBtn).setOnClickListener {
             val intent = Intent(
                 applicationContext,
-                CartOrderActivity::class.java
+                RedeemActivity::class.java
             )
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             startActivity(intent)

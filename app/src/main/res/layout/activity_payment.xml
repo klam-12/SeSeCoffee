@@ -37,8 +37,8 @@
         android:id="@+id/paymentAvatar"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginBottom="56dp"
+        android:layout_marginStart="44dp"
+        android:layout_marginBottom="64dp"
         android:scaleType="centerCrop"
         app:layout_constraintBottom_toTopOf="@+id/paymentMethodChoice"
         app:layout_constraintStart_toStartOf="parent"
@@ -51,7 +51,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="56dp"
-        android:layout_marginBottom="60dp"
+        android:layout_marginBottom="68dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/paymentMethodChoice"
         app:layout_constraintEnd_toEndOf="parent"
@@ -93,12 +93,12 @@
         app:layout_constraintHorizontal_bias="0.483"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.533">
+        app:layout_constraintVertical_bias="0.579">
 
         <RadioButton
             android:id="@+id/cash"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="100dp"
             android:layout_marginBottom="16dp"
             android:drawableRight="@drawable/cash"
             android:padding="16dp"
@@ -109,21 +109,11 @@
         <RadioButton
             android:id="@+id/creditCard"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="100dp"
             android:layout_marginBottom="16dp"
             android:drawableRight="@drawable/credit_card"
             android:padding="16dp"
-            android:text="Credit Card"
-            android:textSize="18dp"
-            android:textStyle="bold" />
-
-        <RadioButton
-            android:id="@+id/eWallet"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:drawableRight="@drawable/momo"
-            android:padding="16dp"
-            android:text="E-Wallet"
+            android:text="Credit/Debit Card"
             android:textSize="18dp"
             android:textStyle="bold" />
 
@@ -141,7 +131,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/paymentTotalPrice"
-        app:layout_constraintVertical_bias="0.02" />
+        app:layout_constraintVertical_bias="0.028" />
 
     <Button
         android:id="@+id/paymentProceedBtn"
@@ -174,5 +164,26 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.855" />
+
+    <LinearLayout
+        android:id="@+id/loadingContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:background="#55F7F8FB">
+    <ProgressBar
+        android:id="@+id/paymentProgressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="320dp"
+        android:layout_marginLeft="160dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

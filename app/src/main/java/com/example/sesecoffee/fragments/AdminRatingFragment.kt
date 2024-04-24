@@ -1,6 +1,7 @@
 package com.example.sesecoffee.fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -47,9 +48,9 @@ class AdminRatingFragment : Fragment(R.layout.fragment_admin_rating) {
                         val listData = it.data
 
                         // filter data with rating != 0
-//                        val filteredListData = listData?.filter { it.rating != 0 }
+//                        val filteredListData = listData?.filter { it.rating != 0F }
 
-                        ratingAdapter.differ.submitList(listData)
+                        ratingAdapter.differ.submitList(it.data)
                         hideLoading()
                     }
                     is Resource.Error -> {

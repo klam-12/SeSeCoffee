@@ -51,9 +51,8 @@ class RatingFragment : Fragment(R.layout.fragment_rating) {
                         val listData = it.data
 
                         // filter data with rating != 0
-//                        val filteredListData = listData?.filter { it.rating != 0 }
-
-                        ratingAdapter.differ.submitList(listData)
+                        val filteredListData = listData?.filter { it.rating != 0F }
+                        ratingAdapter.differ.submitList(filteredListData)
                         hideLoading()
                     }
                     is Resource.Error -> {

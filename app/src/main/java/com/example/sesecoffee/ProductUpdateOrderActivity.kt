@@ -88,8 +88,6 @@ class ProductUpdateOrderActivity : AppCompatActivity() {
                                                     } else {
                                                         Toast.makeText(applicationContext,"Edit product successfully", Toast.LENGTH_SHORT).show()
                                                     }
-                                                    val intent = Intent(applicationContext,AdminMainActivity::class.java)
-                                                    startActivity(intent)
                                                 }
                                                 is Resource.Error -> {
                                                     hideLoading()
@@ -142,50 +140,6 @@ class ProductUpdateOrderActivity : AppCompatActivity() {
                                     priceTextView.setText("${orderItem.price}VNĐ")
 
                                     hideLoading()
-
-                                    findViewById<Button>(R.id.orderNextBtn).setOnClickListener {
-                                        val hotColdChoice = hotColdRadioGroup.checkedRadioButtonId
-                                        val sizeChoice = sizeRadioGroup.checkedRadioButtonId
-                                        val milkChoice = milkRadioGroup.checkedRadioButtonId
-
-                                        if (sizeChoice == -1 || milkChoice == -1 || hotColdChoice == -1) {
-                                            Toast.makeText(this, "Please enter all fields", Toast.LENGTH_SHORT).show()
-                                            return@setOnClickListener
-                                        }
-
-                                        val quantity = quantityTextView.text.toString().toInt()
-                                        val totalPrice = price * quantity
-                                        var temperature : String
-                                        var size : String
-                                        var milk : String
-
-                                        temperature = when(resources.getResourceEntryName(hotColdChoice)){
-                                            "hot" -> HotCold.HOT.value
-                                            else -> HotCold.COLD.value
-                                        }
-
-                                        size = when(resources.getResourceEntryName(sizeChoice)){
-                                            "smallSize" -> Size.SMALL.value
-                                            "mediumSize" -> Size.MEDIUM.value
-                                            else -> Size.LARGE.value
-                                        }
-
-                                        milk = when(resources.getResourceEntryName(milkChoice)){
-                                            "noMilk" -> Milk.NOMILK.value
-                                            "smallMilk" -> Milk.SMALLMILK.value
-                                            else -> Milk.LARGEMILK.value
-                                        }
-
-                                        val newOrder = OrderItem(orderItem.id, orderItem.productId, productNameTextView.text.toString(), image, temperature, size, milk, quantity, totalPrice, false)
-                                        viewModel.updateOrderItemInfo(newOrder, idOrder)
-
-                                        val intent = Intent(
-                                            applicationContext,
-                                            CartOrderActivity::class.java
-                                        )
-                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                                        startActivity(intent)
-                                    }
                                 }
                             }
                     }
@@ -227,6 +181,69 @@ class ProductUpdateOrderActivity : AppCompatActivity() {
         }
 
         findViewById<ImageButton>(R.id.orderCartBtn).setOnClickListener {
+            val intent = Intent(
+                applicationContext,
+                CartOrderActivity::class.java
+            )
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            startActivity(intent)
+        }
+
+        findViewById<Button>(R.id.orderNextBtn).setOnClickListener {
+            val hotColdChoice = hotColdRadioGroup.checkedRadioButtonId
+            val sizeChoice = sizeRadioGroup.checkedRadioButtonId
+            val milkChoice = milkRadioGroup.checkedRadioButtonId
+
+            if (sizeChoice == -1 || milkChoice == -1 || hotColdChoice == -1) {
+                Toast.makeText(this, "Please enter all fields", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            val quantity = quantityTextView.text.toString().toInt()
+            val totalPrice = price * quantity
+            var temperature : String
+            var size : String
+            var milk : String
+
+            temperature = when(resources.getResourceEntryName(hotColdChoice)){
+                "hot" -> HotCold.HOT.value
+                else -> HotCold.COLD.value
+            }
+
+            size = when(resources.getResourceEntryName(sizeChoice)){
+                "smallSize" -> Size.SMALL.value
+                "mediumSize" -> Size.MEDIUM.value
+                else -> Size.LARGE.value
+            }
+
+            milk = when(resources.getResourceEntryName(milkChoice)){
+                "noMilk" -> Milk.NOMILK.value
+                "smallMilk" -> Milk.SMALLMILK.value
+                else -> Milk.LARGEMILK.value
+            }
+
+            collectionOrders.whereEqualTo("userId", UserSingleton.instance?.id.toString())
+                .whereEqualTo("done",false).get()
+                .addOnSuccessListener {
+                    if (!it.isEmpty) {
+                        val idOrder = it.documents[0].id
+                        collectionOrders.document(idOrder).collection(ORDER_ITEM_COLLECTION).document(orderId!!).update("quantity", quantity)
+                        collectionOrders.document(idOrder).collection(ORDER_ITEM_COLLECTION).document(orderId).update("hotCold", temperature)
+                        collectionOrders.document(idOrder).collection(ORDER_ITEM_COLLECTION).document(orderId).update("size", size)
+                        collectionOrders.document(idOrder).collection(ORDER_ITEM_COLLECTION).document(orderId).update("milk", milk)
+                        collectionOrders.document(idOrder).collection(ORDER_ITEM_COLLECTION).document(orderId).update("price", totalPrice)
+                    }
+                }.addOnFailureListener() {
+                    Toast.makeText(
+                        this,
+                        "Errors happen when loading the database",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+
+//            val newOrder = OrderItem(orderItem.id, orderItem.productId, productNameTextView.text.toString(), image, temperature, size, milk, quantity, totalPrice, false)
+//            viewModel.updateOrderItemInfo(newOrder, idOrder)
+
             val intent = Intent(
                 applicationContext,
                 CartOrderActivity::class.java

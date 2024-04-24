@@ -39,7 +39,11 @@ class PersonalRatings : AppCompatActivity() {
 //                        showLoading()
                     }
                     is Resource.Success -> {
-                        ratingAdapter.differ.submitList(it.data)
+                        val listData = it.data
+
+                        // filter data with rating != 0
+                        val filteredListData = listData?.filter { it.rating != 0F }
+                        ratingAdapter.differ.submitList(filteredListData)
 //                        hideLoading()
                     }
                     is Resource.Error -> {
