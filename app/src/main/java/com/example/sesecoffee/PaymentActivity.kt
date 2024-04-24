@@ -3,8 +3,10 @@ package com.example.sesecoffee
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.LinearLayout
 import android.widget.RadioGroup
 import android.widget.TextView
 import android.widget.Toast
@@ -138,15 +140,31 @@ class PaymentActivity : AppCompatActivity() {
         }
     }
 
+    private fun showLoading() {
+        findViewById<LinearLayout>(R.id.loadingContainer).visibility = View.VISIBLE
+    }
+
+    private fun hideLoading() {
+        findViewById<LinearLayout>(R.id.loadingContainer).visibility = View.GONE
+    }
+
+    private fun calculateTotalPrice(itemList : List<OrderItem>) : Int {
+        var price = 0
+        itemList.forEach {
+            price += it.price!!
+        }
+        return price
+    }
+
     private fun createCustomerId(){
         val request = object : StringRequest(
             Request.Method.POST,
             "https://api.stripe.com/v1/customers",
             { response ->
                 try{
+                    showLoading()
                     val jsonObject = JSONObject(response)
                     customerId = jsonObject.getString("id")
-                    Toast.makeText(this, "Customer ID: $customerId", Toast.LENGTH_SHORT).show()
 
                     getEphemeralKey(customerId)
                     Log.d("PaymentActivity", "Response: $response")
@@ -177,7 +195,6 @@ class PaymentActivity : AppCompatActivity() {
                     val jsonObject = JSONObject(response)
                     ephemeralKey = jsonObject.getString("id")
                     ephemeralSecret = jsonObject.getString("secret")
-                    Toast.makeText(this, "Ephemeral Key: $ephemeralKey", Toast.LENGTH_SHORT).show()
 
                     getClientSecret(customerId, ephemeralKey)
                     Log.d("PaymentActivity", "Response: $response")
@@ -215,7 +232,6 @@ class PaymentActivity : AppCompatActivity() {
                 try{
                     val jsonObject = JSONObject(response)
                     clientSecret = jsonObject.getString("client_secret")
-                    Toast.makeText(this, "Client Secret: $clientSecret", Toast.LENGTH_SHORT).show()
 
                     paymentFlow()
                     Log.d("PaymentActivity", "Response: $response")
@@ -249,6 +265,7 @@ class PaymentActivity : AppCompatActivity() {
     }
 
     private fun paymentFlow() {
+        hideLoading()
         paymentSheet.presentWithPaymentIntent(
             clientSecret,
             PaymentSheet.Configuration(
@@ -259,14 +276,6 @@ class PaymentActivity : AppCompatActivity() {
                 )
             )
         )
-    }
-
-    private fun calculateTotalPrice(itemList : List<OrderItem>) : Int {
-        var price = 0
-        itemList.forEach {
-            price += it.price!!
-        }
-        return price
     }
 
     private fun onPaymentSheetResult(paymentSheetResult: PaymentSheetResult) {

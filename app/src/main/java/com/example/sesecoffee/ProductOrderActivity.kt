@@ -176,7 +176,7 @@ class ProductOrderActivity : AppCompatActivity() {
                     }
                     else{
                         for(document in documentSnapshot){
-                            idOrder= document.getString("id").toString()
+                            idOrder = document.getString("id").toString()
                         }
                         Log.i("R","sai oi")
                     }

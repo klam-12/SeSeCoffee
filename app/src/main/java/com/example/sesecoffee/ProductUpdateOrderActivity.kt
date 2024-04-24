@@ -88,8 +88,6 @@ class ProductUpdateOrderActivity : AppCompatActivity() {
                                                     } else {
                                                         Toast.makeText(applicationContext,"Edit product successfully", Toast.LENGTH_SHORT).show()
                                                     }
-                                                    val intent = Intent(applicationContext,AdminMainActivity::class.java)
-                                                    startActivity(intent)
                                                 }
                                                 is Resource.Error -> {
                                                     hideLoading()
