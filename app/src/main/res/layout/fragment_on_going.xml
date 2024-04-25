@@ -15,6 +15,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
+        <ImageView
+            android:id="@+id/tvNoProduct"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/no_order"
+            android:visibility="invisible" />
+
         <androidx.cardview.widget.CardView
             android:id="@+id/cvHome"
             android:layout_width="match_parent"
@@ -31,18 +38,8 @@
                 android:indeterminate="true"
                 android:progress="0"
                 android:progressDrawable="@drawable/progressbar_bg"
-                android:visibility="gone" />
-
-            <TextView
-                android:id="@+id/tvNoProduct"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/productNotification"
-                android:textColor="@color/white"
-                android:textSize="20sp"
-                android:textStyle="bold"
                 android:visibility="invisible" />
+
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/onGoingList"
@@ -51,7 +48,8 @@
                 android:layout_height="match_parent"
                 android:layout_marginHorizontal="10dp"
                 android:layout_marginTop="20dp"
-                android:background="@android:color/transparent" />
+                android:background="@android:color/transparent"
+                android:visibility="invisible" />
 
 
         </androidx.cardview.widget.CardView>

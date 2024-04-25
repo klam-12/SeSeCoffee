@@ -8,7 +8,6 @@
             name="orderItem"
             type="com.example.sesecoffee.model.OrderItem" />
     </data>
-
     <androidx.cardview.widget.CardView
         android:id="@+id/rewardItemCardView"
         android:layout_width="match_parent"
@@ -35,7 +34,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp"
-                    android:text="@{orderItem.productId}"
+                    android:text="Thời Gian"
                     android:textColor="@color/order_inactive"
                     android:textSize="15sp"
                     android:textStyle="normal" />
@@ -48,9 +47,10 @@
                     android:drawableLeft="@drawable/latte"
                     android:drawablePadding="8dp"
 
-                    android:text="@{orderItem.productName}"
+                    android:text="Tên sản phẩm"
                     android:textColor="@color/textColor"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -69,11 +69,13 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginEnd="10dp"
-                android:text="@{orderItem.productImage}"
+                android:text="777.10922"
                 android:textColor="@color/textColor"
                 android:textSize="16sp"
                 android:textStyle="bold" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
+
+
 
 </layout>

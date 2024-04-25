@@ -22,9 +22,10 @@ class OnGoingFragment : Fragment(R.layout.fragment_on_going){
     private var _binding: FragmentOnGoingBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var onGoingAdapter: OnGoingAdapter
+    lateinit var onGoingAdapter: OnGoingAdapter
     private lateinit var orderTrackingViewModel: OrderTrackingViewModel
 
+    var isEmpty = true
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -36,39 +37,56 @@ class OnGoingFragment : Fragment(R.layout.fragment_on_going){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         orderTrackingViewModel = (activity as MainActivity).orderTrackingViewModel
+        orderTrackingViewModel.fetchAllOnGoingOrderItems()
 
-        setUpRecyclerViewOrders()
         lifecycleScope.launchWhenStarted {
-            orderTrackingViewModel.onGoingOrderItems.collectLatest {
-                when(it) {
-                    is Resource.Loading -> {
-                        showLoading()
-                    }
+            lifecycleScope.launchWhenStarted {
+                orderTrackingViewModel.onGoingOrderItems.collectLatest {
+                    when(it) {
+                        is Resource.Loading -> {
+                            showLoading()
+                        }
 
-                    is Resource.Success -> {
-                        onGoingAdapter.differ.submitList(it.data)
-                        hideLoading()
-                    }
+                        is Resource.Success -> {
+                            println("data: ${it.data?.isEmpty()}")
+                            if(it.data?.isEmpty() == true) {
+                                showNoData()
+                            } else {
+                                setUpRecyclerViewOrders()
+                                showData()
+                                onGoingAdapter.differ.submitList(it.data) // Show data in RecyclerView
+                            }
+                        }
 
-                    is Resource.Error -> {
-                        hideLoading()
-                        Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
+                        is Resource.Error -> {
+                            showNoData()
+                            Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT)
+                                .show()
+                        }
+                        else -> Unit
                     }
-
-                    else -> Unit
-                }
+        }
             }
         }
     }
 
 
-    private fun hideLoading() {
+    private fun showData() {
+        binding.onGoingList.visibility = View.VISIBLE
+        binding.tvNoProduct.visibility = View.GONE
         binding.progressBar.visibility = View.GONE
+    }
 
+    private fun showNoData() {
+        binding.tvNoProduct.visibility = View.VISIBLE
+        binding.progressBar.visibility = View.GONE
+        binding.onGoingList.visibility = View.GONE
     }
 
     private fun showLoading() {
         binding.progressBar.visibility = View.VISIBLE
+        binding.tvNoProduct.visibility = View.GONE
+        binding.onGoingList.visibility = View.GONE
     }
 
     private fun setUpRecyclerViewOrders() {

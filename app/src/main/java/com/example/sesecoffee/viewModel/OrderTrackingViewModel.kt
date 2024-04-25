@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.sesecoffee.model.FirebaseSingleton
 import com.example.sesecoffee.model.Order
 import com.example.sesecoffee.model.OrderItem
+import com.example.sesecoffee.model.UserSingleton
 import com.example.sesecoffee.utils.Constant
 import com.example.sesecoffee.utils.Resource
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,7 +27,7 @@ class OrderTrackingViewModel (app: Application) : AndroidViewModel(
     private val fbSingleton = FirebaseSingleton.getInstance()
 
     init {
-        fetchAllOnGoingOrderItems()
+//        fetchAllOnGoingOrderItems()
         fetchAllHistoryOrderItems()
     }
 
@@ -37,14 +38,20 @@ class OrderTrackingViewModel (app: Application) : AndroidViewModel(
         }
 
         fbSingleton.db.collection(Constant.ORDER_COLLECTION)
+//            .whereEqualTo("userId", UserSingleton.instance?.id.toString())
             .whereEqualTo("done", true)
             .whereEqualTo("delivered", false)
             .get()
             .addOnSuccessListener { querySnapshot ->
-                val ordersList = mutableListOf<Order>()
                 val itemsList = mutableListOf<OrderItem>()
-
-
+                val ordersList = mutableListOf<Order>()
+                print("Orders: ${querySnapshot.documents[0]}")
+                if (querySnapshot.documents.isEmpty())
+                {
+                    viewModelScope.launch {
+                        _onGoingOrderItems.emit(Resource.Success(itemsList))
+                    }
+                } else {
                 for (document in querySnapshot.documents) {
                     val order = document.toObject(Order::class.java)
                     val itemsCollection = document.reference.collection("OrderItem")
@@ -78,7 +85,7 @@ class OrderTrackingViewModel (app: Application) : AndroidViewModel(
                                 }
                             }
                         }
-
+                }
                 }
             }
             .addOnFailureListener { exception ->
@@ -98,47 +105,55 @@ class OrderTrackingViewModel (app: Application) : AndroidViewModel(
         }
 
         fbSingleton.db.collection(Constant.ORDER_COLLECTION)
+//            .whereEqualTo("userId", UserSingleton.instance?.id.toString())
             .whereEqualTo("done", true)
             .whereEqualTo("delivered", true)
             .get()
             .addOnSuccessListener { querySnapshot ->
-                val ordersList = mutableListOf<Order>()
+
                 val itemsList = mutableListOf<OrderItem>()
+                val ordersList = mutableListOf<Order>()
+                if (querySnapshot.documents.isEmpty())
+                {
+                    viewModelScope.launch {
+                        _onGoingOrderItems.emit(Resource.Success(itemsList))
+                    }
+                } else {
+                    for (document in querySnapshot.documents) {
+                        val order = document.toObject(Order::class.java)
+                        val itemsCollection = document.reference.collection("OrderItem")
 
-                for (document in querySnapshot.documents) {
-                    val order = document.toObject(Order::class.java)
-                    val itemsCollection = document.reference.collection("OrderItem")
+                        itemsCollection.get()
+                            .addOnSuccessListener { subCollectionSnapshot ->
+                                for (subDocument in subCollectionSnapshot.documents) {
+                                    val item = subDocument.toObject(OrderItem::class.java)
 
-                    itemsCollection.get()
-                        .addOnSuccessListener { subCollectionSnapshot ->
-                            for (subDocument in subCollectionSnapshot.documents) {
-                                val item = subDocument.toObject(OrderItem::class.java)
+                                    item?.productId = order?.createAt?.let {
+                                        formatTimestamp(
+                                            it
+                                        )
+                                    }
+                                    val price = item?.price?.times(item?.quantity!!)
+                                    item?.productImage = price?.let { formatNumber(it) }
 
-                                item?.productId = order?.createAt?.let {
-                                    formatTimestamp(
-                                        it
-                                    )
+                                    item?.let {
+                                        itemsList.add(it)
+                                    }
+                                    println(item.toString())
                                 }
-                                val price = item?.price?.times(item?.quantity!!)
-                                item?.productImage = price?.let { formatNumber(it) }
 
-                                item?.let {
-                                    itemsList.add(it)
+                                order?.let {
+                                    ordersList.add(it)
                                 }
-                                println(item.toString())
+
+                                if (ordersList.size == querySnapshot.documents.size) {
+                                    viewModelScope.launch {
+                                        _historyOrderItems.emit(Resource.Success(itemsList))
+                                    }
+                                }
                             }
 
-                            order?.let {
-                                ordersList.add(it)
-                            }
-
-                            if (ordersList.size == querySnapshot.documents.size) {
-                                viewModelScope.launch {
-                                    _historyOrderItems.emit(Resource.Success(itemsList))
-                                }
-                            }
-                        }
-
+                    }
                 }
             }
             .addOnFailureListener { exception ->
