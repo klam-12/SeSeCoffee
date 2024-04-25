@@ -4,10 +4,14 @@
     <string name="productNotification">No product available</string>
     <string name="profileTitle">Profile</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="forgot_pass">Forgot Password</string>
+    <string name="forgot_pass">Forgot Password?</string>
     <string name="submit_btn">Submit</string>
     <string name="no_data">No data</string>
     <string name="pendingStatus">Pending</string>
     <string name="admin_overall_ratings">Overall Ratings</string>
     <string name="ratings_content">All reviews are from SeSe users that had previously ordered from this store</string>
+    <string name="sign_up">Sign up</string>
+    <string name="new_member">New Member?</string>
+    <string name="sign_in">Sign in</string>
+    <string name="term_of_user">By signing up you agree with our Terms of Use</string>
 </resources>

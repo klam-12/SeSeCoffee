@@ -7,6 +7,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bg_sign_in"
     tools:context=".ProfileActivity">
 
     <TextView
@@ -30,6 +31,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:text="Full Name"
+        android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.093"
         app:layout_constraintStart_toStartOf="parent"
@@ -43,17 +45,21 @@
         android:ems="10"
         android:hint="Name"
         android:inputType="text"
+        android:background="@drawable/rounded_editext"
+        android:padding="8dp"
+        android:elevation="2dp"
         app:layout_constraintEnd_toEndOf="@+id/profile_text_fullName"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/profile_text_fullName"
         app:layout_constraintTop_toBottomOf="@+id/profile_text_fullName"
-        tools:hint="Name" />
+        />
 
     <TextView
         android:id="@+id/profile_text_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
+        android:textSize="15sp"
         android:text="Email"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.089"
@@ -68,6 +74,9 @@
         android:ems="10"
         android:hint="email@gmail.com"
         android:inputType="text"
+        android:background="@drawable/rounded_editext"
+        android:padding="8dp"
+        android:elevation="2dp"
         app:layout_constraintEnd_toEndOf="@+id/profile_text_email"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/profile_text_email"
@@ -78,6 +87,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
+        android:textSize="15sp"
         android:text="Phone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.085"
@@ -92,6 +102,9 @@
         android:ems="10"
         android:hint="+84 vietnam"
         android:inputType="text"
+        android:background="@drawable/rounded_editext"
+        android:padding="8dp"
+        android:elevation="2dp"
         app:layout_constraintStart_toStartOf="@+id/profile_text_phone"
         app:layout_constraintTop_toBottomOf="@+id/profile_text_phone" />
 
@@ -100,6 +113,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
+        android:textSize="15sp"
         android:text="Address"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.087"
@@ -114,6 +128,9 @@
         android:ems="10"
         android:hint="location here"
         android:inputType="text"
+        android:background="@drawable/rounded_editext"
+        android:padding="8dp"
+        android:elevation="2dp"
         app:layout_constraintStart_toStartOf="@+id/profile_text_address"
         app:layout_constraintTop_toBottomOf="@+id/profile_text_address" />
 
@@ -122,7 +139,7 @@
         android:layout_width="350dp"
         android:layout_height="60dp"
         android:layout_marginTop="32dp"
-        android:backgroundTint="#2196F3"
+        android:backgroundTint="@color/primary"
         android:text="Save"
         app:cornerRadius="5dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -132,18 +149,17 @@
 
     <Button
         android:id="@+id/profile_signOut_btn"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="60dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="30dp"
-        android:backgroundTint="#E4F3FF"
+        android:layout_marginTop="48dp"
+        android:backgroundTint="#FFE3C8"
         android:text="Sign out"
-        android:textColor="#2196F3"
+        android:drawableEnd="@drawable/ic_log_out"
+        android:drawableTint="@color/red"
+        android:textColor="@color/red"
         app:cornerRadius="5dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/profile_save_btn"
+        app:layout_constraintStart_toStartOf="@+id/profile_save_btn"
         app:layout_constraintTop_toBottomOf="@+id/profile_save_btn" />
 
 

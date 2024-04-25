@@ -28,7 +28,7 @@ class ProductAdapter()
         var format : Format = Format()
         fun bind(product: Product){
             itemBinding.product = product
-            itemBinding.proPrice.text = product.price?.let { format.formatNumber(it) }
+            itemBinding.proPrice.text = "$${product.price}"
             itemBinding.apply {
                 Glide.with(itemView).load(product.imageUrl).into(proImg)
             }

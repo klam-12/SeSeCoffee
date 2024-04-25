@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/background"
     tools:context=".PersonalRatings">
 
     <TextView
@@ -39,8 +39,8 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:clickable="true"
-        app:backgroundTint="@color/grey"
-        app:elevation="1dp"
+        app:backgroundTint="@color/background"
+        app:elevation="0dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/backbtn"

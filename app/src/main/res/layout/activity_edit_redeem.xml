@@ -12,6 +12,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bg_crud"
     tools:context=".EditRedeemActivity">
 
 
@@ -19,7 +20,7 @@
         android:id="@+id/edit_redeem_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="32dp"
         android:text="Edit Redeem"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textSize="30sp"
@@ -41,12 +42,15 @@
 
     <TextView
         android:id="@+id/redeem_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="340dp"
+        android:layout_height="50dp"
         android:layout_marginTop="8dp"
         android:text="@{redeem.productName}"
         android:textSize="20sp"
         android:textStyle="bold"
+        android:background="@drawable/rounded_editext"
+        android:padding="8dp"
+        android:elevation="2dp"
         app:layout_constraintEnd_toEndOf="@+id/redeem_name_title"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/redeem_name_title"
@@ -72,6 +76,9 @@
         android:text="@{redeem.point.toString()}"
         android:hint="1000"
         android:inputType="text"
+        android:background="@drawable/rounded_editext"
+        android:padding="8dp"
+        android:elevation="2dp"
         app:layout_constraintEnd_toEndOf="@+id/redeem_point_title"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/redeem_point_title"
@@ -100,6 +107,9 @@
         android:focusable="false"
         android:hint="01/05/2025"
         android:inputType="none"
+        android:background="@drawable/rounded_editext"
+        android:padding="8dp"
+        android:elevation="2dp"
         app:layout_constraintEnd_toEndOf="@+id/redeem_valid_title"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/redeem_valid_title"
@@ -110,7 +120,7 @@
         android:id="@+id/saveRedeemBtn"
         android:layout_width="350dp"
         android:layout_height="60dp"
-        android:layout_marginTop="68dp"
+        android:layout_marginTop="32dp"
         android:backgroundTint="@color/primary"
         android:elevation="8dp"
         android:text="@string/submit_btn"
@@ -125,16 +135,27 @@
         android:id="@+id/delRedeemBtn"
         android:layout_width="350dp"
         android:layout_height="60dp"
+        android:layout_marginTop="16dp"
         android:backgroundTint="@color/red"
         android:elevation="8dp"
         android:text="Delete"
         android:textSize="16sp"
         app:cornerRadius="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/saveRedeemBtn" />
+
+    <ProgressBar
+        android:id="@+id/progressBar_editPro"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="32dp"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.508"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/saveRedeemBtn"
-        app:layout_constraintVertical_bias="0.17" />
+        app:layout_constraintTop_toBottomOf="@+id/delRedeemBtn" />
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

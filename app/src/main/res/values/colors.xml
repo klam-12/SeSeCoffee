@@ -15,4 +15,6 @@
     <color name="pastel_brown">#FFF7F1</color>
     <color name="red">#BA0000</color>
     <color name="yellow">#DEA73D</color>
+    <color name="background">#FFFCF9</color>
+
 </resources>
