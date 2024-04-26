@@ -25,14 +25,14 @@ class RatingActivity : AppCompatActivity() {
         val comment = findViewById<EditText>(R.id.feedbackET)
 
         findViewById<Button>(R.id.submitRatingBtn).setOnClickListener {
-            val ratingValue = rating.rating.toInt()
+            val ratingValue = rating.rating
             val commentValue = comment.text.toString()
-            if(ratingValue == 0 || commentValue.isEmpty()){
+            if(ratingValue == 0F || commentValue.isEmpty()){
                 Toast.makeText(this, "Please rate and feedback the order", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            collectionOrders.document(orderId!!).update("rating", rating.rating.toInt())
+            collectionOrders.document(orderId!!).update("rating", rating.rating)
             collectionOrders.document(orderId).update("comment", comment.text.toString())
 
             val intent = Intent(

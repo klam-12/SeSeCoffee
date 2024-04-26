@@ -62,6 +62,7 @@ class PaymentActivity : AppCompatActivity() {
         val phone = findViewById<TextView>(R.id.paymentPhone)
         val address = findViewById<TextView>(R.id.paymentAddress)
         val price = findViewById<TextView>(R.id.paymentPrice)
+        val amount = findViewById<TextView>(R.id.paymentAmount)
         setUpRadioButton()
 
         val query = collectionOrders.whereEqualTo("userId", UserSingleton.instance?.id.toString())
@@ -80,6 +81,7 @@ class PaymentActivity : AppCompatActivity() {
                             val orderItemList = result.toObjects(OrderItem::class.java)
                             totalPrice = calculateTotalPrice(orderItemList)
                             price.setText("${totalPrice}$")
+                            amount.setText("${totalPrice}$")
                         }.addOnFailureListener { exception ->
                             println("Error getting documents: $exception")
                         }

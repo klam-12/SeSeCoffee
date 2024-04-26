@@ -109,31 +109,30 @@
 
     <ImageView
         android:id="@+id/cartEmptyImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:scaleX="5"
-        android:scaleY="5"
-        android:src="@drawable/cart"
-        android:visibility="gone"
+        android:layout_width="155dp"
+        android:layout_height="549dp"
+        android:src="@drawable/empty_cart"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.472"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.312"
-        app:tint="@color/dark_grey" />
+        app:layout_constraintVertical_bias="0.087"
+        app:tint="@color/grey_" />
 
     <TextView
         android:id="@+id/cartEmpty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="The cart is empty..."
-        android:textColor="@android:color/darker_gray"
+        android:textColor="@color/grey_"
         android:textSize="20sp"
-        android:visibility="gone"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.426" />
+        app:layout_constraintVertical_bias="0.465" />
 </androidx.constraintlayout.widget.ConstraintLayout>
