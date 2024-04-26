@@ -39,16 +39,13 @@ class OnGoingFragment : Fragment(R.layout.fragment_on_going){
         orderTrackingViewModel = (activity as MainActivity).orderTrackingViewModel
         orderTrackingViewModel.fetchAllOnGoingOrderItems()
 
-        lifecycleScope.launchWhenStarted {
             lifecycleScope.launchWhenStarted {
-                orderTrackingViewModel.onGoingOrderItems.collectLatest {
+                orderTrackingViewModel.onGoingOrder.collectLatest {
                     when(it) {
                         is Resource.Loading -> {
                             showLoading()
                         }
-
                         is Resource.Success -> {
-                            println("data: ${it.data?.isEmpty()}")
                             if(it.data?.isEmpty() == true) {
                                 showNoData()
                             } else {
@@ -67,7 +64,6 @@ class OnGoingFragment : Fragment(R.layout.fragment_on_going){
                     }
         }
             }
-        }
     }
 
 

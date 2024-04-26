@@ -14,17 +14,17 @@ class OnGoingAdapter (val context: Context?):  RecyclerView.Adapter<OnGoingAdapt
     lateinit var binding : OnGoingItemBinding
 
     inner class OnGoingViewHolder(var binding: OnGoingItemBinding): RecyclerView.ViewHolder(binding.root){
-        fun bind(orderItem: OrderItem){
-            binding.orderItem = orderItem
+        fun bind(order: Order){
+            binding.order = order
         }
     }
 
-    private val diffCallback = object : DiffUtil.ItemCallback<OrderItem>(){
-        override fun areItemsTheSame(oldItem: OrderItem, newItem: OrderItem): Boolean {
-            return oldItem.productId == newItem.productId
+    private val diffCallback = object : DiffUtil.ItemCallback<Order>(){
+        override fun areItemsTheSame(oldItem: Order, newItem: Order): Boolean {
+            return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(oldItem: OrderItem, newItem: OrderItem): Boolean {
+        override fun areContentsTheSame(oldItem: Order, newItem: Order): Boolean {
             return  oldItem == newItem
         }
 
@@ -44,8 +44,8 @@ class OnGoingAdapter (val context: Context?):  RecyclerView.Adapter<OnGoingAdapt
     }
 
     override fun onBindViewHolder(holder: OnGoingViewHolder, position: Int) {
-        val orderItem =  differ.currentList[position]
-        holder.bind(orderItem)
+        val order=  differ.currentList[position]
+        holder.bind(order)
     }
 
     override fun getItemCount(): Int {

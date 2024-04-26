@@ -15,15 +15,17 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import com.google.firebase.Timestamp
 import java.text.SimpleDateFormat
+import java.util.concurrent.atomic.AtomicInteger
 
 class OrderTrackingViewModel (app: Application) : AndroidViewModel(
     app
 ) {
 
-    private val _onGoingOrderItems = MutableStateFlow<Resource<List<OrderItem>>>(Resource.Unspecified())
-    private val _historyOrderItems = MutableStateFlow<Resource<List<OrderItem>>>(Resource.Unspecified())
-    val onGoingOrderItems : StateFlow<Resource<List<OrderItem>>> = _onGoingOrderItems
-    val historyOrderItems : StateFlow<Resource<List<OrderItem>>> = _historyOrderItems
+//    private val _onGoingOrderItems = MutableStateFlow<Resource<List<Order>>>(Resource.Unspecified())
+    private val _onGoingOrder = MutableStateFlow<Resource<List<Order>>>(Resource.Unspecified())
+    private val _historyOrder = MutableStateFlow<Resource<List<Order>>>(Resource.Unspecified())
+    val onGoingOrder : StateFlow<Resource<List<Order>>> = _onGoingOrder
+    val historyOrderItems : StateFlow<Resource<List<Order>>> = _historyOrder
     private val fbSingleton = FirebaseSingleton.getInstance()
 
     init {
@@ -34,7 +36,7 @@ class OrderTrackingViewModel (app: Application) : AndroidViewModel(
 
     fun fetchAllOnGoingOrderItems(){
         viewModelScope.launch {
-            _onGoingOrderItems.emit(Resource.Loading())
+            _onGoingOrder.emit(Resource.Loading())
         }
 
         fbSingleton.db.collection(Constant.ORDER_COLLECTION)
@@ -45,47 +47,51 @@ class OrderTrackingViewModel (app: Application) : AndroidViewModel(
             .addOnSuccessListener { querySnapshot ->
                 val itemsList = mutableListOf<OrderItem>()
                 val ordersList = mutableListOf<Order>()
-                print("Orders: ${querySnapshot.documents[0]}")
                 if (querySnapshot.documents.isEmpty())
                 {
                     viewModelScope.launch {
-                        _onGoingOrderItems.emit(Resource.Success(itemsList))
+                        _onGoingOrder.emit(Resource.Success(ordersList))
                     }
                 } else {
-                for (document in querySnapshot.documents) {
-                    val order = document.toObject(Order::class.java)
-                    val itemsCollection = document.reference.collection("OrderItem")
+                    val ordersList = mutableListOf<Order>()
+                    val processedDocuments = AtomicInteger(0)
 
-                    itemsCollection.get()
-                        .addOnSuccessListener { subCollectionSnapshot ->
-                            for (subDocument in subCollectionSnapshot.documents) {
-                                val item = subDocument.toObject(OrderItem::class.java)
+                    for (document in querySnapshot.documents) {
+                        val order = document.toObject(Order::class.java)
 
-                                item?.productId = order?.createAt?.let {
-                                    formatTimestamp(
-                                        it
-                                    )
+                        val itemsCollection = document.reference.collection("OrderItem")
+
+                        itemsCollection.get()
+                            .addOnSuccessListener { subCollectionSnapshot ->
+                                if (!subCollectionSnapshot.isEmpty) {
+                                    val subDocument = subCollectionSnapshot.documents[0]
+                                    val item = subDocument.toObject(OrderItem::class.java)
+                                    order?.phoneNumber = item?.productName
+                                    order?.userId = item?.quantity.toString()
+                                    order?.rating = subCollectionSnapshot.documents.size
                                 }
-                                val price = item?.price?.times(item?.quantity!!)
-                                item?.productImage = price?.let { formatNumber(it) }
 
-                                item?.let {
-                                    itemsList.add(it)
+                                order?.let {
+                                    ordersList.add(it)
                                 }
-//                                println(item.toString())
-                            }
 
-                            order?.let {
-                                ordersList.add(it)
-                            }
-
-                            if (ordersList.size == querySnapshot.documents.size) {
-                                viewModelScope.launch {
-                                    _onGoingOrderItems.emit(Resource.Success(itemsList))
+                                if (processedDocuments.incrementAndGet() == querySnapshot.documents.size) {
+                                    viewModelScope.launch {
+                                        _onGoingOrder.emit(Resource.Success(ordersList))
+                                    }
                                 }
                             }
-                        }
-                }
+                            .addOnFailureListener { exception ->
+                                // Handle failure
+                                println("Error fetching subcollection: $exception")
+                                if (processedDocuments.incrementAndGet() == querySnapshot.documents.size) {
+                                    viewModelScope.launch {
+                                        _onGoingOrder.emit(Resource.Error(exception.message ?: "Unknown error"))
+                                    }
+                                }
+                            }
+                    }
+
                 }
             }
             .addOnFailureListener { exception ->
@@ -95,13 +101,13 @@ class OrderTrackingViewModel (app: Application) : AndroidViewModel(
                     Toast.LENGTH_LONG
                 ).show()
                 viewModelScope.launch {
-                    _onGoingOrderItems.emit(Resource.Error(exception.message.toString()))
+                    _onGoingOrder.emit(Resource.Error(exception.message.toString()))
                 }
             }
     }
     fun fetchAllHistoryOrderItems(){
         viewModelScope.launch {
-            _historyOrderItems.emit(Resource.Loading())
+            _historyOrder.emit(Resource.Loading())
         }
 
         fbSingleton.db.collection(Constant.ORDER_COLLECTION)
@@ -111,48 +117,37 @@ class OrderTrackingViewModel (app: Application) : AndroidViewModel(
             .get()
             .addOnSuccessListener { querySnapshot ->
 
-                val itemsList = mutableListOf<OrderItem>()
+//                val itemsList = mutableListOf<OrderItem>()
                 val ordersList = mutableListOf<Order>()
                 if (querySnapshot.documents.isEmpty())
                 {
                     viewModelScope.launch {
-                        _onGoingOrderItems.emit(Resource.Success(itemsList))
+                        _historyOrder.emit(Resource.Success(ordersList))
                     }
                 } else {
                     for (document in querySnapshot.documents) {
                         val order = document.toObject(Order::class.java)
                         val itemsCollection = document.reference.collection("OrderItem")
 
+
                         itemsCollection.get()
                             .addOnSuccessListener { subCollectionSnapshot ->
-                                for (subDocument in subCollectionSnapshot.documents) {
-                                    val item = subDocument.toObject(OrderItem::class.java)
+                                var subDocument = subCollectionSnapshot.documents[0]
+                                val item = subDocument.toObject(OrderItem::class.java)
+                                order?.phoneNumber = item?.productName;
+                                order?.userId = item?.quantity.toString()
+                                order?.rating = subCollectionSnapshot.documents.size
 
-                                    item?.productId = order?.createAt?.let {
-                                        formatTimestamp(
-                                            it
-                                        )
-                                    }
-                                    val price = item?.price?.times(item?.quantity!!)
-                                    item?.productImage = price?.let { formatNumber(it) }
 
-                                    item?.let {
-                                        itemsList.add(it)
-                                    }
-                                    println(item.toString())
-                                }
-
-                                order?.let {
-                                    ordersList.add(it)
-                                }
-
-                                if (ordersList.size == querySnapshot.documents.size) {
-                                    viewModelScope.launch {
-                                        _historyOrderItems.emit(Resource.Success(itemsList))
-                                    }
-                                }
                             }
-
+                        if (order != null) {
+                            ordersList.add(order)
+                        }
+                        if (ordersList.size == querySnapshot.documents.size) {
+                            viewModelScope.launch {
+                                _historyOrder.emit(Resource.Success(ordersList))
+                            }
+                        }
                     }
                 }
             }
@@ -163,22 +158,19 @@ class OrderTrackingViewModel (app: Application) : AndroidViewModel(
                     Toast.LENGTH_LONG
                 ).show()
                 viewModelScope.launch {
-                    _historyOrderItems.emit(Resource.Error(exception.message.toString()))
+                    _historyOrder.emit(Resource.Error(exception.message.toString()))
                 }
             }
     }
 
     fun formatTimestamp(timestamp: Timestamp): String {
-        val dateFormatter = SimpleDateFormat("dd MMMM") // "24 June"
+        val dateFormatter = SimpleDateFormat("dd MMMM YYYY") // "24 June"
         val timeFormatter = SimpleDateFormat("HH:mm")  // "12:30"
 
         val dateString = dateFormatter.format(timestamp.toDate())
         val timeString = timeFormatter.format(timestamp.toDate())
 
-        val deadline = timestamp.toDate()
-        val deadlineString = timeFormatter.format(deadline)
-
-        return "$dateString | $timeString | by $deadlineString"
+        return "$dateString | $timeString "
     }
 
     fun formatNumber(number: Int): String {

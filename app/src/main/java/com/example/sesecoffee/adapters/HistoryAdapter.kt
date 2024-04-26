@@ -7,23 +7,24 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sesecoffee.databinding.HistoryItemBinding
+import com.example.sesecoffee.model.Order
 import com.example.sesecoffee.model.OrderItem
 
 class HistoryAdapter (val context: Context?):  RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder>(){
     lateinit var binding : HistoryItemBinding
 
     inner class HistoryViewHolder(var binding: HistoryItemBinding): RecyclerView.ViewHolder(binding.root){
-        fun bind(orderItem: OrderItem){
-            binding.orderItem = orderItem
+        fun bind(order: Order){
+            binding.order = order
         }
     }
 
-    private val diffCallback = object : DiffUtil.ItemCallback<OrderItem>(){
-        override fun areItemsTheSame(oldItem: OrderItem, newItem: OrderItem): Boolean {
-            return oldItem.productId == newItem.productId
+    private val diffCallback = object : DiffUtil.ItemCallback<Order>(){
+        override fun areItemsTheSame(oldItem: Order, newItem: Order): Boolean {
+            return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(oldItem: OrderItem, newItem: OrderItem): Boolean {
+        override fun areContentsTheSame(oldItem: Order, newItem: Order): Boolean {
             return  oldItem == newItem
         }
 

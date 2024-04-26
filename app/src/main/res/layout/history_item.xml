@@ -5,8 +5,8 @@
 
     <data>
         <variable
-            name="orderItem"
-            type="com.example.sesecoffee.model.OrderItem" />
+            name="order"
+            type="com.example.sesecoffee.model.Order" />
     </data>
 
     <androidx.cardview.widget.CardView
@@ -14,87 +14,118 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:top="1dp"
-            android:bottom="1dp"
-            android:orientation="horizontal">
-
+            android:layout_height="match_parent"
+            android:orientation="vertical">
             <LinearLayout
-                android:layout_width="222dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="10dp"
-                android:orientation="vertical">
+                android:layout_marginStart="16dp"
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp"
-                    android:text="@{orderItem.productId}"
+                    android:layout_marginRight="50dp"
+                    android:text="@{order.phoneNumber}"
                     android:textColor="@color/order_inactive"
                     android:textSize="15sp"
                     android:textStyle="normal" />
 
-
                 <TextView
-                    android:layout_width="match_parent"
+                    android:id="@+id/textView4"
+                    android:layout_width="289dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
-                    android:drawableLeft="@drawable/latte"
-                    android:drawablePadding="8dp"
-
-                    android:text="@{orderItem.productName}"
-                    android:textColor="@color/textColor"
-                    android:textSize="18sp" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:drawablePadding="8dp"
-                    android:drawableStart="@drawable/address"
-                    android:text="227 Nguyễn Văn Cừ, Quận 5, TP Hồ Chí Minh"
-                    android:textColor="@color/textColor"
-                    android:textSize="15sp"
-                    android:textStyle="normal" />
+                    android:layout_weight="1"
+                    android:text="@{`>> ` + order.phoneNumber + ` sản phẩm...`}"
+                    android:textColor="@color/order_inactive" />
 
             </LinearLayout>
-
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:paddingTop="23dp">
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:top="1dp"
+                android:bottom="1dp"
+                android:orientation="horizontal">
 
-                <TextView
+                <LinearLayout
+                    android:layout_width="222dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:text="@{order.id}"
+                        android:textColor="@color/order_inactive"
+                        android:textSize="15sp"
+                        android:textStyle="normal" />
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:drawableLeft="@drawable/latte"
+                        android:drawablePadding="8dp"
+
+                        android:text="@{order.id}"
+                        android:textColor="@color/textColor"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawablePadding="8dp"
+                        android:drawableStart="@drawable/address"
+                        android:text="227 Nguyễn Văn Cừ, Quận 5, TP Hồ Chí Minh"
+                        android:textColor="@color/textColor"
+                        android:textSize="15sp"
+                        android:textStyle="normal" />
+
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="6dp"
-                    android:layout_marginEnd="10dp"
-                    android:gravity="center"
-                    android:text="@{orderItem.productImage}"
-                    android:textColor="@color/textColor"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:paddingTop="23dp">
 
-                <Button
-                    android:id="@+id/pointsBtn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal|center_vertical"
-                    android:backgroundTint="@color/primary"
-                    android:padding="2sp"
-                    android:paddingHorizontal="3sp"
-                    android:text='Re-order'
-                    android:textSize="14sp"
-                    app:cornerRadius="50dp" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="6dp"
+                        android:layout_marginEnd="10dp"
+                        android:gravity="center"
+                        android:text="@{order.id}"
+                        android:textColor="@color/textColor"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <Button
+                        android:id="@+id/pointsBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal|center_vertical"
+                        android:backgroundTint="@color/primary"
+                        android:padding="2sp"
+                        android:paddingHorizontal="3sp"
+                        android:text='Re-order'
+                        android:textSize="14sp"
+                        app:cornerRadius="50dp" />
+
+                </LinearLayout>
 
             </LinearLayout>
-
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
