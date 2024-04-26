@@ -94,6 +94,7 @@ dependencies {
 
     //RecyclerView Decorator
     implementation("it.xabaras.android:recyclerview-swipedecorator:1.4")
+    implementation("com.github.denzcoskun:ImageSlideshow:0.1.2")
 
 
     implementation ("com.google.android.material:material:1.1.0-alpha02")
@@ -106,6 +107,4 @@ dependencies {
     implementation ("com.stripe:stripe-android:20.41.0")
     implementation ("com.android.volley:volley:1.2.1")
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
-//    implementation ("com.paypal.android:card-payments:1.3.0")
-//    implementation ("com.paypal.android:payment-buttons:1.3.0")
 }
