@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".PaymentActivity">
 
     <ImageButton
@@ -51,7 +52,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="56dp"
-        android:layout_marginBottom="68dp"
+        android:layout_marginBottom="72dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/paymentMethodChoice"
         app:layout_constraintEnd_toEndOf="parent"
@@ -90,32 +91,102 @@
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.483"
+        app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.579">
+        app:layout_constraintVertical_bias="0.499">
 
-        <RadioButton
-            android:id="@+id/cash"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_marginBottom="16dp"
-            android:drawableRight="@drawable/cash"
-            android:padding="16dp"
-            android:text="Cash"
-            android:textSize="18dp"
-            android:textStyle="bold" />
+            android:layout_height="96dp"
+            android:background="@drawable/gray_round_corner"
+            android:orientation="horizontal"
+            android:paddingHorizontal="20dp">
 
-        <RadioButton
-            android:id="@+id/creditCard"
+            <RadioButton
+                android:id="@+id/cash"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center|start"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Cash"
+                    android:textSize="18dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Pay with cash on delivery"
+                    android:textColor="#38001833" />
+            </LinearLayout>
+
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/cash" />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_marginBottom="16dp"
-            android:drawableRight="@drawable/credit_card"
-            android:padding="16dp"
-            android:text="Credit/Debit Card"
-            android:textSize="18dp"
-            android:textStyle="bold" />
+            android:layout_height="96dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/gray_round_corner"
+            android:orientation="horizontal"
+            android:paddingHorizontal="20dp">
+
+            <RadioButton
+                android:id="@+id/creditCard"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center|start"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Credit / Debit Card"
+                    android:textSize="18dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Stripe payment"
+                    android:textColor="#38001833" />
+            </LinearLayout>
+
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/visa__1_" />
+        </LinearLayout>
+
 
     </RadioGroup>
 

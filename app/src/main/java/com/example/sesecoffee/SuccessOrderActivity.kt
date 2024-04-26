@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.Toast
+import com.example.sesecoffee.model.UserSingleton
 
 class SuccessOrderActivity : AppCompatActivity() {
     lateinit var orderId : String
