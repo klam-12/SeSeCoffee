@@ -1,11 +1,15 @@
 package com.example.sesecoffee.adapters
 
 import android.content.Context;
+import android.content.Intent
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView;
+import com.example.sesecoffee.AdminMainActivity
+import com.example.sesecoffee.OrderDetailActivity
 import com.example.sesecoffee.databinding.OnGoingItemBinding
 import com.example.sesecoffee.model.Order
 import com.example.sesecoffee.model.OrderItem
@@ -13,8 +17,24 @@ import com.example.sesecoffee.model.OrderItem
 class OnGoingAdapter (val context: Context?):  RecyclerView.Adapter<OnGoingAdapter.OnGoingViewHolder>(){
     lateinit var binding : OnGoingItemBinding
 
-    inner class OnGoingViewHolder(var binding: OnGoingItemBinding): RecyclerView.ViewHolder(binding.root){
-        fun bind(order: Order){
+    inner class OnGoingViewHolder(private val binding: OnGoingItemBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+
+        init {
+            binding.root.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    val order = differ.currentList[position]
+                    // Start the activity here using the context
+                    val intent = Intent(context, OrderDetailActivity::class.java)
+//                    intent.putExtra('order_detail', order)
+                    context?.startActivity(intent)
+                }
+            }
+
+        }
+
+        fun bind(order: Order) {
             binding.order = order
         }
     }
@@ -40,8 +60,10 @@ class OnGoingAdapter (val context: Context?):  RecyclerView.Adapter<OnGoingAdapt
             LayoutInflater.from(parent.context),
             parent,
             false)
+
         return OnGoingViewHolder(binding)
     }
+
 
     override fun onBindViewHolder(holder: OnGoingViewHolder, position: Int) {
         val order=  differ.currentList[position]
