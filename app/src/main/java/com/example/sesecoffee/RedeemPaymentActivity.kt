@@ -3,6 +3,7 @@ package com.example.sesecoffee
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -31,6 +32,7 @@ class RedeemPaymentActivity : AppCompatActivity() {
     val collectionProducts: CollectionReference = db.collection(PRODUCT_COLLECTION)
     val collectionOrders: CollectionReference = db.collection(ORDER_COLLECTION)
     val collectionRedeem: CollectionReference = db.collection(REDEEM_COLLECTION)
+    val collectionUser: CollectionReference = db.collection("USER")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_redeem_payment)
@@ -87,7 +89,6 @@ class RedeemPaymentActivity : AppCompatActivity() {
                             ""
                         )
                         collectionOrders.document(orderId!!).set(paidOrder)
-
                         val intent = Intent(
                             applicationContext,
                             SuccessOrderActivity::class.java
@@ -95,6 +96,25 @@ class RedeemPaymentActivity : AppCompatActivity() {
                         intent.putExtra("orderId", orderId)
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                         startActivity(intent)
+
+//                        val documentRef = collectionUser.document(UserSingleton.instance?.id.toString())
+//                        val updates = hashMapOf(
+//                            "redeemPoint " to (UserSingleton.instance?.redeemPoint!! - redeem.point!!)
+//                        )
+//                        documentRef.update(updates as Map<String, Any>)
+//                            .addOnSuccessListener {
+//                                val intent = Intent(
+//                                    applicationContext,
+//                                    SuccessOrderActivity::class.java
+//                                )
+//                                intent.putExtra("orderId", orderId)
+//                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+//                                startActivity(intent)
+//                            }
+//                            .addOnFailureListener { exception ->
+//                                Log.i("R","sai roi")
+//                                println("Error updating fields: $exception")
+//                            }
                     }
                 }
             }

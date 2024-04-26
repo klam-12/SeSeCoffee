@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.LinearLayout
+import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.TextView
 import android.widget.Toast
@@ -61,7 +62,7 @@ class PaymentActivity : AppCompatActivity() {
         val phone = findViewById<TextView>(R.id.paymentPhone)
         val address = findViewById<TextView>(R.id.paymentAddress)
         val price = findViewById<TextView>(R.id.paymentPrice)
-        val paymentRadioGroup = findViewById<RadioGroup>(R.id.paymentMethodChoice)
+        setUpRadioButton()
 
         val query = collectionOrders.whereEqualTo("userId", UserSingleton.instance?.id.toString())
             .whereEqualTo("done",false)
@@ -78,7 +79,7 @@ class PaymentActivity : AppCompatActivity() {
                         .addOnSuccessListener { result ->
                             val orderItemList = result.toObjects(OrderItem::class.java)
                             totalPrice = calculateTotalPrice(orderItemList)
-                            price.setText("${totalPrice}VNĐ")
+                            price.setText("${totalPrice}$")
                         }.addOnFailureListener { exception ->
                             println("Error getting documents: $exception")
                         }
@@ -88,7 +89,7 @@ class PaymentActivity : AppCompatActivity() {
                     address.setText("Address: ${this.userAddress}")
 
                     findViewById<Button>(R.id.paymentProceedBtn).setOnClickListener {
-                        val paymentMethodChoice = paymentRadioGroup.checkedRadioButtonId
+                        val paymentMethodChoice = getCheckedRadioButtonId()
                         if(paymentMethodChoice == -1) {
                             Toast.makeText(this, "Please select a payment method", Toast.LENGTH_SHORT).show()
                             return@setOnClickListener
@@ -146,6 +147,33 @@ class PaymentActivity : AppCompatActivity() {
 
     private fun hideLoading() {
         findViewById<LinearLayout>(R.id.loadingContainer).visibility = View.GONE
+    }
+
+    private fun getCheckedRadioButtonId(): Int {
+        val cashRadio = findViewById<RadioButton>(R.id.cash)
+        val cardRadio = findViewById<RadioButton>(R.id.creditCard)
+
+        return if (cashRadio.isChecked) {
+            R.id.cash
+        } else if (cardRadio.isChecked) {
+            R.id.creditCard
+        } else {
+            -1
+        }
+    }
+
+    private fun setUpRadioButton(){
+        val cashRadio = findViewById<RadioButton>(R.id.cash)
+        val cardRadio = findViewById<RadioButton>(R.id.creditCard)
+
+        cashRadio.setOnClickListener {
+            cashRadio.isChecked = true
+            cardRadio.isChecked = false
+        }
+        cardRadio.setOnClickListener {
+            cashRadio.isChecked = false
+            cardRadio.isChecked = true
+        }
     }
 
     private fun calculateTotalPrice(itemList : List<OrderItem>) : Int {
@@ -252,8 +280,7 @@ class PaymentActivity : AppCompatActivity() {
             override fun getParams(): MutableMap<String, String> {
                 val params = HashMap<String, String>()
                 params["customer"] = customerId
-//                params["amount"] = "10" + "00"
-                params["amount"] = totalPrice.toString()
+                params["amount"] = totalPrice.toString() + "00"
                 params["currency"] = "usd"
                 params["automatic_payment_methods[enabled]"] = "true"
                 return params

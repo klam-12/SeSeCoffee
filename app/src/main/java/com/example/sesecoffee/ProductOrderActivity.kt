@@ -33,8 +33,9 @@ class ProductOrderActivity : AppCompatActivity() {
     private var price = 0
     private var sizeFee = 0
     private var milkFee = 0
-    private  var productName = ""
-    private  var productImg = ""
+    private var productName = ""
+    private var productImg = ""
+    private var description = ""
     lateinit var idOrder : String
 
     private lateinit var orderItemViewModel: OrderItemsViewModel
@@ -54,6 +55,7 @@ class ProductOrderActivity : AppCompatActivity() {
 
         val productImage = findViewById<ImageView>(R.id.orderImageView)
         val productNameTextView = findViewById<TextView>(R.id.orderItem)
+        val descriptionTextView = findViewById<TextView>(R.id.orderDescription)
         val quantityTextView = findViewById<TextView>(R.id.orderQuantity)
         val priceTextView = findViewById<TextView>(R.id.orderPrice)
 
@@ -78,11 +80,13 @@ class ProductOrderActivity : AppCompatActivity() {
                         val priceTemp = it.get("price").toString().toInt()
                         productName = it.getString("name").toString()
                         productImg = it.getString("imageUrl").toString()
+                        description = it.getString("description").toString()
                         price = priceTemp
                         productNameTextView.setText(productName)
                         Glide.with(this).load(productImg).into(productImage)
+                        descriptionTextView.setText(description)
                         quantityTextView.setText("$quantity")
-                        priceTextView.setText("${price * quantity}VNĐ")
+                        priceTextView.setText("${price * quantity}$")
                         hideLoading()
                     }
                 }.addOnFailureListener() {
@@ -97,16 +101,16 @@ class ProductOrderActivity : AppCompatActivity() {
         }
 
         handleRadioButton(smallSizeRadio, 0, 0)
-        handleRadioButton(mediumSizeRadio, 1000, 0)
-        handleRadioButton(largeSizeRadio, 2000, 0)
+        handleRadioButton(mediumSizeRadio, 1, 0)
+        handleRadioButton(largeSizeRadio, 2, 0)
         handleRadioButton(noMilkRadio, 0, 1)
-        handleRadioButton(smallMilkRadio, 1000, 1)
-        handleRadioButton(largeMilkRadio, 2000, 1)
+        handleRadioButton(smallMilkRadio, 1, 1)
+        handleRadioButton(largeMilkRadio, 2, 1)
 
         findViewById<Button>(R.id.orderQuantityPlus).setOnClickListener {
             quantity++
             quantityTextView.setText("$quantity")
-            priceTextView.setText("${price * quantity}VNĐ")
+            priceTextView.setText("${price * quantity}$")
         }
 
         findViewById<Button>(R.id.orderQuantityMinus).setOnClickListener {
@@ -115,7 +119,7 @@ class ProductOrderActivity : AppCompatActivity() {
                 quantity = 1
             }
             quantityTextView.setText("$quantity")
-            priceTextView.setText("${price * quantity}VNĐ")
+            priceTextView.setText("${price * quantity}$")
         }
 
         findViewById<Button>(R.id.orderNextBtn).setOnClickListener {
@@ -153,6 +157,7 @@ class ProductOrderActivity : AppCompatActivity() {
 
             val tempName = productName
             val tempImg = productImg
+            val tempDescription = description
             val query = collectionOrders.whereEqualTo("userId", UserSingleton.instance?.id.toString())
                 .whereEqualTo("done",false)
             query.get()
@@ -180,7 +185,7 @@ class ProductOrderActivity : AppCompatActivity() {
                         }
                         Log.i("R","sai oi")
                     }
-                    val newOrder = OrderItem(UUID.randomUUID().toString(), productId, tempName, tempImg, temperature, size, milk, quantity, totalPrice, false)
+                    val newOrder = OrderItem(UUID.randomUUID().toString(), productId, tempName, tempImg, tempDescription, temperature, size, milk, quantity, totalPrice, false)
                     orderItemViewModel.addOrderItem(newOrder,idOrder)
 
                     val intent = Intent(
@@ -224,7 +229,7 @@ class ProductOrderActivity : AppCompatActivity() {
             else if(type == 1){
                 addMilkFee(fee)
             }
-            findViewById<TextView>(R.id.orderPrice).setText("${price * quantity}VNĐ")
+            findViewById<TextView>(R.id.orderPrice).setText("${price * quantity}$")
         }
     }
 

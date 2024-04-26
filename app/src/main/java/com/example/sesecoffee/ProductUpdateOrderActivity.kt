@@ -52,6 +52,7 @@ class ProductUpdateOrderActivity : AppCompatActivity() {
         val productNameTextView = findViewById<TextView>(R.id.orderItem)
         val quantityTextView = findViewById<TextView>(R.id.orderQuantity)
         val priceTextView = findViewById<TextView>(R.id.orderPrice)
+        val descriptionTextView = findViewById<TextView>(R.id.orderDescription)
 
         val hotColdRadioGroup = findViewById<RadioGroup>(R.id.orderHotColdChoice)
         val sizeRadioGroup = findViewById<RadioGroup>(R.id.orderSizeChoice)
@@ -101,6 +102,7 @@ class ProductUpdateOrderActivity : AppCompatActivity() {
                                     orderItem = it.toObject(OrderItem::class.java)!!
                                     productNameTextView.setText(orderItem.productName)
                                     Glide.with(this).load(orderItem.productImage).into(productImage)
+                                    descriptionTextView.setText(orderItem.description)
 
                                     when(orderItem.hotCold){
                                         HotCold.HOT.value -> hotColdRadioGroup.check(R.id.hot)
@@ -120,24 +122,24 @@ class ProductUpdateOrderActivity : AppCompatActivity() {
                                     if(orderItem.size == Size.SMALL.value){
                                         sizeFee = 0
                                     } else if(orderItem.size == Size.MEDIUM.value){
-                                        sizeFee = 1000
+                                        sizeFee = 1
                                     } else {
-                                        sizeFee = 2000
+                                        sizeFee = 2
                                     }
 
                                     if(orderItem.milk == Milk.NOMILK.value){
                                         milkFee = 0
                                     } else if(orderItem.milk == Milk.SMALLMILK.value){
-                                        milkFee = 1000
+                                        milkFee = 1
                                     } else {
-                                        milkFee = 2000
+                                        milkFee = 2
                                     }
 
                                     image = orderItem.productImage!!
                                     price = orderItem.price!! / orderItem.quantity!!
                                     quantity = orderItem.quantity!!
                                     quantityTextView.setText("${orderItem.quantity}")
-                                    priceTextView.setText("${orderItem.price}VNĐ")
+                                    priceTextView.setText("${orderItem.price}$")
 
                                     hideLoading()
                                 }
@@ -155,16 +157,16 @@ class ProductUpdateOrderActivity : AppCompatActivity() {
         }
 
         handleRadioButton(smallSizeRadio, 0, 0)
-        handleRadioButton(mediumSizeRadio, 1000, 0)
-        handleRadioButton(largeSizeRadio, 2000, 0)
+        handleRadioButton(mediumSizeRadio, 1, 0)
+        handleRadioButton(largeSizeRadio, 2, 0)
         handleRadioButton(noMilkRadio, 0, 1)
-        handleRadioButton(smallMilkRadio, 1000, 1)
-        handleRadioButton(largeMilkRadio, 2000, 1)
+        handleRadioButton(smallMilkRadio, 1, 1)
+        handleRadioButton(largeMilkRadio, 2, 1)
 
         findViewById<Button>(R.id.orderQuantityPlus).setOnClickListener {
             quantity++
             quantityTextView.setText("$quantity")
-            priceTextView.setText("${price * quantity}VNĐ")
+            priceTextView.setText("${price * quantity}$")
         }
 
         findViewById<Button>(R.id.orderQuantityMinus).setOnClickListener {
@@ -173,7 +175,7 @@ class ProductUpdateOrderActivity : AppCompatActivity() {
                 quantity = 1
             }
             quantityTextView.setText("$quantity")
-            priceTextView.setText("${price * quantity}VNĐ")
+            priceTextView.setText("${price * quantity}$")
         }
 
         findViewById<ImageButton>(R.id.orderBackBtn).setOnClickListener {
@@ -241,9 +243,6 @@ class ProductUpdateOrderActivity : AppCompatActivity() {
                     ).show()
                 }
 
-//            val newOrder = OrderItem(orderItem.id, orderItem.productId, productNameTextView.text.toString(), image, temperature, size, milk, quantity, totalPrice, false)
-//            viewModel.updateOrderItemInfo(newOrder, idOrder)
-
             val intent = Intent(
                 applicationContext,
                 CartOrderActivity::class.java
@@ -268,7 +267,7 @@ class ProductUpdateOrderActivity : AppCompatActivity() {
             else if(type == 1){
                 addMilkFee(fee)
             }
-            findViewById<TextView>(R.id.orderPrice).setText("${price * quantity}VNĐ")
+            findViewById<TextView>(R.id.orderPrice).setText("${price * quantity}$")
         }
     }
     fun addSizeFee(fee: Int): Int {

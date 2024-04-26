@@ -26,7 +26,7 @@ class OrderAdapter(val context: Context)
             binding.apply {
                 Glide.with(itemView).load(orderItem.productImage).into(productImageView)
             }
-            binding.orderItemCardView.setOnClickListener {
+            binding.orderItemLayout.setOnClickListener {
                 val intent = Intent(context, ProductUpdateOrderActivity::class.java)
                 intent.putExtra("order", orderItem.id)
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)

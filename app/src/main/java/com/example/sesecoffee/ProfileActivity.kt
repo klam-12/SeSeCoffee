@@ -22,8 +22,6 @@ class ProfileActivity : AppCompatActivity() {
         binding.profileInputPhone.setText(UserSingleton.instance?.phone )
         binding.profileInputAddress.setText(UserSingleton.instance?.address )
 
-
-
         binding.profileSaveBtn.setOnClickListener() {
 
             UserSingleton.instance?.fullName = binding.profileInputFullName.text.toString()

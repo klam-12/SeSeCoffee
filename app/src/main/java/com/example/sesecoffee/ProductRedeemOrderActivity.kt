@@ -32,8 +32,9 @@ class ProductRedeemOrderActivity : AppCompatActivity() {
     private var price = 0
     private var sizeFee = 0
     private var milkFee = 0
-    private  var productName = ""
-    private  var productImg = ""
+    private var productName = ""
+    private var productImg = ""
+    private var description = ""
     lateinit var idOrder : String
 
     private lateinit var orderItemViewModel: OrderItemsViewModel
@@ -55,6 +56,7 @@ class ProductRedeemOrderActivity : AppCompatActivity() {
         val productNameTextView = findViewById<TextView>(R.id.orderItem)
         val quantityTextView = findViewById<TextView>(R.id.orderQuantity)
         val priceTextView = findViewById<TextView>(R.id.orderPrice)
+        val descriptionTextView = findViewById<TextView>(R.id.orderDescription)
 
         val hotColdRadioGroup = findViewById<RadioGroup>(R.id.orderHotColdChoice)
         val sizeRadioGroup = findViewById<RadioGroup>(R.id.orderSizeChoice)
@@ -77,11 +79,13 @@ class ProductRedeemOrderActivity : AppCompatActivity() {
                         val priceTemp = it.get("price").toString().toInt()
                         productName = it.getString("name").toString()
                         productImg = it.getString("imageUrl").toString()
+                        description = it.getString("description").toString()
                         price = priceTemp
                         productNameTextView.setText(productName)
                         Glide.with(this).load(productImg).into(productImage)
+                        descriptionTextView.setText(description)
                         quantityTextView.setText("$quantity")
-                        priceTextView.setText("${price * quantity}VNĐ")
+                        priceTextView.setText("${price * quantity}$")
                         hideLoading()
                     }
                 }.addOnFailureListener() {
@@ -96,11 +100,11 @@ class ProductRedeemOrderActivity : AppCompatActivity() {
         }
 
         handleRadioButton(smallSizeRadio, 0, 0)
-        handleRadioButton(mediumSizeRadio, 1000, 0)
-        handleRadioButton(largeSizeRadio, 2000, 0)
+        handleRadioButton(mediumSizeRadio, 1, 0)
+        handleRadioButton(largeSizeRadio, 2, 0)
         handleRadioButton(noMilkRadio, 0, 1)
-        handleRadioButton(smallMilkRadio, 1000, 1)
-        handleRadioButton(largeMilkRadio, 2000, 1)
+        handleRadioButton(smallMilkRadio, 1, 1)
+        handleRadioButton(largeMilkRadio, 2, 1)
 
         findViewById<Button>(R.id.orderNextBtn).setOnClickListener {
             val hotColdChoice = hotColdRadioGroup.checkedRadioButtonId
@@ -137,6 +141,7 @@ class ProductRedeemOrderActivity : AppCompatActivity() {
 
             val tempName = productName
             val tempImg = productImg
+            val tempDescription = description
 
             val id = UUID.randomUUID().toString()
             val newOrders = Order(id,0,
@@ -154,7 +159,7 @@ class ProductRedeemOrderActivity : AppCompatActivity() {
             orderViewModel.addOrders(newOrders)
             idOrder = id
 
-            val newOrder = OrderItem(UUID.randomUUID().toString(), productId, tempName, tempImg, temperature, size, milk, quantity, totalPrice, false)
+            val newOrder = OrderItem(UUID.randomUUID().toString(), productId, tempName, tempImg, tempDescription, temperature, size, milk, quantity, totalPrice, false)
             orderItemViewModel.addOrderItem(newOrder, idOrder)
 
             val intent = Intent(
@@ -197,7 +202,7 @@ class ProductRedeemOrderActivity : AppCompatActivity() {
             else if(type == 1){
                 addMilkFee(fee)
             }
-            findViewById<TextView>(R.id.orderPrice).setText("${price * quantity}VNĐ")
+            findViewById<TextView>(R.id.orderPrice).setText("${price * quantity}$")
         }
     }
 

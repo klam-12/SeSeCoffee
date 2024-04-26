@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
@@ -71,14 +72,16 @@ class CartOrderActivity : AppCompatActivity() {
                                     if(it.data!!.isEmpty()){
                                         isEmpty = true
                                         findViewById<TextView>(R.id.cartEmpty).visibility = View.VISIBLE
+                                        findViewById<ImageView>(R.id.cartEmptyImage).visibility = View.VISIBLE
                                     }
                                     else{
                                         isEmpty = false
                                         findViewById<TextView>(R.id.cartEmpty).visibility = View.GONE
+                                        findViewById<ImageView>(R.id.cartEmptyImage).visibility = View.GONE
                                     }
 
                                     val orderItems = it.data.toMutableList()
-                                    price.setText("${calculateTotalPrice(it.data)}VNĐ")
+                                    price.setText("${calculateTotalPrice(it.data)}$")
 
                                     val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT){
                                         override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
@@ -94,10 +97,10 @@ class CartOrderActivity : AppCompatActivity() {
                                             orderItems.remove(deleteItem)
                                             if(orderItems.isEmpty()){
                                                 isEmpty = true
-                                                price.setText("0VNĐ")
+                                                price.setText("0$")
                                             }
                                             else{
-                                                price.setText("${calculateTotalPrice(orderItems)}VNĐ")
+                                                price.setText("${calculateTotalPrice(orderItems)}$")
                                             }
                                         }
 
@@ -119,6 +122,7 @@ class CartOrderActivity : AppCompatActivity() {
                                                     )
                                                 )
                                                 .addActionIcon(R.drawable.delete)
+                                                .addCornerRadius(1, 28)
                                                 .create()
                                                 .decorate()
                                             super.onChildDraw(
@@ -148,7 +152,8 @@ class CartOrderActivity : AppCompatActivity() {
                 }
                 else{
                     findViewById<TextView>(R.id.cartEmpty).visibility = View.VISIBLE
-                    price.setText("0VNĐ")
+                    findViewById<ImageView>(R.id.cartEmptyImage).visibility = View.VISIBLE
+                    price.setText("0$")
                 }
 
             }.addOnFailureListener { exception ->

@@ -12,6 +12,7 @@ data class OrderItem(
     var productId:String? = null,
     var productName : String? = null,
     var productImage: String? = null,
+    var description: String? = null,
     var hotCold : String? = null,
     var size : String? = null,
     var milk : String? = null,
@@ -24,6 +25,7 @@ data class OrderItem(
         productId: String?,
         productName : String?,
         productImage : String?,
+        description: String?,
         hotCold : HotCold?,
         size : Size?,
         milk : Milk?,
@@ -31,7 +33,7 @@ data class OrderItem(
         price : Int?,
         isDelivered : Boolean?
     ) :
-            this(id, productId, productName, productImage, hotCold.toString(), size.toString(), milk.toString(), quantity, price, isDelivered) {}
+            this(id, productId, productName, productImage, description, hotCold.toString(), size.toString(), milk.toString(), quantity, price, isDelivered) {}
 
     override fun toString() : String {
         return "$productId $productName $hotCold $size $milk $quantity $price "
