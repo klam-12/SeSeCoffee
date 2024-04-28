@@ -25,14 +25,18 @@ class OnGoingAdapter (val context: Context?):  RecyclerView.Adapter<OnGoingAdapt
                 val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
                     val order = differ.currentList[position]
-                    // Start the activity here using the context
-                    val intent = Intent(context, OrderDetailActivity::class.java)
-//                    intent.putExtra('order_detail', order)
-                    context?.startActivity(intent)
+                    println(order)
+
+                    println(binding.root.context)
+                    binding.root.context?.let { ctx ->
+                        val intent = Intent(binding.root.context, OrderDetailActivity::class.java)
+                        intent.putExtra("order_id", order.id)
+                        ctx.startActivity(intent)
+                    }
                 }
             }
-
         }
+
 
         fun bind(order: Order) {
             binding.order = order
@@ -50,7 +54,8 @@ class OnGoingAdapter (val context: Context?):  RecyclerView.Adapter<OnGoingAdapt
 
     }
 
-    val differ = AsyncListDiffer(this,diffCallback)
+    val differ = AsyncListDiffer(this, diffCallback)
+
 
     override fun onCreateViewHolder(
         parent: ViewGroup,

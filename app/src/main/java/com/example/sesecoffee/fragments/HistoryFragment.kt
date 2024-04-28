@@ -35,8 +35,8 @@ class HistoryFragment : Fragment(R.layout.fragment_history) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         orderTrackingViewModel = (activity as MainActivity).orderTrackingViewModel
-
-        setUpRecyclerViewOrders()
+        orderTrackingViewModel.fetchAllHistoryOrderItems()
+//        setUpRecyclerViewOrders()
         lifecycleScope.launchWhenStarted {
             orderTrackingViewModel.historyOrderItems.collectLatest {
                 when(it) {
@@ -45,13 +45,17 @@ class HistoryFragment : Fragment(R.layout.fragment_history) {
                     }
 
                     is Resource.Success -> {
-                        println("ALOLOALO $it")
-                        historyAdapter.differ.submitList(it.data)
-                        hideLoading()
+                        if(it.data?.isEmpty() == true) {
+                            showNoData()
+                        } else {
+                            setUpRecyclerViewOrders()
+                            showData()
+                            historyAdapter.differ.submitList(it.data) // Show data in RecyclerView
+                        }
                     }
 
                     is Resource.Error -> {
-                        hideLoading()
+                        showNoData()
                         Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
                     }
 
@@ -61,14 +65,22 @@ class HistoryFragment : Fragment(R.layout.fragment_history) {
         }
     }
 
-
-    private fun hideLoading() {
+    private fun showData() {
+        binding.historyList.visibility = View.VISIBLE
+        binding.tvNoProduct.visibility = View.GONE
         binding.progressBar.visibility = View.GONE
+    }
 
+    private fun showNoData() {
+        binding.tvNoProduct.visibility = View.VISIBLE
+        binding.progressBar.visibility = View.GONE
+        binding.historyList.visibility = View.GONE
     }
 
     private fun showLoading() {
         binding.progressBar.visibility = View.VISIBLE
+        binding.tvNoProduct.visibility = View.GONE
+        binding.historyList.visibility = View.GONE
     }
 
     private fun setUpRecyclerViewOrders() {

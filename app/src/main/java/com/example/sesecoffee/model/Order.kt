@@ -10,11 +10,12 @@ data class Order(
     var address : String? = null,
     var userId : String? = null,
     var phoneNumber : String? = null,
-    var paymentId: String?=null,
-    var code : String? = null,
+    var paymentMethod : String? = null,
+    var stripeCustomerId : String? = null,
     var done: Boolean= false,
-    var rating: Int? = null,
-    var delivered: Boolean=false
+    var delivered: Boolean=false,
+    var rating : Float? = null,
+    var comment : String? = null
 
 ) {
  //   constructor() :

@@ -30,7 +30,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp"
-                    android:layout_marginRight="150dp"
+                    android:layout_marginRight="100dp"
                     android:text="@{order.formatTimestamp(order.createAt)}"
                     android:textColor="@color/order_inactive"
                     android:textSize="15sp"
@@ -41,7 +41,7 @@
                     android:layout_width="289dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@{`&lt;&lt; ` + order.rating + ` sản phẩm...`}"
+                    android:text="@{`&lt;&lt; ` + order.comment + ` sản phẩm...`}"
                     android:textColor="@color/order_inactive" />
 
             </LinearLayout>
@@ -102,7 +102,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginEnd="10dp"
-                    android:text="@{Integer.toString(order.total)}"
+                    android:text="@{order.paymentMethod}"
                     android:textColor="@color/textColor"
                     android:textSize="16sp"
                     android:textStyle="bold" />

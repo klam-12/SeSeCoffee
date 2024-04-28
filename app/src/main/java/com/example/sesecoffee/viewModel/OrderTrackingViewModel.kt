@@ -30,7 +30,7 @@ class OrderTrackingViewModel (app: Application) : AndroidViewModel(
 
     init {
 //        fetchAllOnGoingOrderItems()
-        fetchAllHistoryOrderItems()
+//        fetchAllHistoryOrderItems()
     }
 
 
@@ -40,7 +40,7 @@ class OrderTrackingViewModel (app: Application) : AndroidViewModel(
         }
 
         fbSingleton.db.collection(Constant.ORDER_COLLECTION)
-//            .whereEqualTo("userId", UserSingleton.instance?.id.toString())
+            .whereEqualTo("userId", UserSingleton.instance?.id.toString())
             .whereEqualTo("done", true)
             .whereEqualTo("delivered", false)
             .get()
@@ -61,17 +61,21 @@ class OrderTrackingViewModel (app: Application) : AndroidViewModel(
 
                         val itemsCollection = document.reference.collection("OrderItem")
 
-                        itemsCollection.get()
-                            .addOnSuccessListener { subCollectionSnapshot ->
-                                if (!subCollectionSnapshot.isEmpty) {
-                                    val subDocument = subCollectionSnapshot.documents[0]
+                        itemsCollection.get().addOnSuccessListener { subCollectionSnapshot ->
+                            if (!subCollectionSnapshot.isEmpty) {
+                                for (subDocument in subCollectionSnapshot.documents) {
                                     val item = subDocument.toObject(OrderItem::class.java)
+                                    // Example: Assigning values to order fields based on item data
                                     order?.phoneNumber = item?.productName
                                     order?.userId = item?.quantity.toString()
-                                    order?.rating = subCollectionSnapshot.documents.size
+                                    // You might need to adjust this logic based on your requirements
+                                    order?.comment = subCollectionSnapshot.documents.size.toString()
+                                    order?.paymentMethod = order?.total?.let { formatNumber(it) }
                                 }
+                            }
 
-                                order?.let {
+
+                        order?.let {
                                     ordersList.add(it)
                                 }
 
@@ -111,13 +115,12 @@ class OrderTrackingViewModel (app: Application) : AndroidViewModel(
         }
 
         fbSingleton.db.collection(Constant.ORDER_COLLECTION)
-//            .whereEqualTo("userId", UserSingleton.instance?.id.toString())
+            .whereEqualTo("userId", UserSingleton.instance?.id.toString())
             .whereEqualTo("done", true)
             .whereEqualTo("delivered", true)
             .get()
             .addOnSuccessListener { querySnapshot ->
 
-//                val itemsList = mutableListOf<OrderItem>()
                 val ordersList = mutableListOf<Order>()
                 if (querySnapshot.documents.isEmpty())
                 {
@@ -125,6 +128,8 @@ class OrderTrackingViewModel (app: Application) : AndroidViewModel(
                         _historyOrder.emit(Resource.Success(ordersList))
                     }
                 } else {
+                    val ordersList = mutableListOf<Order>()
+                    val processedDocuments = AtomicInteger(0)
                     for (document in querySnapshot.documents) {
                         val order = document.toObject(Order::class.java)
                         val itemsCollection = document.reference.collection("OrderItem")
@@ -132,22 +137,25 @@ class OrderTrackingViewModel (app: Application) : AndroidViewModel(
 
                         itemsCollection.get()
                             .addOnSuccessListener { subCollectionSnapshot ->
-                                var subDocument = subCollectionSnapshot.documents[0]
-                                val item = subDocument.toObject(OrderItem::class.java)
-                                order?.phoneNumber = item?.productName;
-                                order?.userId = item?.quantity.toString()
-                                order?.rating = subCollectionSnapshot.documents.size
+                                if (!subCollectionSnapshot.isEmpty) {
+                                    val subDocument = subCollectionSnapshot.documents[0]
+                                    val item = subDocument.toObject(OrderItem::class.java)
+                                    order?.phoneNumber = item?.productName
+                                    order?.userId = item?.quantity.toString()
+                                    order?.comment = subCollectionSnapshot.documents.size.toString()
+                                    order?.paymentMethod = order?.total?.let { formatNumber(it) }
+                                }
 
+                                order?.let {
+                                    ordersList.add(it)
+                                }
 
+                                if (processedDocuments.incrementAndGet() == querySnapshot.documents.size) {
+                                    viewModelScope.launch {
+                                        _historyOrder.emit(Resource.Success(ordersList))
+                                    }
+                                }
                             }
-                        if (order != null) {
-                            ordersList.add(order)
-                        }
-                        if (ordersList.size == querySnapshot.documents.size) {
-                            viewModelScope.launch {
-                                _historyOrder.emit(Resource.Success(ordersList))
-                            }
-                        }
                     }
                 }
             }

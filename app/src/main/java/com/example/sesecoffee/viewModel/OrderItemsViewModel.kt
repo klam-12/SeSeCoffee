@@ -16,6 +16,7 @@ class OrderItemsViewModel(app: Application) : AndroidViewModel(
     app
 ) {
 
+
     private val _orderItems = MutableStateFlow<Resource<List<Order>>>(Resource.Unspecified())
     val orderItems : StateFlow<Resource<List<Order>>> = _orderItems
 
@@ -24,7 +25,6 @@ class OrderItemsViewModel(app: Application) : AndroidViewModel(
     init {
         fetchAllOrderItems()
     }
-
     fun fetchAllOrderItems()  {
         viewModelScope.launch { _orderItems.emit(Resource.Loading()) }
 

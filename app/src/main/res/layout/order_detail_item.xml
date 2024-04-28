@@ -32,16 +32,16 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/textView12"
+                    android:id="@+id/productName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Capuchinooooooooooo"
                     android:textColor="@color/textColor"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/textView13"
+                    android:id="@+id/quantity"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
@@ -50,7 +50,7 @@
                     android:textSize="10sp" />
 
                 <TextView
-                    android:id="@+id/textView14"
+                    android:id="@+id/hotCold"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
@@ -59,7 +59,7 @@
                     android:textSize="10sp" />
 
                 <TextView
-                    android:id="@+id/textView15"
+                    android:id="@+id/milk"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
@@ -68,7 +68,7 @@
                     android:textSize="10sp" />
 
                 <TextView
-                    android:id="@+id/textView16"
+                    android:id="@+id/price"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Price: 100.000 VND"
