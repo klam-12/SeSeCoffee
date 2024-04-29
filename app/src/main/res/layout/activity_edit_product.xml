@@ -9,6 +9,11 @@
             type="com.example.sesecoffee.model.Product" />
     </data>
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_crud">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -23,20 +28,19 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:textSize="30sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/product_text_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="20dp"
             android:text="Name"
+            android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.093"
+            app:layout_constraintHorizontal_bias="0.083"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/edit_product_title" />
 
@@ -48,6 +52,9 @@
             android:ems="10"
             android:inputType="text"
             android:text="@{product.name}"
+            android:background="@drawable/rounded_editext"
+            android:padding="8dp"
+            android:elevation="2dp"
             app:layout_constraintEnd_toEndOf="@+id/product_text_name"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/product_text_name"
@@ -55,15 +62,46 @@
             tools:hint="Name" />
 
         <TextView
+            android:id="@+id/product_text_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Description"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="@+id/product_text_name"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/product_text_name"
+            app:layout_constraintTop_toBottomOf="@+id/product_input_name" />
+
+        <EditText
+            android:id="@+id/product_input_description"
+            android:layout_width="340dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:ems="10"
+            android:text="@{product.description}"
+            android:hint="None"
+            android:gravity="start|top"
+            android:inputType="textMultiLine"
+            android:background="@drawable/rounded_editext"
+            android:padding="8dp"
+            android:elevation="2dp"
+            app:layout_constraintEnd_toEndOf="@+id/product_text_description"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/product_text_description"
+            app:layout_constraintTop_toBottomOf="@+id/product_text_description" />
+
+        <TextView
             android:id="@+id/product_text_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="20dp"
             android:text="Price"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="@+id/product_text_description"
             app:layout_constraintHorizontal_bias="0.089"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/product_input_name" />
+            app:layout_constraintStart_toStartOf="@+id/product_text_description"
+            app:layout_constraintTop_toBottomOf="@+id/product_input_description" />
 
         <EditText
             android:id="@+id/product_input_price"
@@ -71,8 +109,11 @@
             android:layout_height="50dp"
             android:layout_marginTop="8dp"
             android:ems="10"
-            android:inputType="text"
+            android:inputType="number"
             android:text="@{product.price.toString()}"
+            android:background="@drawable/rounded_editext"
+            android:padding="8dp"
+            android:elevation="2dp"
             app:layout_constraintEnd_toEndOf="@+id/product_text_price"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/product_text_price"
@@ -83,12 +124,13 @@
             android:id="@+id/product_image_btn"
             android:layout_width="wrap_content"
             android:layout_height="60dp"
-            android:layout_marginTop="64dp"
+            android:layout_marginTop="50dp"
             android:backgroundTint="#E3BC9F"
             android:elevation="8dp"
+            android:textSize="15sp"
             android:text="Choose image"
             android:textColor="@color/primary"
-            app:cornerRadius="0dp"
+            app:cornerRadius="3dp"
             app:layout_constraintStart_toStartOf="@+id/product_input_price"
             app:layout_constraintTop_toBottomOf="@+id/product_input_price" />
 
@@ -106,18 +148,20 @@
             android:id="@+id/progressBar_editPro"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="64dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="32dp"
             android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/product_image_btn" />
+            app:layout_constraintTop_toBottomOf="@+id/product_delete_btn" />
 
         <Button
             android:id="@+id/product_save_btn"
             android:layout_width="350dp"
             android:layout_height="60dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="16dp"
             android:backgroundTint="@color/primary"
             android:elevation="8dp"
             android:text="Submit"
@@ -126,22 +170,24 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.508"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/progressBar_editPro" />
+            app:layout_constraintTop_toBottomOf="@+id/product_image" />
 
         <Button
             android:id="@+id/product_delete_btn"
             android:layout_width="350dp"
             android:layout_height="60dp"
-            android:layout_marginTop="24dp"
-            android:backgroundTint="#BA0000"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="@color/red"
             android:elevation="8dp"
             android:text="Delete"
             android:textSize="16sp"
             app:cornerRadius="5dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/product_save_btn" />
+            app:layout_constraintTop_toBottomOf="@+id/product_save_btn"
+            />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 </layout>

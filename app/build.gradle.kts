@@ -58,7 +58,6 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 
-
     // Navigation
     val nav_version = "2.7.7"
     implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
@@ -77,11 +76,14 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore")
     implementation("com.google.firebase:firebase-storage")
     implementation("com.google.firebase:firebase-auth")
+    implementation ("com.google.firebase:firebase-messaging:20.2.3")
+//    implementation ("com.google.firebase:firebase-crashlytics:17.2.2")
+//    implementation ("com.google.android.gms:play-services-analytics:17.0.0")
 
     // Glide library
     implementation("com.github.bumptech.glide:glide:4.12.0")
     annotationProcessor("com.github.bumptech.glide:compiler:4.12.0")
-
+    kapt("com.github.bumptech.glide:compiler:4.12.0")
     // Dagger Hilt
     implementation("com.google.dagger:hilt-android:2.51")
     implementation ("com.google.android.material:material:1.1.0-alpha02")
@@ -89,6 +91,17 @@ dependencies {
     annotationProcessor("com.google.dagger:hilt-compiler:2.51")
 
     implementation("it.xabaras.android:recyclerview-swipedecorator:1.4")
+    implementation("com.github.denzcoskun:ImageSlideshow:0.1.2")
+
+
+    implementation ("com.google.android.material:material:1.1.0-alpha02")
+    implementation ("androidx.cardview:cardview:1.0.0")
+
     // Add the dependencies for any other desired Firebase products
     // https://firebase.google.com/docs/android/setup#available-libraries
+
+    implementation ("com.stripe:stripe-java:25.0.0")
+    implementation ("com.stripe:stripe-android:20.41.0")
+    implementation ("com.android.volley:volley:1.2.1")
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
 }

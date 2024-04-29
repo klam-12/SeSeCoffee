@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-
     <item
-        
         android:title="Home"
         android:icon="@drawable/ic_home"
         android:id="@+id/homeFragment">
@@ -18,6 +16,18 @@
         android:title="Orders"
         android:icon="@drawable/ic_order"
         android:id="@+id/orderTrackingFragment">
+    </item>
+
+    <item
+        android:title="Ratings"
+        android:icon="@drawable/ic_star"
+        android:id="@+id/ratingFragment">
+    </item>
+
+    <item
+        android:title="Chat"
+        android:icon="@drawable/ic_chat"
+        android:id="@+id/chatFragment">
     </item>
 
 </menu>

@@ -1,7 +1,7 @@
 package com.example.sesecoffee.enums
 
-enum class PaymentMethod {
-    CASH,
-    VNPAY,
-    MOMO
+enum class PaymentMethod(val value: String){
+    CASH("cash"),
+    CARD("card"),
+    REDEEM("redeem"),
 }

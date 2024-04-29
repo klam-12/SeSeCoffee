@@ -1,5 +1,7 @@
 package com.example.sesecoffee
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -101,10 +103,30 @@ class EditProductActivity : AppCompatActivity() {
             }
 
             productDeleteBtn.setOnClickListener(){
-                // not testing yet
-                if(oldProduct != null){
-                    oldProduct?.id?.let { it1 -> productsViewModel.deleteProduct(it1) }
+                val context = it.context
+                val alertDialog: AlertDialog? = this.let {
+                    val builder = AlertDialog.Builder(context)
+                    builder.apply {
+                        setPositiveButton("Yes", DialogInterface.OnClickListener { dialog, id ->
+                            if(oldProduct != null){
+                                oldProduct?.id?.let { it1 -> productsViewModel.deleteProduct(it1) }
+                            }
+                        })
+                        setNegativeButton("No", DialogInterface.OnClickListener { dialog, id ->
+
+                        })
+                        // Set other dialog properties
+                        setIcon(R.drawable.ic_warning_yellow)
+                        setTitle("Do you want to delete this product?")
+                    }
+                    // Create the AlertDialog
+                    builder.create()
                 }
+
+                if (alertDialog != null) {
+                    alertDialog!!.show()
+                }
+
             }
         }
     }
@@ -121,11 +143,12 @@ class EditProductActivity : AppCompatActivity() {
         if (oldProduct!= null) {
             val id = oldProduct?.id
             var proName = binding.productInputName.text.toString()
+            var proDesc = binding.productInputDescription.text.toString()
             var proPrice = binding.productInputPrice.text.toString()
             var imageUriString: String = imageUri.toString()
             var timeStamp: Timestamp = Timestamp(Date())
             var proPriceInt = if (proPrice.isNotEmpty()) proPrice.toInt() else 0
-            var product = Product(id, proName, proPriceInt, imageUriString, timeStamp)
+            var product = Product(id, proName,proDesc, proPriceInt, imageUriString, timeStamp)
 
             productsViewModel.updateProduct(product, imageUri, oldProduct?.imageUrl)
         }

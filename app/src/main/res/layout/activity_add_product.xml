@@ -3,10 +3,30 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_crud"
+        >
+
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".AddProductActivity">
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/backBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:clickable="true"
+        app:backgroundTint="@color/background"
+        app:elevation="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/backbtn"
+        tools:ignore="SpeakableTextPresentCheck" />
 
     <TextView
         android:id="@+id/add_product_title"
@@ -21,14 +41,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.012" />
 
     <TextView
         android:id="@+id/product_text_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="24dp"
         android:text="Name"
+        android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.093"
         app:layout_constraintStart_toStartOf="parent"
@@ -42,6 +63,9 @@
         android:ems="10"
         android:hint="Name"
         android:inputType="text"
+        android:background="@drawable/rounded_editext"
+        android:padding="8dp"
+        android:elevation="2dp"
         app:layout_constraintEnd_toEndOf="@+id/product_text_name"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/product_text_name"
@@ -49,15 +73,45 @@
         tools:hint="Name" />
 
     <TextView
-        android:id="@+id/product_text_price"
+        android:id="@+id/product_text_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
+        android:text="Description"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.093"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/product_input_name" />
+
+    <EditText
+        android:id="@+id/product_input_description"
+        android:layout_width="340dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:hint="Short description about the product"
+        android:gravity="start|top"
+        android:inputType="textMultiLine"
+        android:background="@drawable/rounded_editext"
+        android:padding="8dp"
+        android:elevation="2dp"
+        app:layout_constraintEnd_toEndOf="@+id/product_text_description"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/product_text_description"
+        app:layout_constraintTop_toBottomOf="@+id/product_text_description" />
+
+    <TextView
+        android:id="@+id/product_text_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="Price"
+        android:textSize="15sp"
+        android:layout_marginTop="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.089"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/product_input_name" />
+        app:layout_constraintTop_toBottomOf="@+id/product_input_description" />
 
     <EditText
         android:id="@+id/product_input_price"
@@ -66,7 +120,10 @@
         android:layout_marginTop="8dp"
         android:ems="10"
         android:hint="VND"
-        android:inputType="text"
+        android:inputType="number"
+        android:background="@drawable/rounded_editext"
+        android:padding="8dp"
+        android:elevation="2dp"
         app:layout_constraintEnd_toEndOf="@+id/product_text_price"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/product_text_price"
@@ -77,12 +134,13 @@
         android:id="@+id/product_image_btn"
         android:layout_width="wrap_content"
         android:layout_height="60dp"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="60dp"
         android:backgroundTint="#E3BC9F"
         android:elevation="8dp"
         android:text="Choose image"
         android:textColor="@color/primary"
-        app:cornerRadius="0dp"
+        android:textSize="15sp"
+        app:cornerRadius="3dp"
         app:layout_constraintStart_toStartOf="@+id/product_input_price"
         app:layout_constraintTop_toBottomOf="@+id/product_input_price" />
 
@@ -90,8 +148,8 @@
         android:id="@+id/product_image"
         android:layout_width="150dp"
         android:layout_height="150dp"
+        android:layout_marginStart="32dp"
         app:layout_constraintBottom_toBottomOf="@+id/product_image_btn"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/product_image_btn"
         app:layout_constraintTop_toTopOf="@+id/product_image_btn"
         tools:src="@tools:sample/backgrounds/scenic" />
@@ -100,27 +158,32 @@
         android:id="@+id/progressBar_newPro"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="24dp"
         android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/product_image_btn" />
+        app:layout_constraintTop_toBottomOf="@+id/product_save_btn"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/product_save_btn"
         android:layout_width="350dp"
         android:layout_height="60dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="32dp"
         android:backgroundTint="@color/primary"
         android:elevation="8dp"
         android:text="Submit"
         android:textSize="16sp"
         app:cornerRadius="5dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.409"
+        app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/progressBar_newPro" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        app:layout_constraintTop_toBottomOf="@+id/product_image" />
 
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 </layout>

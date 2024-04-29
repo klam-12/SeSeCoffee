@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".PaymentActivity">
 
     <ImageButton
@@ -37,8 +38,8 @@
         android:id="@+id/paymentAvatar"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginBottom="56dp"
+        android:layout_marginStart="44dp"
+        android:layout_marginBottom="64dp"
         android:scaleType="centerCrop"
         app:layout_constraintBottom_toTopOf="@+id/paymentMethodChoice"
         app:layout_constraintStart_toStartOf="parent"
@@ -51,7 +52,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="56dp"
-        android:layout_marginBottom="60dp"
+        android:layout_marginBottom="72dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/paymentMethodChoice"
         app:layout_constraintEnd_toEndOf="parent"
@@ -68,7 +69,7 @@
             tools:layout_editor_absoluteY="153dp" />
 
         <TextView
-            android:id="@+id/paymentOrderId"
+            android:id="@+id/paymentPhone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="14sp"
@@ -90,48 +91,102 @@
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.483"
+        app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.533">
+        app:layout_constraintVertical_bias="0.499">
 
-        <RadioButton
-            android:id="@+id/cash"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:background="@color/item_background"
-            android:backgroundTint="@color/item_background"
-            android:drawableRight="@drawable/cash"
-            android:padding="16dp"
-            android:text="Cash"
-            android:textSize="18dp"
-            android:textStyle="bold" />
+            android:layout_height="96dp"
+            android:background="@drawable/gray_round_corner"
+            android:orientation="horizontal"
+            android:paddingHorizontal="20dp">
 
-        <RadioButton
-            android:id="@+id/creditCard"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:background="@color/item_background"
-            android:backgroundTint="@color/item_background"
-            android:drawableRight="@drawable/credit_card"
-            android:padding="16dp"
-            android:text="Credit Card"
-            android:textSize="18dp"
-            android:textStyle="bold" />
+            <RadioButton
+                android:id="@+id/cash"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
 
-        <RadioButton
-            android:id="@+id/eWallet"
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center|start"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Cash"
+                    android:textSize="18dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Pay with cash on delivery"
+                    android:textColor="#38001833" />
+            </LinearLayout>
+
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/cash" />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/item_background"
-            android:backgroundTint="@color/item_background"
-            android:drawableRight="@drawable/momo"
-            android:padding="16dp"
-            android:text="E-Wallet"
-            android:textSize="18dp"
-            android:textStyle="bold" />
+            android:layout_height="96dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/gray_round_corner"
+            android:orientation="horizontal"
+            android:paddingHorizontal="20dp">
+
+            <RadioButton
+                android:id="@+id/creditCard"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center|start"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Credit / Debit Card"
+                    android:textSize="18dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Stripe payment"
+                    android:textColor="#38001833" />
+            </LinearLayout>
+
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/visa__1_" />
+        </LinearLayout>
+
 
     </RadioGroup>
 
@@ -147,7 +202,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/paymentTotalPrice"
-        app:layout_constraintVertical_bias="0.02" />
+        app:layout_constraintVertical_bias="0.028" />
 
     <Button
         android:id="@+id/paymentProceedBtn"
@@ -160,7 +215,7 @@
         android:drawableTint="@color/white"
         android:paddingLeft="28dp"
         android:paddingRight="28dp"
-        android:text="Proceed"
+        android:text="Pay Now"
         android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -180,5 +235,54 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.855" />
+
+    <LinearLayout
+        android:id="@+id/loadingContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#55F7F8FB"
+        android:gravity="center"
+        android:visibility="gone"
+        >
+
+        <ProgressBar
+            android:id="@+id/paymentProgressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.5" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/paymentAmountLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="96dp"
+        android:text="Amount"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.122"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.738" />
+
+    <TextView
+        android:id="@+id/paymentAmount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="96dp"
+        android:layout_marginRight="48dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.737" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

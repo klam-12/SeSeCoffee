@@ -3,11 +3,16 @@ package com.example.sesecoffee.model
 import com.example.sesecoffee.enums.HotCold
 import com.example.sesecoffee.enums.Milk
 import com.example.sesecoffee.enums.Size
+import com.google.firebase.Timestamp
+import java.text.SimpleDateFormat
+import java.util.*
 
 data class OrderItem(
-    var productId : String? = null,
+    val id:String? = null,
+    var productId:String? = null,
     var productName : String? = null,
     var productImage: String? = null,
+    var description: String? = null,
     var hotCold : String? = null,
     var size : String? = null,
     var milk : String? = null,
@@ -16,9 +21,11 @@ data class OrderItem(
     var isDelivered : Boolean? = false,
 ) {
     constructor(
-        productId : String?,
+        id: String?,
+        productId: String?,
         productName : String?,
         productImage : String?,
+        description: String?,
         hotCold : HotCold?,
         size : Size?,
         milk : Milk?,
@@ -26,9 +33,16 @@ data class OrderItem(
         price : Int?,
         isDelivered : Boolean?
     ) :
-            this(productId, productName, productImage, hotCold.toString(), size.toString(), milk.toString(), quantity, price, isDelivered) {}
+            this(id, productId, productName, productImage, description, hotCold.toString(), size.toString(), milk.toString(), quantity, price, isDelivered) {}
 
     override fun toString() : String {
-        return "$productName $hotCold $size $milk $quantity $price"
+        return "$productId $productName $hotCold $size $milk $quantity $price "
     }
+    fun getReward(): Int? {
+        return (price?.toDouble() )?.div(1000)?.let { Math.round(it).toInt() }
+    }
+
+
+
+
 }
