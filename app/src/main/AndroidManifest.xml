@@ -29,12 +29,12 @@
         <activity
             android:name=".RedeemPaymentActivity"
             android:exported="false" />
-        <activity
-            android:name=".EditRedeemActivity"
-            android:exported="false" />
-        <activity
-            android:name=".AddRedeemActivity"
-            android:exported="false" />
+<!--        <activity-->
+<!--            android:name=".EditRedeemActivity"-->
+<!--            android:exported="false" />-->
+<!--        <activity-->
+<!--            android:name=".AddRedeemActivity"-->
+<!--            android:exported="false" />-->
         <activity
             android:name=".EditProductActivity"
             android:exported="false" />
@@ -55,8 +55,10 @@
 
         </activity>
         <activity
-            android:name=".AddProductActivity"
-            android:exported="false" />
+            android:name=".RedeemActivity"
+            android:exported="false">
+
+        </activity>
         <activity
             android:name=".ProfileActivity"
             android:exported="false" />
@@ -93,11 +95,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".MainActivity"
-            android:exported="false">
 
-        </activity>
 
     </application>
 

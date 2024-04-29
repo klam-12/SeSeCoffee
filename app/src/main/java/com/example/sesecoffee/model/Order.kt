@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 
+
 data class Order(
     val id:String? = null,
     var total : Int? = null,
@@ -19,5 +20,29 @@ data class Order(
     var rating : Float? = null,
     var comment : String? = null
 ) {
+    public fun formatTimestamp(timestamp: Timestamp): String {
+        val dateFormatter = SimpleDateFormat("dd MMMM YYYY") // "24 June"
+        val timeFormatter = SimpleDateFormat("HH:mm")  // "12:30"
 
+        val dateString = dateFormatter.format(timestamp.toDate())
+        val timeString = timeFormatter.format(timestamp.toDate())
+
+        return "$dateString | $timeString "
+    }
+
+    public fun formatNumber(number: Int): String {
+        val numberString = number.toString().reversed()
+
+        val parts = mutableListOf<Char>()
+        for (i in 0 until numberString.length) {
+            parts.add(0, numberString[i])
+
+            if ((i + 1) % 3 == 0 && i != numberString.lastIndex) {
+                parts.add(0, ',')
+            }
+        }
+        val result =  parts.joinToString("")
+        println(result)
+        return "$result VND"
+    }
 }

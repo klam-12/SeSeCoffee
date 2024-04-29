@@ -8,20 +8,23 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.example.sesecoffee.databinding.ActivityMainBinding
 import com.example.sesecoffee.fragments.HomeFragment
+import com.example.sesecoffee.fragments.OrderTrackingFragment
 import com.example.sesecoffee.fragments.RatingFragment
 import com.example.sesecoffee.fragments.RewardFragment
 import com.example.sesecoffee.model.UserSingleton
+import com.example.sesecoffee.viewModel.OrderItemsViewModel
 import com.example.sesecoffee.viewModel.OrderViewModel
 import com.example.sesecoffee.viewModel.ProductsViewModel
 import com.example.sesecoffee.viewModel.RewardItemViewModel
-
+import com.example.sesecoffee.viewModel.OrderTrackingViewModel
 class MainActivity : AppCompatActivity() {
 
     lateinit var binding : ActivityMainBinding
     lateinit var productsViewModel: ProductsViewModel
     lateinit var  rewardViewModel: RewardItemViewModel
     lateinit var  orderViewModel: OrderViewModel
-
+    lateinit var orderItemViewModel: OrderItemsViewModel
+    lateinit var orderTrackingViewModel: OrderTrackingViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -31,7 +34,7 @@ class MainActivity : AppCompatActivity() {
             when(it.itemId){
                 R.id.homeFragment -> replaceFragment(HomeFragment())
                 R.id.rewardFragment -> replaceFragment(RewardFragment())
-                R.id.orderTrackingFragment -> replaceFragment(HomeFragment())
+                R.id.orderTrackingFragment -> replaceFragment(OrderTrackingFragment())
                 R.id.ratingFragment -> replaceFragment(RatingFragment())
                 R.id.chatFragment -> replaceFragment(HomeFragment())
 
@@ -50,6 +53,8 @@ class MainActivity : AppCompatActivity() {
         productsViewModel = ProductsViewModel(application);
         rewardViewModel = RewardItemViewModel(application);
         orderViewModel = OrderViewModel(application);
+        orderItemViewModel = OrderItemsViewModel(application)
+        orderTrackingViewModel = OrderTrackingViewModel(application)
     }
 
     private fun replaceFragment(fragment: Fragment){

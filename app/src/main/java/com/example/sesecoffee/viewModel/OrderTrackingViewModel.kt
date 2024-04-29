@@ -40,7 +40,7 @@ class OrderTrackingViewModel (app: Application) : AndroidViewModel(
         }
 
         fbSingleton.db.collection(Constant.ORDER_COLLECTION)
-            .whereEqualTo("userId", UserSingleton.instance?.id.toString())
+//            .whereEqualTo("userId", UserSingleton.instance?.id.toString())
             .whereEqualTo("done", true)
             .whereEqualTo("delivered", false)
             .get()

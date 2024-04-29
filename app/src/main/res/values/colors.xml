@@ -4,6 +4,8 @@
     <color name="white">#FFFFFFFF</color>
     <color name="brown">#FFAE6524</color>
     <color name="grey">#FFF7F8FB</color>
+    <color name="dark_grey">#6C6C6C</color>
+    <color name="grey_">#324A5980</color>
     <color name="divider_color">#FFF4F5F7</color>
     <color name="order_inactive">#FFD8D8D8</color>
     <color name="item_delete">#FFFFE5E5</color>
@@ -156,7 +158,6 @@
     <color name="md_theme_surfaceContainer_highContrast">#FBEBE1</color>
     <color name="md_theme_surfaceContainerHigh_highContrast">#F5E5DC</color>
     <color name="md_theme_surfaceContainerHighest_highContrast">#F0DFD6</color>
-    <color name="primary">#4E2602</color>
     <color name="success">#65B741</color>
     <color name="pending">#ffcc53</color>
 </resources>
