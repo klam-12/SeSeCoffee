@@ -1,19 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
-
-    <data>
-        <variable
-            name="redeem"
-            type="com.example.sesecoffee.model.Redeem" />
-    </data>
 
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_crud"
-    tools:context=".EditRedeemActivity">
+    tools:context=".EditRedeemActivity"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
 
     <TextView
@@ -45,7 +39,7 @@
         android:layout_width="340dp"
         android:layout_height="50dp"
         android:layout_marginTop="8dp"
-        android:text="@{redeem.productName}"
+        android:text="product"
         android:textSize="20sp"
         android:textStyle="bold"
         android:background="@drawable/rounded_editext"
@@ -73,7 +67,7 @@
         android:layout_height="50dp"
         android:layout_marginTop="8dp"
         android:ems="10"
-        android:text="@{redeem.point.toString()}"
+        android:text="1000"
         android:hint="1000"
         android:inputType="text"
         android:background="@drawable/rounded_editext"
@@ -158,4 +152,3 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/delRedeemBtn" />
 </androidx.constraintlayout.widget.ConstraintLayout>
-</layout>

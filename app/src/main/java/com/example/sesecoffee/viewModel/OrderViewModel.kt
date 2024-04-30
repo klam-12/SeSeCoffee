@@ -1,17 +1,23 @@
 package com.example.sesecoffee.viewModel
 
 import android.app.Application
+import android.content.Intent
 import android.net.Uri
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.sesecoffee.AdminMainActivity
+import com.example.sesecoffee.MainActivity
 import com.example.sesecoffee.model.FirebaseSingleton
 import com.example.sesecoffee.model.Order
+import com.example.sesecoffee.model.UserSingleton
 import com.example.sesecoffee.utils.Constant
 import com.example.sesecoffee.utils.Resource
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.toObject
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -65,7 +71,7 @@ class OrderViewModel(app: Application) : AndroidViewModel(
     }
 
     fun fetchPersonalOrder(userId : String){
-        Log.i("KL",userId)
+//        Log.i("KL",userId)
         viewModelScope.launch { _personalOrder.emit(Resource.Loading()) }
 
         fbSingleton.db.collection(Constant.ORDER_COLLECTION)
@@ -139,6 +145,25 @@ class OrderViewModel(app: Application) : AndroidViewModel(
         }
 
     }
+
+    fun findOrderById(id: String, callback: (Order?) -> Unit) {
+        fbSingleton.db.collection(Constant.ORDER_COLLECTION).document(id)
+            .get()
+            .addOnSuccessListener { document ->
+                if (document != null && document.exists()) {
+                    val order = document.toObject(Order::class.java)
+                    callback(order)
+                } else {
+                    Log.d("Order", "No such document")
+                    callback(null)
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.d("Order", "Get failed with ", exception)
+                callback(null)
+            }
+    }
+
 
     fun updateOrder(newOrder: Order, orderId : String) {
         val documentRef = fbSingleton.db.collection(Constant.ORDER_COLLECTION).document(orderId)

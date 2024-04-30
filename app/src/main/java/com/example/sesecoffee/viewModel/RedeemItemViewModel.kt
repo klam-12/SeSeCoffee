@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
 
 class RedeemItemViewModel(app:Application) : AndroidViewModel(app) {
 
-    var redeemsList : MutableList<Redeem>? = null
+    private var redeemsList : MutableList<Redeem>? = null
     private val _redeems = MutableStateFlow<Resource<List<Redeem>>>(Resource.Unspecified())
     val redeems= _redeems.asSharedFlow()
 
@@ -33,11 +33,6 @@ class RedeemItemViewModel(app:Application) : AndroidViewModel(app) {
     val error = _error.asSharedFlow()
 
     private val fbSingleton = FirebaseSingleton.getInstance()
-
-//    init{
-//        fetchAllRedeems()
-//        fetchAllRedeemWithValidDate()
-//    }
 
     fun fetchAllRedeems(){
         viewModelScope.launch{_redeems.emit(Resource.Loading())}
@@ -104,12 +99,25 @@ class RedeemItemViewModel(app:Application) : AndroidViewModel(app) {
 
     }
 
-    fun updateRedeem(newRedeem : Redeem){
+    fun findRedeemById(id:String) : Redeem? {
+        redeemsList?.forEach { redeem ->
+            if (redeem.id == id){
+                return redeem
+            }
+        }
+        return null
+    }
+
+    fun updateRedeem(newRedeem : Redeem,position: Int){
+        viewModelScope.launch {
+            _updateRedeem.emit(Resource.Loading())
+        }
+
         val documentRef = fbSingleton.db.collection(Constant.REDEEM_COLLECTION).document(newRedeem.id!!)
         fbSingleton.db.runTransaction { transaction ->
             val snapshot = transaction.get(documentRef)
             if(snapshot.exists()){
-                documentRef.set(newRedeem)
+                transaction.set(documentRef, newRedeem)
             }
         } .addOnSuccessListener {
             viewModelScope.launch {

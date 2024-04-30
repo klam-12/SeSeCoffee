@@ -88,6 +88,8 @@ class AdminRedeemAdapter()
             if(holder.isValid){
                 val intent = Intent(it.context, EditRedeemActivity::class.java)
                 intent.putExtra("redeem",currentRedeem)
+                intent.putExtra("position", position)
+
                 it.context.startActivity(intent)
             } else{
                 Toast.makeText(it.context,"This redeem is overdue so cannot be edited",Toast.LENGTH_SHORT).show()

@@ -6,7 +6,7 @@ import java.util.*
 
 class Format {
     fun timestampToFormattedString(timestamp: Timestamp): String {
-        val sdf = SimpleDateFormat("dd MMMM yyyy | HH:mm", Locale.getDefault())
+        val sdf = SimpleDateFormat("dd MMMM yyyy | HH:mm", Locale.US)
         return sdf.format(timestamp.toDate())
     }
 
