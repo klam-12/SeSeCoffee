@@ -218,7 +218,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="100.000 VND"
+                                android:text=""
                                 android:textColor="@color/textColor"
                                 android:textStyle="bold" />
                         </TableRow>

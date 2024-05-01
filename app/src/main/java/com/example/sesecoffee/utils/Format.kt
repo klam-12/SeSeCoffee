@@ -3,10 +3,10 @@ package com.example.sesecoffee.utils
 import com.google.firebase.Timestamp
 import java.text.SimpleDateFormat
 import java.util.*
-
+import java.text.NumberFormat
 class Format {
     fun timestampToFormattedString(timestamp: Timestamp): String {
-        val sdf = SimpleDateFormat("dd MMMM yyyy | HH:mm", Locale.getDefault())
+        val sdf = SimpleDateFormat("dd MMMM yyyy | HH:mm", Locale.US)
         return sdf.format(timestamp.toDate())
     }
 
@@ -23,5 +23,10 @@ class Format {
         }
         val result =  parts.joinToString("")
         return result
+    }
+
+    fun formatToDollars(number: Int): String {
+        val formatter = NumberFormat.getCurrencyInstance(Locale.US)
+        return formatter.format(number.toDouble())
     }
 }

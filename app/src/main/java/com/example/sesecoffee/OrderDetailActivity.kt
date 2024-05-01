@@ -18,6 +18,7 @@ import com.example.sesecoffee.databinding.OrderDetailItemBinding
 import com.example.sesecoffee.fragments.OrderDetailItemAdapter
 import com.example.sesecoffee.model.OrderItem
 import com.example.sesecoffee.utils.Constant
+import com.example.sesecoffee.utils.Format
 import com.example.sesecoffee.utils.ItemOffsetDecoration
 import com.example.sesecoffee.viewModel.OrderItemsViewModel
 import com.example.sesecoffee.viewModel.OrderViewModel
@@ -32,6 +33,7 @@ class OrderDetailActivity : AppCompatActivity() {
     private val collectionOrders: CollectionReference = db.collection(Constant.ORDER_COLLECTION)
     private val collectionUser: CollectionReference = db.collection("USER")
 //    lateinit var viewModel:Order
+    private val format: Format = Format()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,7 +59,7 @@ class OrderDetailActivity : AppCompatActivity() {
                 .addOnSuccessListener { documentSnapshot ->
                     if (documentSnapshot.exists()) {
                         val createAt = documentSnapshot.getTimestamp("createAt")
-                        binding.createdAt.text = createAt?.let { formatTimestamp(it) }
+                        binding.createdAt.text = createAt?.let { format.timestampToFormattedString(it) }
                         val delivered = documentSnapshot.getBoolean("delivered")
 
                         // Display appropriate image based on delivery status
@@ -91,7 +93,7 @@ class OrderDetailActivity : AppCompatActivity() {
                         val paymentMethod = documentSnapshot.getString("paymentMethod")
                         binding.paymentMethod.text = paymentMethod
                         val total = documentSnapshot.getLong("total")?.toString()?.toInt()
-                        binding.price.text = total?.let { formatNumber(it) }
+                        binding.price.text = total?.let { format.formatToDollars(it) }
 
 
                         // Retrieve order items from subcollection
@@ -140,16 +142,7 @@ class OrderDetailActivity : AppCompatActivity() {
         }
         val result =  parts.joinToString("")
         println(result)
-        return "$result VND"
-    }
-    public fun formatTimestamp(timestamp: Timestamp): String {
-        val dateFormatter = SimpleDateFormat("dd MMMM YYYY") // "24 June"
-        val timeFormatter = SimpleDateFormat("HH:mm")  // "12:30"
-
-        val dateString = dateFormatter.format(timestamp.toDate())
-        val timeString = timeFormatter.format(timestamp.toDate())
-
-        return "$dateString | $timeString "
+        return "$$result"
     }
 }
 

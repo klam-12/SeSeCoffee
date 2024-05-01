@@ -13,17 +13,18 @@ import com.example.sesecoffee.AdminMainActivity
 import com.example.sesecoffee.R
 import com.example.sesecoffee.adapters.AdminRatingAdapter
 import com.example.sesecoffee.databinding.FragmentAdminRatingBinding
+import com.example.sesecoffee.model.Order
 import com.example.sesecoffee.utils.Resource
 import com.example.sesecoffee.viewModel.OrderViewModel
 import kotlinx.coroutines.flow.collectLatest
+import java.math.RoundingMode
+import java.text.DecimalFormat
 
 class AdminRatingFragment : Fragment(R.layout.fragment_admin_rating) {
     private var _binding : FragmentAdminRatingBinding? = null
     private val binding get() = _binding!!
     lateinit var ratingAdapter: AdminRatingAdapter
     lateinit var orderViewModel: OrderViewModel
-
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,6 +50,10 @@ class AdminRatingFragment : Fragment(R.layout.fragment_admin_rating) {
 
                         // filter data with rating != 0
 //                        val filteredListData = listData?.filter { it.rating != 0F }
+                        val df = DecimalFormat("#.##")
+                        df.roundingMode = RoundingMode.CEILING
+                        val overallRatingText = df.format(calculateOverallRating(listData!!))
+                        binding.avgRating.text = "${overallRatingText}/5"
 
                         ratingAdapter.differ.submitList(it.data)
                         hideLoading()
@@ -79,6 +84,23 @@ class AdminRatingFragment : Fragment(R.layout.fragment_admin_rating) {
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL ,false)
             adapter = ratingAdapter
         }
+    }
+
+    private fun calculateOverallRating(data : List<Order>) : Float {
+        var sumRates = 0F;
+        var countRates = 0;
+        data.forEach { order ->
+            if(order.rating != 0F){
+                countRates += 1
+                sumRates += order.rating!!
+            }
+        }
+        var avgRate = 0F
+        if(countRates != 0){
+            avgRate = sumRates/countRates
+        }
+
+        return avgRate;
     }
 
     override fun onDestroy() {

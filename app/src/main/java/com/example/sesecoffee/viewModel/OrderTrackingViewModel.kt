@@ -9,6 +9,7 @@ import com.example.sesecoffee.model.Order
 import com.example.sesecoffee.model.OrderItem
 import com.example.sesecoffee.model.UserSingleton
 import com.example.sesecoffee.utils.Constant
+import com.example.sesecoffee.utils.Format
 import com.example.sesecoffee.utils.Resource
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -27,7 +28,7 @@ class OrderTrackingViewModel (app: Application) : AndroidViewModel(
     val onGoingOrder : StateFlow<Resource<List<Order>>> = _onGoingOrder
     val historyOrderItems : StateFlow<Resource<List<Order>>> = _historyOrder
     private val fbSingleton = FirebaseSingleton.getInstance()
-
+    private val format: Format = Format()
     init {
 //        fetchAllOnGoingOrderItems()
 //        fetchAllHistoryOrderItems()
@@ -70,7 +71,7 @@ class OrderTrackingViewModel (app: Application) : AndroidViewModel(
                                     order?.userId = item?.quantity.toString()
                                     // You might need to adjust this logic based on your requirements
                                     order?.comment = subCollectionSnapshot.documents.size.toString()
-                                    order?.paymentMethod = order?.total?.let { formatNumber(it) }
+                                    order?.paymentMethod = order?.total?.let { format.formatToDollars(it) }
                                 }
                             }
 
@@ -143,7 +144,7 @@ class OrderTrackingViewModel (app: Application) : AndroidViewModel(
                                     order?.phoneNumber = item?.productName
                                     order?.userId = item?.quantity.toString()
                                     order?.comment = subCollectionSnapshot.documents.size.toString()
-                                    order?.paymentMethod = order?.total?.let { formatNumber(it) }
+                                    order?.paymentMethod = order?.total?.let { format.formatToDollars(it) }
                                 }
 
                                 order?.let {
@@ -171,31 +172,6 @@ class OrderTrackingViewModel (app: Application) : AndroidViewModel(
             }
     }
 
-    fun formatTimestamp(timestamp: Timestamp): String {
-        val dateFormatter = SimpleDateFormat("dd MMMM YYYY") // "24 June"
-        val timeFormatter = SimpleDateFormat("HH:mm")  // "12:30"
-
-        val dateString = dateFormatter.format(timestamp.toDate())
-        val timeString = timeFormatter.format(timestamp.toDate())
-
-        return "$dateString | $timeString "
-    }
-
-    fun formatNumber(number: Int): String {
-        val numberString = number.toString().reversed()
-
-        val parts = mutableListOf<Char>()
-        for (i in 0 until numberString.length) {
-            parts.add(0, numberString[i])
-
-            if ((i + 1) % 3 == 0 && i != numberString.lastIndex) {
-                parts.add(0, ',')
-            }
-        }
-        val result =  parts.joinToString("")
-        println(result)
-        return "$result VND"
-    }
 
 
 }

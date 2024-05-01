@@ -43,6 +43,6 @@ data class Order(
         }
         val result =  parts.joinToString("")
         println(result)
-        return "$result VND"
+        return "$$result"
     }
 }

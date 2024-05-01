@@ -17,9 +17,12 @@ import com.example.sesecoffee.R
 import com.example.sesecoffee.adapters.AdminRatingAdapter
 import com.example.sesecoffee.databinding.FragmentAdminRatingBinding
 import com.example.sesecoffee.databinding.FragmentRatingBinding
+import com.example.sesecoffee.model.Order
 import com.example.sesecoffee.utils.Resource
 import com.example.sesecoffee.viewModel.OrderViewModel
 import kotlinx.coroutines.flow.collectLatest
+import java.math.RoundingMode
+import java.text.DecimalFormat
 
 
 class RatingFragment : Fragment(R.layout.fragment_rating) {
@@ -52,6 +55,11 @@ class RatingFragment : Fragment(R.layout.fragment_rating) {
 
                         // filter data with rating != 0
                         val filteredListData = listData?.filter { it.rating != 0F }
+                        val df = DecimalFormat("#.##")
+                        df.roundingMode = RoundingMode.CEILING
+                        val overallRatingText = df.format(calculateOverallRating(filteredListData!!))
+                        binding.avgRating.text = "${overallRatingText}/5"
+
                         ratingAdapter.differ.submitList(filteredListData)
                         hideLoading()
                     }
@@ -86,6 +94,23 @@ class RatingFragment : Fragment(R.layout.fragment_rating) {
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL ,false)
             adapter = ratingAdapter
         }
+    }
+
+    private fun calculateOverallRating(data : List<Order>) : Float {
+        var sumRates = 0F;
+        var countRates = 0;
+        data.forEach { order ->
+            if(order.rating != 0F){
+                countRates += 1
+                sumRates += order.rating!!
+            }
+        }
+        var avgRate = 0F
+        if(countRates != 0){
+            avgRate = sumRates/countRates
+        }
+
+        return avgRate;
     }
 
     override fun onDestroy() {

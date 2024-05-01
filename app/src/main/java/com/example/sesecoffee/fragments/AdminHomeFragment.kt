@@ -1,5 +1,7 @@
 package com.example.sesecoffee.fragments
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,6 +14,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.sesecoffee.AddProductActivity
 import com.example.sesecoffee.AdminMainActivity
 import com.example.sesecoffee.R
+import com.example.sesecoffee.SignInActivity
 import com.example.sesecoffee.adapters.ProductAdapter
 import com.example.sesecoffee.databinding.FragmentAdminHomeBinding
 import com.example.sesecoffee.utils.Resource
@@ -68,6 +71,30 @@ class AdminHomeFragment : Fragment(R.layout.fragment_admin_home) {
         binding.addProductBtn.setOnClickListener(){
             val intent = Intent(requireContext(), AddProductActivity::class.java)
             startActivity(intent)
+        }
+
+        binding.signOutBtn.setOnClickListener(){
+            val alertDialog: AlertDialog? = this.let {
+                val builder = AlertDialog.Builder(requireContext())
+                builder.apply {
+                    setPositiveButton("Yes", DialogInterface.OnClickListener { dialog, id ->
+                        val intent = Intent(requireContext(), SignInActivity::class.java)
+                        startActivity(intent)
+                    })
+                    setNegativeButton("No", DialogInterface.OnClickListener { dialog, id ->
+
+                    })
+                    // Set other dialog properties
+                    setIcon(R.drawable.ic_warning_yellow)
+                    setTitle("Do you want to exit?")
+                }
+                // Create the AlertDialog
+                builder.create()
+            }
+
+            if (alertDialog != null) {
+                alertDialog!!.show()
+            }
         }
 
     }

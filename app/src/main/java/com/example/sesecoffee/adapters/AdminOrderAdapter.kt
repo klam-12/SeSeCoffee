@@ -72,7 +72,6 @@ class AdminOrderAdapter
                 .addOnSuccessListener { document ->
                     if (document != null && document.exists()) {
                         username = document.data?.get(key = "fullname").toString()
-                        Log.i("KL",username)
                         holder.bind(currentOrder,username);
                     }
                 }
