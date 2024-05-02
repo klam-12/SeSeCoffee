@@ -29,14 +29,17 @@
         <activity
             android:name=".RedeemPaymentActivity"
             android:exported="false" />
-<!--        <activity-->
-<!--            android:name=".EditRedeemActivity"-->
-<!--            android:exported="false" />-->
-<!--        <activity-->
-<!--            android:name=".AddRedeemActivity"-->
-<!--            android:exported="false" />-->
+        <activity
+            android:name=".EditRedeemActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AddRedeemActivity"
+            android:exported="false" />
         <activity
             android:name=".EditProductActivity"
+            android:exported="false" />
+        <activity
+            android:name=".RatingActivity"
             android:exported="false" />
         <activity
             android:name=".ForgotPasswordActivity"

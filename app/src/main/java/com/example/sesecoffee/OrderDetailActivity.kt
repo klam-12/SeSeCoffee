@@ -108,7 +108,7 @@ class OrderDetailActivity : AppCompatActivity() {
                                     }
                                 }
                                 val recyclerView: RecyclerView = binding.listOrderItem
-                                val itemOffsetDecoration = ItemOffsetDecoration(16) // Set your desired gap here
+                                val itemOffsetDecoration = ItemOffsetDecoration(25) // Set your desired gap here
                                 recyclerView.addItemDecoration(itemOffsetDecoration)
 
                                 val layoutManager = LinearLayoutManager(this)

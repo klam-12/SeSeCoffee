@@ -61,7 +61,6 @@ class ProductsViewModel(app: Application) : AndroidViewModel(
 //    }
 
     fun fetchAllProducts()  {
-        Toast.makeText(getApplication(),"Fetch all products",Toast.LENGTH_LONG).show()
 
         viewModelScope.launch { _products.emit(Resource.Loading()) }
 

@@ -19,7 +19,7 @@ class SuccessOrderActivity : AppCompatActivity() {
         findViewById<Button>(R.id.successRateBtn).setOnClickListener {
             val intent = Intent(
                 applicationContext,
-                MainActivity::class.java
+                RatingActivity::class.java
             )
             intent.putExtra("orderIdRating", orderId)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
