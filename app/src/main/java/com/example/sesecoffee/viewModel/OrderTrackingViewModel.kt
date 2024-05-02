@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import com.google.firebase.Timestamp
+import com.google.firebase.firestore.Query
 import java.text.SimpleDateFormat
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -41,7 +42,7 @@ class OrderTrackingViewModel (app: Application) : AndroidViewModel(
         }
 
         fbSingleton.db.collection(Constant.ORDER_COLLECTION)
-//            .whereEqualTo("userId", UserSingleton.instance?.id.toString())
+            .whereEqualTo("userId", UserSingleton.instance?.id.toString())
             .whereEqualTo("done", true)
             .whereEqualTo("delivered", false)
             .get()

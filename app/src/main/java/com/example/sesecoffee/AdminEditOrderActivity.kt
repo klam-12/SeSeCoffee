@@ -147,7 +147,7 @@ class AdminEditOrderActivity : AppCompatActivity() {
                         val paymentMethod = documentSnapshot.getString("paymentMethod")
                         binding.paymentMethod.text = paymentMethod
                         val total = documentSnapshot.getLong("total")?.toString()?.toInt()
-                        binding.totalBill.text = "$ ${total}"
+                        binding.totalBill.text = total?.let { format.formatToDollars(it) }
 
 
                         // Retrieve order items from subcollection

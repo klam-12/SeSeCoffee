@@ -21,6 +21,7 @@ import com.example.sesecoffee.model.Order
 import com.example.sesecoffee.model.OrderItem
 import com.example.sesecoffee.model.UserSingleton
 import com.example.sesecoffee.utils.Constant
+import com.example.sesecoffee.utils.Format
 import com.example.sesecoffee.viewModel.OrderItemsViewModel
 import com.example.sesecoffee.viewModel.OrderViewModel
 import com.google.firebase.firestore.CollectionReference
@@ -40,6 +41,7 @@ class ProductRedeemOrderActivity : AppCompatActivity() {
     private lateinit var orderItemViewModel: OrderItemsViewModel
     private lateinit var orderViewModel: OrderViewModel
 
+    var format: Format = Format()
     var db = FirebaseFirestore.getInstance()
     var collectionReference: CollectionReference = db.collection(Constant.PRODUCT_COLLECTION)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -85,7 +87,7 @@ class ProductRedeemOrderActivity : AppCompatActivity() {
                         Glide.with(this).load(productImg).into(productImage)
                         descriptionTextView.setText(description)
                         quantityTextView.setText("$quantity")
-                        priceTextView.setText("${price * quantity}$")
+                        priceTextView.setText(format.formatToDollars(price * quantity))
                         hideLoading()
                     }
                 }.addOnFailureListener() {
@@ -202,7 +204,7 @@ class ProductRedeemOrderActivity : AppCompatActivity() {
             else if(type == 1){
                 addMilkFee(fee)
             }
-            findViewById<TextView>(R.id.orderPrice).setText("${price * quantity}$")
+            findViewById<TextView>(R.id.orderPrice).setText(format.formatToDollars(price * quantity))
         }
     }
 

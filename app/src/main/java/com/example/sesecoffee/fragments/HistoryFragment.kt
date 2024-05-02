@@ -56,6 +56,7 @@ class HistoryFragment : Fragment(R.layout.fragment_history) {
 
                     is Resource.Error -> {
                         showNoData()
+                        println(it.message)
                         Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
                     }
 

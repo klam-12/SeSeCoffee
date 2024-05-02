@@ -21,13 +21,8 @@ data class Order(
     var comment : String? = null
 ) {
     public fun formatTimestamp(timestamp: Timestamp): String {
-        val dateFormatter = SimpleDateFormat("dd MMMM YYYY") // "24 June"
-        val timeFormatter = SimpleDateFormat("HH:mm")  // "12:30"
-
-        val dateString = dateFormatter.format(timestamp.toDate())
-        val timeString = timeFormatter.format(timestamp.toDate())
-
-        return "$dateString | $timeString "
+        val sdf = SimpleDateFormat("dd MMMM yyyy | HH:mm", Locale.US)
+        return sdf.format(timestamp.toDate())
     }
 
     public fun formatNumber(number: Int): String {

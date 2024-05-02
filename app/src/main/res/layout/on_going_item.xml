@@ -41,7 +41,7 @@
                     android:layout_width="289dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@{`&lt;&lt; ` + order.comment + ` sản phẩm...`}"
+                    android:text="@{`&lt;&lt; ` + order.comment + ` products...`}"
                     android:textColor="@color/order_inactive" />
 
             </LinearLayout>

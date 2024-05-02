@@ -1,5 +1,6 @@
 package com.example.sesecoffee
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Canvas
 import android.os.Bundle
@@ -21,6 +22,7 @@ import com.example.sesecoffee.model.OrderItem
 import com.example.sesecoffee.model.UserSingleton
 import com.example.sesecoffee.utils.Constant.ORDER_COLLECTION
 import com.example.sesecoffee.utils.Constant.ORDER_ITEM_COLLECTION
+import com.example.sesecoffee.utils.Format
 import com.example.sesecoffee.utils.Resource
 import com.example.sesecoffee.viewModel.OrderItemsViewModel
 import com.google.firebase.firestore.CollectionReference
@@ -32,6 +34,7 @@ class CartOrderActivity : AppCompatActivity() {
     lateinit var orderAdapter: OrderAdapter
     lateinit var idOrder : String
     lateinit var orderItemsViewModel: OrderItemsViewModel
+    var format: Format = Format()
 
     var isEmpty = true
     var db = FirebaseFirestore.getInstance()
@@ -81,13 +84,14 @@ class CartOrderActivity : AppCompatActivity() {
                                     }
 
                                     val orderItems = it.data.toMutableList()
-                                    price.setText("${calculateTotalPrice(it.data)}$")
+                                    price.text = format.formatToDollars(calculateTotalPrice(it.data))
 
                                     val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT){
                                         override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
                                             return false
                                         }
 
+                                        @SuppressLint("SetTextI18n")
                                         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                                             val position = viewHolder.adapterPosition
                                             orderAdapter.deleteItem(position, application, idOrder)
@@ -97,10 +101,10 @@ class CartOrderActivity : AppCompatActivity() {
                                             orderItems.remove(deleteItem)
                                             if(orderItems.isEmpty()){
                                                 isEmpty = true
-                                                price.setText("0$")
+                                                price.text = "$0.00"
                                             }
                                             else{
-                                                price.setText("${calculateTotalPrice(orderItems)}$")
+                                                price.setText(format.formatToDollars(calculateTotalPrice(orderItems)))
                                             }
                                         }
 
@@ -153,7 +157,7 @@ class CartOrderActivity : AppCompatActivity() {
                 else{
                     findViewById<TextView>(R.id.cartEmpty).visibility = View.VISIBLE
                     findViewById<ImageView>(R.id.cartEmptyImage).visibility = View.VISIBLE
-                    price.setText("0$")
+                    price.setText("$0.00")
                 }
 
             }.addOnFailureListener { exception ->

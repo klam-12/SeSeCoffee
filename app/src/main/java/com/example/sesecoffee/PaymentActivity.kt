@@ -21,6 +21,7 @@ import com.example.sesecoffee.model.OrderItem
 import com.example.sesecoffee.model.UserSingleton
 import com.example.sesecoffee.utils.Constant.ORDER_COLLECTION
 import com.example.sesecoffee.utils.Constant.ORDER_ITEM_COLLECTION
+import com.example.sesecoffee.utils.Format
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.CollectionReference
@@ -37,6 +38,8 @@ class PaymentActivity : AppCompatActivity() {
     private lateinit var userPhone : String
     private lateinit var userAddress : String
     private var totalPrice = 0
+
+    var format: Format = Format()
 
     var db = FirebaseFirestore.getInstance()
     var collectionOrders: CollectionReference = db.collection(ORDER_COLLECTION)
@@ -80,8 +83,8 @@ class PaymentActivity : AppCompatActivity() {
                         .addOnSuccessListener { result ->
                             val orderItemList = result.toObjects(OrderItem::class.java)
                             totalPrice = calculateTotalPrice(orderItemList)
-                            price.setText("${totalPrice}$")
-                            amount.setText("${totalPrice}$")
+                            price.setText(format.formatToDollars(totalPrice))
+                            amount.setText(format.formatToDollars(totalPrice))
                         }.addOnFailureListener { exception ->
                             println("Error getting documents: $exception")
                         }

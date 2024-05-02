@@ -128,22 +128,6 @@ class OrderDetailActivity : AppCompatActivity() {
         }
     }
 
-
-    public fun formatNumber(number: Int): String {
-        val numberString = number.toString().reversed()
-
-        val parts = mutableListOf<Char>()
-        for (i in 0 until numberString.length) {
-            parts.add(0, numberString[i])
-
-            if ((i + 1) % 3 == 0 && i != numberString.lastIndex) {
-                parts.add(0, ',')
-            }
-        }
-        val result =  parts.joinToString("")
-        println(result)
-        return "$$result"
-    }
 }
 
 

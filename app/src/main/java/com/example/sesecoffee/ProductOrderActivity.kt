@@ -25,6 +25,7 @@ import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.example.sesecoffee.utils.Constant.PRODUCT_COLLECTION
 import com.example.sesecoffee.utils.Constant.ORDER_COLLECTION
+import com.example.sesecoffee.utils.Format
 import com.example.sesecoffee.viewModel.OrderViewModel
 import java.util.UUID
 
@@ -41,6 +42,7 @@ class ProductOrderActivity : AppCompatActivity() {
     private lateinit var orderItemViewModel: OrderItemsViewModel
     private lateinit var orderViewModel: OrderViewModel
 
+    var format : Format = Format();
     var db = FirebaseFirestore.getInstance()
     var collectionReference: CollectionReference = db.collection(PRODUCT_COLLECTION)
     var collectionOrders:CollectionReference = db.collection(ORDER_COLLECTION)
@@ -86,7 +88,7 @@ class ProductOrderActivity : AppCompatActivity() {
                         Glide.with(this).load(productImg).into(productImage)
                         descriptionTextView.setText(description)
                         quantityTextView.setText("$quantity")
-                        priceTextView.setText("${price * quantity}$")
+                        priceTextView.setText(format.formatToDollars(price * quantity))
                         hideLoading()
                     }
                 }.addOnFailureListener() {
@@ -110,7 +112,7 @@ class ProductOrderActivity : AppCompatActivity() {
         findViewById<Button>(R.id.orderQuantityPlus).setOnClickListener {
             quantity++
             quantityTextView.setText("$quantity")
-            priceTextView.setText("${price * quantity}$")
+            priceTextView.setText(format.formatToDollars(price * quantity))
         }
 
         findViewById<Button>(R.id.orderQuantityMinus).setOnClickListener {
@@ -119,7 +121,7 @@ class ProductOrderActivity : AppCompatActivity() {
                 quantity = 1
             }
             quantityTextView.setText("$quantity")
-            priceTextView.setText("${price * quantity}$")
+            priceTextView.setText(format.formatToDollars(price * quantity))
         }
 
         findViewById<Button>(R.id.orderNextBtn).setOnClickListener {
@@ -229,7 +231,7 @@ class ProductOrderActivity : AppCompatActivity() {
             else if(type == 1){
                 addMilkFee(fee)
             }
-            findViewById<TextView>(R.id.orderPrice).setText("${price * quantity}$")
+            findViewById<TextView>(R.id.orderPrice).setText(format.formatToDollars(price * quantity))
         }
     }
 

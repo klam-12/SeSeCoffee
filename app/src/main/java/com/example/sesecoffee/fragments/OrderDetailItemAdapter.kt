@@ -1,5 +1,6 @@
 package com.example.sesecoffee.fragments
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -8,9 +9,11 @@ import com.bumptech.glide.Glide
 import com.example.sesecoffee.R
 import com.example.sesecoffee.databinding.OrderDetailItemBinding
 import com.example.sesecoffee.model.OrderItem
+import com.example.sesecoffee.utils.Format
 
 class OrderDetailItemAdapter(private val orderItems: List<OrderItem>) : RecyclerView.Adapter<OrderDetailItemAdapter.ViewHolder>() {
 
+    var format: Format = Format()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding: OrderDetailItemBinding = DataBindingUtil.inflate(inflater, R.layout.order_detail_item, parent, false)
@@ -28,6 +31,7 @@ class OrderDetailItemAdapter(private val orderItems: List<OrderItem>) : Recycler
 
     inner class ViewHolder(private val binding: OrderDetailItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
+        @SuppressLint("SetTextI18n")
         fun bind(orderItem: OrderItem) {
             binding.orderItem = orderItem
             Glide.with(itemView)
@@ -40,7 +44,7 @@ class OrderDetailItemAdapter(private val orderItems: List<OrderItem>) : Recycler
             binding.quantity.text = "x ${orderItem.quantity}" // Assuming quantity is an Int
             binding.hotCold.text = orderItem.hotCold
             binding.milk.text = orderItem.milk
-            binding.price.text = "Price: ${orderItem.price}" // Assuming price is a String
+            binding.price.text = "Price: " + orderItem.price?.let { format.formatToDollars(it) }// Assuming price is a String
             binding.executePendingBindings()
         }
 
