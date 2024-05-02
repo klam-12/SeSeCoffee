@@ -1,11 +1,13 @@
 package com.example.sesecoffee
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Canvas
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
@@ -20,6 +22,7 @@ import com.example.sesecoffee.model.OrderItem
 import com.example.sesecoffee.model.UserSingleton
 import com.example.sesecoffee.utils.Constant.ORDER_COLLECTION
 import com.example.sesecoffee.utils.Constant.ORDER_ITEM_COLLECTION
+import com.example.sesecoffee.utils.Format
 import com.example.sesecoffee.utils.Resource
 import com.example.sesecoffee.viewModel.OrderItemsViewModel
 import com.google.firebase.firestore.CollectionReference
@@ -31,7 +34,9 @@ class CartOrderActivity : AppCompatActivity() {
     lateinit var orderAdapter: OrderAdapter
     lateinit var idOrder : String
     lateinit var orderItemsViewModel: OrderItemsViewModel
+    var format: Format = Format()
 
+    var isEmpty = true
     var db = FirebaseFirestore.getInstance()
     var collectionOrders: CollectionReference = db.collection(ORDER_COLLECTION)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,20 +73,25 @@ class CartOrderActivity : AppCompatActivity() {
                                     hideLoading()
 
                                     if(it.data!!.isEmpty()){
+                                        isEmpty = true
                                         findViewById<TextView>(R.id.cartEmpty).visibility = View.VISIBLE
+                                        findViewById<ImageView>(R.id.cartEmptyImage).visibility = View.VISIBLE
                                     }
                                     else{
+                                        isEmpty = false
                                         findViewById<TextView>(R.id.cartEmpty).visibility = View.GONE
+                                        findViewById<ImageView>(R.id.cartEmptyImage).visibility = View.GONE
                                     }
 
                                     val orderItems = it.data.toMutableList()
-                                    price.setText("${calculateTotalPrice(it.data)}VNĐ")
+                                    price.text = format.formatToDollars(calculateTotalPrice(it.data))
 
                                     val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT){
                                         override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
                                             return false
                                         }
 
+                                        @SuppressLint("SetTextI18n")
                                         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                                             val position = viewHolder.adapterPosition
                                             orderAdapter.deleteItem(position, application, idOrder)
@@ -90,10 +100,11 @@ class CartOrderActivity : AppCompatActivity() {
                                             val deleteItem = orderItems[position]
                                             orderItems.remove(deleteItem)
                                             if(orderItems.isEmpty()){
-                                                price.setText("0VNĐ")
+                                                isEmpty = true
+                                                price.text = "$0.00"
                                             }
                                             else{
-                                                price.setText("${calculateTotalPrice(orderItems)}VNĐ")
+                                                price.setText(format.formatToDollars(calculateTotalPrice(orderItems)))
                                             }
                                         }
 
@@ -115,6 +126,7 @@ class CartOrderActivity : AppCompatActivity() {
                                                     )
                                                 )
                                                 .addActionIcon(R.drawable.delete)
+                                                .addCornerRadius(1, 28)
                                                 .create()
                                                 .decorate()
                                             super.onChildDraw(
@@ -144,7 +156,8 @@ class CartOrderActivity : AppCompatActivity() {
                 }
                 else{
                     findViewById<TextView>(R.id.cartEmpty).visibility = View.VISIBLE
-                    price.setText("0VNĐ")
+                    findViewById<ImageView>(R.id.cartEmptyImage).visibility = View.VISIBLE
+                    price.setText("$0.00")
                 }
 
             }.addOnFailureListener { exception ->
@@ -161,6 +174,10 @@ class CartOrderActivity : AppCompatActivity() {
         }
 
         findViewById<Button>(R.id.cartNextBtn).setOnClickListener {
+            if(isEmpty){
+                Toast.makeText(this, "Cart is empty", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
             val intent = Intent(
                 applicationContext,
                 PaymentActivity::class.java

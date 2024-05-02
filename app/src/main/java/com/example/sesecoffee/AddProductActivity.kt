@@ -103,9 +103,13 @@ class AddProductActivity : AppCompatActivity() {
                 selectImageActivityForResult.launch(intent)
             }
 
-
             productSaveBtn.setOnClickListener(){
                 addNewProduct()
+            }
+
+            backBtn.setOnClickListener(){
+                val intent = Intent(applicationContext,AdminMainActivity::class.java)
+                startActivity(intent)
             }
         }
     }
@@ -122,25 +126,14 @@ class AddProductActivity : AppCompatActivity() {
     private fun addNewProduct() {
         val id = UUID.randomUUID().toString()
         var proName = binding.productInputName.text.toString()
+        var proDesc = binding.productInputDescription.text.toString()
         var proPrice = binding.productInputPrice.text.toString()
         var imageUriString: String = if (imageUri == null) "" else imageUri.toString()
         var timeStamp: Timestamp = Timestamp(Date())
         var proPriceInt = if (proPrice.isNotEmpty()) proPrice.toInt() else 0
-        var product: Product = Product(id,proName, proPriceInt, imageUriString, timeStamp)
+        var product: Product = Product(id,proName,proDesc, proPriceInt, imageUriString, timeStamp)
 
         productsViewModel.addAProduct(product, imageUri)
-    }
-
-    override fun onStart() {
-        super.onStart()
-//        user = auth.currentUser!!
-    }
-
-    override fun onStop() {
-        super.onStop()
-//        if(auth != null){
-            // Do some remove,...
-//        }
     }
 
     override fun onDestroy() {

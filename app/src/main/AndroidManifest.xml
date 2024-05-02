@@ -18,6 +18,15 @@
         android:theme="@style/Theme.SeSeCoffee"
         tools:targetApi="31">
         <activity
+            android:name=".PersonalRatings"
+            android:exported="false" />
+        <activity
+            android:name=".AdminEditOrderActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ProductRedeemOrderActivity"
+            android:exported="false" />
+        <activity
             android:name=".RedeemPaymentActivity"
             android:exported="false" />
         <activity
@@ -30,23 +39,31 @@
             android:name=".EditProductActivity"
             android:exported="false" />
         <activity
-            android:name=".ForgotPasswordActivity"
-            android:exported="false" />
-        <activity
             android:name=".RatingActivity"
             android:exported="false" />
         <activity
-            android:name=".AdminMainActivity"
+            android:name=".ForgotPasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".AddProductActivity"
+            android:name=".AdminMainActivity"
             android:exported="false">
+
+        </activity>
+        <activity
+            android:name=".AddProductActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".OrderDetailActivity"
+            android:exported="false">
+
+        </activity>
+        <activity
+            android:name=".RedeemActivity"
+            android:exported="false">
+
         </activity>
         <activity
             android:name=".ProfileActivity"
-            android:exported="false" />
-        <activity
-            android:name=".RedeemActivity"
             android:exported="false" />
         <activity
             android:name=".CartOrderActivity"
@@ -67,6 +84,12 @@
             android:name=".SignUpActivity"
             android:exported="false" />
         <activity
+            android:name=".MainActivity"
+            android:exported="false">
+
+
+        </activity>
+        <activity
             android:name=".SignInActivity"
             android:exported="true">
             <intent-filter>
@@ -75,10 +98,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".MainActivity"
-            android:exported="false">
-        </activity>
+
 
     </application>
 

@@ -54,11 +54,14 @@ class OrderItemsViewModel(app: Application) : AndroidViewModel(
     }
 
     fun fetchOrderItemByOrderId(orderId: String) {
+        println(orderId)
         viewModelScope.launch { _orderItems.emit(Resource.Loading()) }
         collectionOrders.document(orderId).collection(ORDER_ITEM_COLLECTION).get()
             .addOnSuccessListener {
                     result ->
+
                 orderItemList = result.toObjects(OrderItem::class.java)
+                println("orderList $orderItemList")
                 viewModelScope.launch {
                     _orderItems.emit(Resource.Success(orderItemList))
                 }
@@ -81,7 +84,7 @@ class OrderItemsViewModel(app: Application) : AndroidViewModel(
             .addOnSuccessListener {
                 Toast.makeText(
                     getApplication(),
-                    "Order item added successfully",
+                    "Add to cart successfully",
                     Toast.LENGTH_LONG
                 ).show()
             }.addOnFailureListener() {

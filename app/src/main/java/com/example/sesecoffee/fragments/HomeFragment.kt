@@ -9,6 +9,8 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
+import com.denzcoskun.imageslider.constants.ScaleTypes
+import com.denzcoskun.imageslider.models.SlideModel
 import com.example.sesecoffee.CartOrderActivity
 import com.example.sesecoffee.MainActivity
 import com.example.sesecoffee.ProfileActivity
@@ -49,8 +51,15 @@ class HomeFragment : Fragment(R.layout.fragment_home){
         super.onViewCreated(view, savedInstanceState)
         productsViewModel = (activity as MainActivity).productsViewModel
 
+        val imageList = ArrayList<SlideModel>()
+        imageList.add(SlideModel("https://firebasestorage.googleapis.com/v0/b/sese-coffee.appspot.com/o/product_images%2Fsesecoffee.png?alt=media&token=a009190c-b0d8-49d9-943e-33c031f73f24"))
+        imageList.add(SlideModel("https://firebasestorage.googleapis.com/v0/b/sese-coffee.appspot.com/o/product_images%2Fcoffee_on_table.jpg?alt=media&token=4117e65d-ea79-4cbf-b368-95557ed2bb86"))
+        imageList.add(SlideModel("https://firebasestorage.googleapis.com/v0/b/sese-coffee.appspot.com/o/product_images%2Fexpresso.jpg?alt=media&token=73b82aa4-e305-4008-ae33-1473306ec805"))
+        imageList.add(SlideModel("https://firebasestorage.googleapis.com/v0/b/sese-coffee.appspot.com/o/product_images%2Fcappucino.png?alt=media&token=887876d2-774d-4621-927a-971d25d28b8a"))
+
         setUpRecyclerViewProducts()
         binding.username.text = UserSingleton.instance?.fullName
+        binding.imageSlider.setImageList(imageList, ScaleTypes.CENTER_CROP)
         lifecycleScope.launchWhenStarted {
             productsViewModel.products.collectLatest {
                 when(it){

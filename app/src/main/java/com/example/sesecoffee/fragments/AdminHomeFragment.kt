@@ -4,7 +4,6 @@ import android.app.AlertDialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,8 +17,6 @@ import com.example.sesecoffee.R
 import com.example.sesecoffee.SignInActivity
 import com.example.sesecoffee.adapters.ProductAdapter
 import com.example.sesecoffee.databinding.FragmentAdminHomeBinding
-import com.example.sesecoffee.model.Product
-import com.example.sesecoffee.model.UserSingleton
 import com.example.sesecoffee.utils.Resource
 import com.example.sesecoffee.viewModel.ProductsViewModel
 import com.google.firebase.firestore.firestoreSettings
@@ -51,7 +48,6 @@ class AdminHomeFragment : Fragment(R.layout.fragment_admin_home) {
         productsViewModel = (activity as AdminMainActivity).productsViewModel
 
         setUpRecyclerViewProducts()
-        binding.username.text = UserSingleton.instance?.fullName
         lifecycleScope.launchWhenStarted {
             productsViewModel.fetchAllProducts()
             productsViewModel.products.collectLatest {
@@ -61,7 +57,6 @@ class AdminHomeFragment : Fragment(R.layout.fragment_admin_home) {
                     }
                     is Resource.Success -> {
                         productAdapter.differ.submitList(it.data)
-
                         hideLoading()
                     }
                     is Resource.Error -> {
@@ -79,9 +74,10 @@ class AdminHomeFragment : Fragment(R.layout.fragment_admin_home) {
         }
 
         binding.signOutBtn.setOnClickListener(){
-            val context = it.context
+
             val alertDialog: AlertDialog? = this.let {
-                val builder = AlertDialog.Builder(context)
+                val builder = AlertDialog.Builder(requireContext())
+
                 builder.apply {
                     setPositiveButton("Yes", DialogInterface.OnClickListener { dialog, id ->
                         val intent = Intent(requireContext(), SignInActivity::class.java)
@@ -92,7 +88,8 @@ class AdminHomeFragment : Fragment(R.layout.fragment_admin_home) {
                     })
                     // Set other dialog properties
                     setIcon(R.drawable.ic_warning_yellow)
-                    setTitle("Do you want to sign out?")
+                    setTitle("Do you want to exit?")
+
                 }
                 // Create the AlertDialog
                 builder.create()
@@ -128,5 +125,6 @@ class AdminHomeFragment : Fragment(R.layout.fragment_admin_home) {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+
     }
 }

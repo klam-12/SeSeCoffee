@@ -63,7 +63,6 @@ class SignInActivity : AppCompatActivity() {
                                     UserSingleton.instance?.address = userData?.get(key = "address").toString()
                                     UserSingleton.instance?.id = userId.toString()
                                     UserSingleton.instance?.isAdmin = Integer.parseInt(userData?.get(key = "isAdmin").toString())
-                                    UserSingleton.instance?.phone=userData?.get(key = "phone").toString()
                                     //login vao man hinh admin or guess
                                     if(UserSingleton.instance?.isAdmin==1){
                                         val intent = Intent(this, AdminMainActivity::class.java)

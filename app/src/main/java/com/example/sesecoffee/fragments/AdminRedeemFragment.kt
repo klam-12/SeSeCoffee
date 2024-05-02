@@ -40,33 +40,42 @@ class AdminRedeemFragment : Fragment(R.layout.fragment_admin_redeem) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         redeemItemViewModel = (activity as AdminMainActivity).redeemItemViewModel
-
         setUpRecyclerViewRedeem()
+
+        binding.addRedeemBtn.setOnClickListener(){
+            val intent = Intent(requireContext(),AddRedeemActivity::class.java);
+            startActivity(intent)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
         lifecycleScope.launchWhenStarted {
             redeemItemViewModel.fetchAllRedeems()
             redeemItemViewModel.redeems.collectLatest {
                 when(it){
                     is Resource.Loading -> {
-//                        showLoading()
+                        showLoading()
                     }
                     is Resource.Success -> {
                         adminRedeemAdapter.differ.submitList(it.data)
-//                        hideLoading()
+                        hideLoading()
                     }
                     is Resource.Error -> {
-//                        hideLoading()
+                        hideLoading()
                         Toast.makeText(requireContext(),it.message, Toast.LENGTH_SHORT).show()
                     }
                     else -> Unit
                 }
             }
         }
+    }
+    private fun hideLoading() {
+        binding.redeemProgressBar.visibility = View.GONE
+    }
 
-        binding.addRedeemBtn.setOnClickListener(){
-            val intent = Intent(requireContext(),AddRedeemActivity::class.java);
-            startActivity(intent)
-
-        }
+    private fun showLoading() {
+        binding.redeemProgressBar.visibility = View.VISIBLE
     }
 
     private fun setUpRecyclerViewRedeem() {

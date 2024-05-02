@@ -8,18 +8,21 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.sesecoffee.CartOrderActivity
 import com.example.sesecoffee.MainActivity
 import com.example.sesecoffee.R
 import com.example.sesecoffee.RedeemActivity
-import com.example.sesecoffee.adapters.OrderAdapter
 import com.example.sesecoffee.adapters.RewardAdapter
 import com.example.sesecoffee.databinding.FragmentRewardBinding
 import com.example.sesecoffee.utils.Resource
 import com.example.sesecoffee.viewModel.RewardItemViewModel
 import kotlinx.coroutines.flow.collectLatest
+
+// TODO: Rename parameter arguments, choose names that match
+// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+private const val ARG_PARAM1 = "param1"
+private const val ARG_PARAM2 = "param2"
+
 
 class RewardFragment : Fragment(R.layout.fragment_reward) {
     private var _binding: FragmentRewardBinding? = null

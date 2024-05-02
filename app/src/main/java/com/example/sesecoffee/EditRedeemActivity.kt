@@ -6,11 +6,11 @@ import android.content.DialogInterface
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
-import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
-import com.example.sesecoffee.databinding.ActivityEditProductBinding
-import com.example.sesecoffee.databinding.ActivityEditRedeemBinding
 import com.example.sesecoffee.model.Redeem
 import com.example.sesecoffee.utils.Resource
 import com.example.sesecoffee.viewModel.RedeemItemViewModel
@@ -22,18 +22,33 @@ import java.util.Calendar
 import java.util.Locale
 
 class EditRedeemActivity : AppCompatActivity() {
-    lateinit var binding : ActivityEditRedeemBinding
     lateinit var redeemItemViewModel: RedeemItemViewModel
     private var oldRedeem : Redeem? = null
 
+    lateinit var inputValid : EditText
+    lateinit var inputName : TextView
+    lateinit var inputPoint : EditText
+    lateinit var saveRedeemBtn : Button
+    lateinit var delRedeemBtn: Button
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this,R.layout.activity_edit_redeem)
+        setContentView(R.layout.activity_edit_redeem)
         redeemItemViewModel = RedeemItemViewModel(application)
 
         oldRedeem = intent.getParcelableExtra("redeem")!!
-        binding.redeem = oldRedeem
-        binding.redeemInputValid.setText(convertTimestampToString(oldRedeem?.untilAt))
+        val position = intent.getIntExtra("position",0)
+
+
+        inputName = findViewById(R.id.redeem_name)
+        inputPoint = findViewById(R.id.redeem_input_point)
+        inputValid = findViewById(R.id.redeem_input_valid)
+        saveRedeemBtn = findViewById(R.id.saveRedeemBtn)
+        delRedeemBtn = findViewById(R.id.delRedeemBtn)
+
+        inputName.text = oldRedeem?.productName
+        inputPoint.setText(oldRedeem?.point.toString())
+        inputValid.setText(convertTimestampToString(oldRedeem?.untilAt))
 
         lifecycleScope.launchWhenStarted {
             redeemItemViewModel.updateRedeem.collectLatest {
@@ -48,8 +63,7 @@ class EditRedeemActivity : AppCompatActivity() {
                         } else {
                             Toast.makeText(applicationContext,"Edit redeem successfully", Toast.LENGTH_SHORT).show()
                         }
-                        val intent = Intent(applicationContext,AdminMainActivity::class.java)
-                        startActivity(intent)
+                        finish()
                     }
                     is Resource.Error -> {
 //                        hideLoading()
@@ -67,10 +81,32 @@ class EditRedeemActivity : AppCompatActivity() {
         }
 
         setUpInputValid()
-        binding.apply {
-            saveRedeemBtn.setOnClickListener(){
-                updateRedeem()
+
+        saveRedeemBtn.setOnClickListener(){
+            updateRedeem(position)
+
+        }
+
+        delRedeemBtn.setOnClickListener(){
+            val alertDialog: AlertDialog? = this.let {
+                val builder = AlertDialog.Builder(this)
+                builder.apply {
+                    setPositiveButton("Yes", DialogInterface.OnClickListener { dialog, id ->
+                        if(oldRedeem!= null){
+                            oldRedeem!!.id?.let { it1 -> redeemItemViewModel.deleteRedeem(it1) }
+                        }
+                    })
+                    setNegativeButton("No", DialogInterface.OnClickListener { dialog, id ->
+
+                    })
+                    // Set other dialog properties
+                    setIcon(R.drawable.ic_warning_yellow)
+                    setTitle("Do you want to delete this redeem?")
+                }
+                // Create the AlertDialog
+                builder.create()
             }
+
 
             delRedeemBtn.setOnClickListener(){
                 val context = it.context
@@ -96,8 +132,11 @@ class EditRedeemActivity : AppCompatActivity() {
                 if (alertDialog != null) {
                     alertDialog!!.show()
                 }
+
             }
+
         }
+
     }
 
     private fun setUpInputValid(){
@@ -111,10 +150,10 @@ class EditRedeemActivity : AppCompatActivity() {
             // format date
             val dateFormat = "dd/MM/yyyy"
             val sdf = SimpleDateFormat(dateFormat, Locale.US)
-            binding.redeemInputValid.setText(sdf.format(cal.time))
+            inputValid.setText(sdf.format(cal.time))
         }
 
-        binding.redeemInputValid.setOnClickListener() {
+        inputValid.setOnClickListener() {
             DatePickerDialog(this, dateSetListener,
                 cal.get(Calendar.YEAR),
                 cal.get(Calendar.MONTH),
@@ -122,27 +161,27 @@ class EditRedeemActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateRedeem() {
+    private fun updateRedeem(position: Int) {
         if(oldRedeem != null){
             val id = oldRedeem?.id
             val proId = oldRedeem?.productId
             val proName = oldRedeem?.productName
             val proImg = oldRedeem?.imageUrl
-            val point = binding.redeemInputPoint.text.toString()
-            val validTimeString = binding.redeemInputValid.text.toString()
+            val point = inputPoint.text.toString()
+            val validTimeString = inputValid.text.toString()
             val pointInt : Int
             try {
                 pointInt = Integer.parseInt(point)
             }catch (e: NumberFormatException){
-                binding.redeemInputPoint.error = "Invalid point"
+                inputPoint.error = "Invalid point"
                 return
             }
             if(pointInt <= 0){
-                binding.redeemInputPoint.error = "Point must be a positive integer"
+                inputPoint.error = "Point must be a positive integer"
                 return
             }
             if(validTimeString == ""){
-                binding.redeemInputValid.error = "Invalid date"
+                inputValid.error = "Invalid date"
                 return
             }
             val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.US)
@@ -155,11 +194,11 @@ class EditRedeemActivity : AppCompatActivity() {
                 // Convert Date to Timestamp
                 validTime = date?.let { Timestamp(it) }!!
             } catch (e: Exception) {
-                binding.redeemInputValid.error = "Invalid date"
+                inputValid.error = "Invalid date"
                 return
             }
             val redeem = Redeem(id,proId,proName,proImg,pointInt,validTime)
-            redeemItemViewModel.updateRedeem(redeem)
+            redeemItemViewModel.updateRedeem(redeem,position)
 
         }
     }
@@ -179,8 +218,4 @@ class EditRedeemActivity : AppCompatActivity() {
         return validDateString
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        binding = null!!
-    }
 }

@@ -35,11 +35,13 @@ import java.util.UUID
 class ProductsViewModel(app: Application) : AndroidViewModel(
     app
 ) {
+
     private var productsList : MutableList<Product>? = null
     private  val fbSingleton = FirebaseSingleton.getInstance()
 
     // For list of products
     private val _products = MutableStateFlow<Resource<List<Product>>>(Resource.Unspecified())
+//    val products : StateFlow<Resource<List<Product>>> = _products
     val products = _products.asStateFlow()
 
     // For update product
@@ -59,7 +61,6 @@ class ProductsViewModel(app: Application) : AndroidViewModel(
 //    }
 
     fun fetchAllProducts()  {
-//        Toast.makeText(getApplication(),"Fetch all products",Toast.LENGTH_LONG).show()
 
         viewModelScope.launch { _products.emit(Resource.Loading()) }
 
@@ -106,7 +107,6 @@ class ProductsViewModel(app: Application) : AndroidViewModel(
                 .addOnSuccessListener() {
                     filePath.downloadUrl
                         .addOnSuccessListener {
-                            product.imageUrl = it.toString();
                             collectionReference.document(product.id!!).set(product)
                                 .addOnSuccessListener {
 
@@ -159,6 +159,8 @@ class ProductsViewModel(app: Application) : AndroidViewModel(
         } else {
             updateProductWithNewImg(newProduct,imageUri)
         }
+
+
     }
 
     private fun updateProductWithNewImg(newProduct: Product, imageUri: Uri) {
