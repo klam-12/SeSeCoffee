@@ -7,9 +7,11 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.example.sesecoffee.databinding.ActivityMainBinding
+import com.example.sesecoffee.fragments.ChatFragment
 import com.example.sesecoffee.fragments.HomeFragment
 import com.example.sesecoffee.fragments.RewardFragment
 import com.example.sesecoffee.model.UserSingleton
+import com.example.sesecoffee.viewModel.MessageViewModel
 import com.example.sesecoffee.viewModel.ProductsViewModel
 import com.example.sesecoffee.viewModel.RewardItemViewModel
 
@@ -18,6 +20,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var binding : ActivityMainBinding
     lateinit var productsViewModel: ProductsViewModel
     lateinit var  rewardViewModel: RewardItemViewModel
+    lateinit var messageViewModel: MessageViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,7 +33,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.rewardFragment -> replaceFragment(RewardFragment())
                 R.id.orderTrackingFragment -> replaceFragment(HomeFragment())
                 R.id.ratingFragment -> replaceFragment(HomeFragment())
-                R.id.chatFragment -> replaceFragment(HomeFragment())
+                R.id.chatFragment -> replaceFragment(ChatFragment())
 
                 else -> {
                     Toast.makeText(this,"Invalid navigation",Toast.LENGTH_SHORT).show()
@@ -45,7 +48,8 @@ class MainActivity : AppCompatActivity() {
         Log.i("User",user.toString())
 
         productsViewModel = ProductsViewModel(application)
-        rewardViewModel = RewardItemViewModel(application);
+        rewardViewModel = RewardItemViewModel(application)
+        messageViewModel= MessageViewModel(application)
     }
 
     private fun replaceFragment(fragment: Fragment){

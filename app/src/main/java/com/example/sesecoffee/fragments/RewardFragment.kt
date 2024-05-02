@@ -8,13 +8,10 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.sesecoffee.CartOrderActivity
 import com.example.sesecoffee.MainActivity
 import com.example.sesecoffee.R
 import com.example.sesecoffee.RedeemActivity
-import com.example.sesecoffee.adapters.OrderAdapter
 import com.example.sesecoffee.adapters.RewardAdapter
 import com.example.sesecoffee.databinding.FragmentRewardBinding
 import com.example.sesecoffee.utils.Resource
