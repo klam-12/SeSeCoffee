@@ -1,7 +1,6 @@
 package com.example.sesecoffee
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
@@ -10,12 +9,10 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import com.example.sesecoffee.model.User
-import com.example.sesecoffee.model.UserSingleton
+import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
-import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 
 class SignUpActivity : AppCompatActivity() {
@@ -61,7 +58,10 @@ class SignUpActivity : AppCompatActivity() {
                             "address" to "",
                             "email" to emailAddress.toString(),
                             "phone" to phone.text.toString(),
+                            "redeemPoint" to 0,
                             "isAdmin" to "0"
+
+
                         )
                         if (user != null) {
                             db.collection("USER").document(user.uid)

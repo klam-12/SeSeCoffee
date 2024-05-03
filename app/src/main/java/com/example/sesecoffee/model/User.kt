@@ -12,16 +12,17 @@ data class User(
     var isAdmin : Int,
     val createdAt: Date,
     var updatedAt: Date,
+    var redeemPoint: Int,
     ) {
     constructor() :
-            this(UUID.randomUUID().toString(),"","","","",0, Date(), Date()) {}
+            this(UUID.randomUUID().toString(),"","","","",0, Date(), Date(),0) {}
 
     constructor(fullName:String) :
-            this(UUID.randomUUID().toString(),fullName,"","","",0, Date(), Date()) {}
+            this(UUID.randomUUID().toString(),fullName,"","","",0, Date(), Date(),0) {}
 
     constructor(fullName:String,email:String,password:String,address:String) :
-            this(UUID.randomUUID().toString(),fullName,email,password,address,0, Date(), Date()) {}
+            this(UUID.randomUUID().toString(),fullName,email,password,address,0, Date(), Date(),0) {}
     constructor(isAdmin:Int) :
-            this(UUID.randomUUID().toString(),"","","","",isAdmin, Date(), Date()) {}
+            this(UUID.randomUUID().toString(),"","","","",isAdmin, Date(), Date(),0) {}
 
 }
