@@ -12,7 +12,7 @@ class UserSingleton : Application() {
     val createdAt: Date? = null
     var updatedAt: Date? = null
     var phone: String?=null
-
+    var redeemPoint: Int?=null
     companion object{
         var instance : UserSingleton? = null
             get(){
