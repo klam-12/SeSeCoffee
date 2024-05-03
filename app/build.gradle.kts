@@ -107,4 +107,5 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
 
     implementation ("com.intuit.sdp:sdp-android:1.1.1")
+    implementation("de.hdodenhof:circleimageview:3.1.0")
 }
