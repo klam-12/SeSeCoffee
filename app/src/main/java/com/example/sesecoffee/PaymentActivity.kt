@@ -99,8 +99,8 @@ class PaymentActivity : AppCompatActivity() {
                             Toast.makeText(this, "Please select a payment method", Toast.LENGTH_SHORT).show()
                             return@setOnClickListener
                         }
-                        if(userAddress == "") {
-                            Toast.makeText(this, "Please update your address in Profile", Toast.LENGTH_SHORT).show()
+                        if(userAddress == "" || userPhone == "") {
+                            Toast.makeText(this, "Please update your information in Profile", Toast.LENGTH_SHORT).show()
                             return@setOnClickListener
                         }
 

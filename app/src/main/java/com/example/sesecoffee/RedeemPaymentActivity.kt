@@ -15,6 +15,7 @@ import com.example.sesecoffee.model.Order
 import com.example.sesecoffee.model.Product
 import com.example.sesecoffee.model.Redeem
 import com.example.sesecoffee.model.UserSingleton
+import com.example.sesecoffee.utils.Constant
 import com.example.sesecoffee.utils.Constant.ORDER_COLLECTION
 import com.example.sesecoffee.utils.Constant.PRODUCT_COLLECTION
 import com.example.sesecoffee.utils.Constant.REDEEM_COLLECTION
@@ -42,8 +43,6 @@ class RedeemPaymentActivity : AppCompatActivity() {
         val productId = intent.getStringExtra("productId")
         val orderId = intent.getStringExtra("orderId")
 
-        Toast.makeText(this, "Redeem: $redeemId, Product: $productId, Order: $orderId", Toast.LENGTH_SHORT).show()
-
         val avatar = findViewById<ShapeableImageView>(R.id.redeemPaymentAvatar)
         val name = findViewById<TextView>(R.id.redeemPaymentName)
         val phone = findViewById<TextView>(R.id.redeemPaymentPhone)
@@ -53,6 +52,14 @@ class RedeemPaymentActivity : AppCompatActivity() {
         val productImg = findViewById<ImageView>(R.id.redeemProductImage)
         val productName = findViewById<TextView>(R.id.redeemProductName)
         val productPrice = findViewById<TextView>(R.id.redeemProductPrice)
+
+        userName = UserSingleton.instance?.fullName.toString()
+        userPhone = UserSingleton.instance?.phone.toString()
+        userAddress = UserSingleton.instance?.address.toString()
+
+        name.setText(userName)
+        phone.setText("Phone: $userPhone")
+        address.setText("Address: $userAddress")
 
         collectionProducts.document(productId!!).get()
             .addOnSuccessListener { documentSnapshot ->
@@ -74,6 +81,11 @@ class RedeemPaymentActivity : AppCompatActivity() {
                     price.setText("${redeem?.point} points")
 
                     findViewById<Button>(R.id.redeemPaymentProceedBtn).setOnClickListener {
+                        if(userAddress == "" || userPhone == "") {
+                            Toast.makeText(this, "Please update your information in Profile", Toast.LENGTH_SHORT).show()
+                            return@setOnClickListener
+                        }
+
                         val paidOrder = Order(
                             orderId,
                             redeem?.point!!,
@@ -89,6 +101,11 @@ class RedeemPaymentActivity : AppCompatActivity() {
                             ""
                         )
                         collectionOrders.document(orderId!!).set(paidOrder)
+
+                        val redeemPoint = UserSingleton.instance?.redeemPoint!! - redeem.point!!
+                        collectionUser.document(UserSingleton.instance?.id.toString()).update("redeemPoint", redeemPoint)
+                        UserSingleton.instance?.redeemPoint = redeemPoint
+
                         val intent = Intent(
                             applicationContext,
                             SuccessOrderActivity::class.java
@@ -96,39 +113,12 @@ class RedeemPaymentActivity : AppCompatActivity() {
                         intent.putExtra("orderId", orderId)
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                         startActivity(intent)
-
-//                        val documentRef = collectionUser.document(UserSingleton.instance?.id.toString())
-//                        val updates = hashMapOf(
-//                            "redeemPoint " to (UserSingleton.instance?.redeemPoint!! - redeem.point!!)
-//                        )
-//                        documentRef.update(updates as Map<String, Any>)
-//                            .addOnSuccessListener {
-//                                val intent = Intent(
-//                                    applicationContext,
-//                                    SuccessOrderActivity::class.java
-//                                )
-//                                intent.putExtra("orderId", orderId)
-//                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-//                                startActivity(intent)
-//                            }
-//                            .addOnFailureListener { exception ->
-//                                Log.i("R","sai roi")
-//                                println("Error updating fields: $exception")
-//                            }
                     }
                 }
             }
             .addOnFailureListener { exception ->
                 println("Error getting documents: $exception")
             }
-
-        userName = UserSingleton.instance?.fullName.toString()
-        userPhone = UserSingleton.instance?.phone.toString()
-        userAddress = UserSingleton.instance?.address.toString()
-
-        name.setText(userName)
-        phone.setText("Phone: $userPhone")
-        address.setText("Address: $userAddress")
 
         findViewById<ImageButton>(R.id.redeemPaymentBackBtn).setOnClickListener {
             collectionOrders.document(orderId!!).delete()

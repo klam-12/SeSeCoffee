@@ -27,21 +27,16 @@ class RedeemAdapter (val context: Context?)
 
         }
         binding.pointsBtn.setOnClickListener {
-            val intent = Intent(context, ProductRedeemOrderActivity::class.java)
-            intent.putExtra("redeem", redeemItem.id)
-            intent.putExtra("productId", redeemItem.productId)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            context!!.startActivity(intent)
-//            if(UserSingleton.instance?.redeemPoint != null && UserSingleton.instance?.redeemPoint!! >= redeemItem.point!!){
-//                val intent = Intent(context, ProductRedeemOrderActivity::class.java)
-//                intent.putExtra("redeem", redeemItem.id)
-//                intent.putExtra("productId", redeemItem.productId)
-//                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-//                context!!.startActivity(intent)
-//            }
-//            else{
-//                Toast.makeText(context, "You don't have enough points", Toast.LENGTH_SHORT).show()
-//            }
+            if(UserSingleton.instance?.redeemPoint != null && UserSingleton.instance?.redeemPoint!! >= redeemItem.point!!){
+                val intent = Intent(context, ProductRedeemOrderActivity::class.java)
+                intent.putExtra("redeem", redeemItem.id)
+                intent.putExtra("productId", redeemItem.productId)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                context!!.startActivity(intent)
+            }
+            else{
+                Toast.makeText(context, "You don't have enough points", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 }

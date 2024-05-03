@@ -47,7 +47,6 @@
         <activity
             android:name=".AdminMainActivity"
             android:exported="false">
-
         </activity>
         <activity
             android:name=".AddProductActivity"

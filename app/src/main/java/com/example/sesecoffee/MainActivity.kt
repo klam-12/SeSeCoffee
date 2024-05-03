@@ -23,8 +23,8 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var binding : ActivityMainBinding
     lateinit var productsViewModel: ProductsViewModel
-    lateinit var  rewardViewModel: RewardItemViewModel
-    lateinit var  orderViewModel: OrderViewModel
+    lateinit var rewardViewModel: RewardItemViewModel
+    lateinit var orderViewModel: OrderViewModel
     lateinit var orderItemViewModel: OrderItemsViewModel
     lateinit var orderTrackingViewModel: OrderTrackingViewModel
     lateinit var messageViewModel: MessageViewModel
