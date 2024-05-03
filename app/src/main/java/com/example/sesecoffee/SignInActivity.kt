@@ -61,6 +61,7 @@ class SignInActivity : AppCompatActivity() {
                                     UserSingleton.instance?.fullName = userData?.get(key = "fullname").toString()
                                     UserSingleton.instance?.email = userData?.get(key = "email").toString()
                                     UserSingleton.instance?.address = userData?.get(key = "address").toString()
+                                    UserSingleton.instance?.phone = userData?.get(key = "phone").toString()
                                     UserSingleton.instance?.id = userId.toString()
                                     UserSingleton.instance?.isAdmin = Integer.parseInt(userData?.get(key = "isAdmin").toString())
                                     //login vao man hinh admin or guess

@@ -30,7 +30,7 @@
         android:layout_marginTop="40dp"
         android:text="Redeem Product"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.093"
+        app:layout_constraintHorizontal_bias="0.094"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edit_redeem_title" />
 
@@ -69,7 +69,7 @@
         android:ems="10"
         android:text="1000"
         android:hint="1000"
-        android:inputType="text"
+        android:inputType="number"
         android:background="@drawable/rounded_editext"
         android:padding="8dp"
         android:elevation="2dp"
@@ -129,7 +129,7 @@
         android:id="@+id/delRedeemBtn"
         android:layout_width="350dp"
         android:layout_height="60dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="24dp"
         android:backgroundTint="@color/red"
         android:elevation="8dp"
         android:text="Delete"
@@ -140,7 +140,7 @@
         app:layout_constraintTop_toBottomOf="@+id/saveRedeemBtn" />
 
     <ProgressBar
-        android:id="@+id/progressBar_editPro"
+        android:id="@+id/progressBar_editRedeem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -151,4 +151,17 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/delRedeemBtn" />
+
+    <TextView
+        android:id="@+id/overdueRedeem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="This redeem is overdue"
+        android:textColor="@color/red"
+        android:visibility="gone"
+
+        app:layout_constraintEnd_toEndOf="@+id/edit_redeem_title"
+        app:layout_constraintStart_toStartOf="@+id/edit_redeem_title"
+        app:layout_constraintTop_toBottomOf="@+id/edit_redeem_title" />
 </androidx.constraintlayout.widget.ConstraintLayout>

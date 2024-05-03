@@ -2,6 +2,8 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+
+
 <ScrollView
     android:id="@+id/horizontalScrollView2"
     android:layout_width="match_parent"
@@ -40,13 +42,14 @@
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView5"
-            tools:srcCompat="@color/primary" />
+            tools:srcCompat="@drawable/order_success" />
 
         <LinearLayout
-            android:id="@+id/linearLayout2"
+            android:id="@+id/layout_orderDetail"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="10dp"
+            android:padding="4dp"
             android:orientation="vertical"
             app:layout_constraintTop_toBottomOf="@+id/imageView"
             tools:layout_editor_absoluteX="0dp">
@@ -263,20 +266,26 @@
 
         <Button
             android:id="@+id/approveBtn"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
+            android:layout_width="200dp"
+            android:layout_height="60dp"
             android:layout_marginTop="16dp"
-            android:backgroundTint="@color/primary"
+            android:drawableEnd="@drawable/ic_approve_order"
+            android:drawableTint="@color/white"
+            android:backgroundTint="@color/green"
+            android:textSize="18sp"
             android:text="Approve order"/>
 
         <Button
             android:id="@+id/backBtn"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
-            android:backgroundTint="#FFEAD5"
+            android:drawableLeft="@drawable/ic_arrow_left"
+            android:drawableTint="@color/primary"
+            android:backgroundTint="@android:color/transparent"
             android:textColor="@color/primary"
+            android:textSize="18sp"
             android:text="Back"/>
 
     </LinearLayout>

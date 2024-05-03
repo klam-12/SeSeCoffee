@@ -8,6 +8,7 @@ import androidx.databinding.DataBindingUtil
 import com.example.sesecoffee.databinding.ActivityProfileBinding
 import com.example.sesecoffee.model.FirebaseSingleton
 import com.example.sesecoffee.model.UserSingleton
+import com.stripe.model.PaymentMethod.Boleto
 
 class ProfileActivity : AppCompatActivity() {
 
@@ -23,7 +24,9 @@ class ProfileActivity : AppCompatActivity() {
         binding.profileInputAddress.setText(UserSingleton.instance?.address )
 
         binding.profileSaveBtn.setOnClickListener() {
-
+            if(!validateInput()){
+                return@setOnClickListener
+            }
             UserSingleton.instance?.fullName = binding.profileInputFullName.text.toString()
             UserSingleton.instance?.email = binding.profileInputEmail.text.toString()
             UserSingleton.instance?.phone = binding.profileInputPhone.text.toString()
@@ -32,7 +35,7 @@ class ProfileActivity : AppCompatActivity() {
             val documentRef = fbSingleton.db.collection("USER").document(UserSingleton.instance?.id.toString())
             val updates = hashMapOf(
                 "fullname" to binding.profileInputFullName.text.toString(),
-                "email " to binding.profileInputEmail.text.toString(),
+                "email" to binding.profileInputEmail.text.toString(),
                 "phone" to binding.profileInputPhone.text.toString(),
                 "address" to binding.profileInputAddress.text.toString()
             )
@@ -47,16 +50,29 @@ class ProfileActivity : AppCompatActivity() {
                     println("Error updating fields: $exception")
                 }
 
-
-//            val intent = Intent(this, MainActivity::class.java)
-//            startActivity(intent)
-
-
         }
         binding.profileSignOutBtn.setOnClickListener(){
             val intent = Intent(this, SignInActivity::class.java)
             startActivity(intent)
         }
 
+    }
+
+    private fun validateInput() : Boolean{
+        var isValid = true
+        val fullName = binding.profileInputFullName.text.toString()
+        val phone = binding.profileInputPhone.text.toString()
+
+        if(fullName == ""){
+            binding.profileInputFullName.error = "Fullname can't be empty"
+            isValid = false
+        }
+
+        if(phone == ""){
+            binding.profileInputPhone.error = "Phone can't be empty"
+            isValid = false
+        }
+
+        return isValid
     }
 }

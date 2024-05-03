@@ -136,8 +136,4 @@ class AddProductActivity : AppCompatActivity() {
         productsViewModel.addAProduct(product, imageUri)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        binding = null!!
-    }
 }

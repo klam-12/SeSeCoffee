@@ -81,6 +81,7 @@
                 android:layout_weight="1"
                 android:textAlignment="center"
                 app:chipBackgroundColor="@color/primary"
+                android:clickable="false"
                 android:textColor="@color/white"
                 android:text="Invalid"/>
         </LinearLayout>

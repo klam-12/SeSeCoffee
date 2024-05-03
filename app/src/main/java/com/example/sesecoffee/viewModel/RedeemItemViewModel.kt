@@ -12,6 +12,7 @@ import com.example.sesecoffee.utils.Constant
 import com.example.sesecoffee.utils.Resource
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.Query
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -37,7 +38,9 @@ class RedeemItemViewModel(app:Application) : AndroidViewModel(app) {
     fun fetchAllRedeems(){
         viewModelScope.launch{_redeems.emit(Resource.Loading())}
 
-        fbSingleton.db.collection(Constant.REDEEM_COLLECTION).get()
+        fbSingleton.db.collection(Constant.REDEEM_COLLECTION)
+            .orderBy("untilAt", Query.Direction.DESCENDING)
+            .get()
             .addOnSuccessListener {
                     result ->
                 redeemsList = result.toObjects(Redeem::class.java)

@@ -6,18 +6,22 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.sesecoffee.adapters.AdminOrderAdapter
 import com.example.sesecoffee.adapters.OrderAdapter
 import com.example.sesecoffee.databinding.ActivityAdminEditOrderBinding
 import com.example.sesecoffee.databinding.ActivityMainBinding
+import com.example.sesecoffee.fragments.OrderDetailItemAdapter
 import com.example.sesecoffee.model.OrderItem
 import com.example.sesecoffee.utils.Constant
 import com.example.sesecoffee.utils.Format
+import com.example.sesecoffee.utils.ItemOffsetDecoration
 import com.example.sesecoffee.utils.Resource
 import com.example.sesecoffee.viewModel.OrderItemsViewModel
 import com.example.sesecoffee.viewModel.OrderViewModel
@@ -38,12 +42,20 @@ class AdminEditOrderActivity : AppCompatActivity() {
     private val collectionUser: CollectionReference = db.collection("USER")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        setContentView(R.layout.activity_admin_edit_order)
         binding = ActivityAdminEditOrderBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         orderViewModel = OrderViewModel(application)
         orderItemsViewModel = OrderItemsViewModel(application)
+
+        val intent = intent
+        orderId = intent.getStringExtra("orderId")
+        position = intent.getIntExtra("position", 0)
+        orderId?.let {
+            orderAdapter = OrderAdapter(this)
+            getOrderDetails(orderId)
+
+        }
 
         lifecycleScope.launchWhenStarted {
             orderViewModel.updateOrder.collectLatest {
@@ -93,17 +105,6 @@ class AdminEditOrderActivity : AppCompatActivity() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        val intent = intent
-        orderId = intent.getStringExtra("orderId")
-        position = intent.getIntExtra("position", 0)
-        orderId?.let {
-            getOrderDetails(orderId)
-            setUpRecyclerViewOrder()
-        }
-    }
-
     private fun getOrderDetails(orderId: String?) {
         val format = Format()
         try {
@@ -116,12 +117,14 @@ class AdminEditOrderActivity : AppCompatActivity() {
                         binding.createdAt.text = createAt?.let { format.timestampToFormattedString(createAt) }
                         val delivered = documentSnapshot.getBoolean("delivered")
 
-                        // Display appropriate image based on delivery status
-//                        if (delivered == true) {
-//                            Glide.with(this).load(R.drawable.order_success).into(binding.imageView)
-//                        } else {
-//                            Glide.with(this).load(R.drawable.order_pending).into(binding.imageView)
-//                        }
+//                         Display appropriate image based on delivery status
+                        if (delivered == true) {
+                            Glide.with(this).load(R.drawable.order_success).into(binding.imageView)
+                            binding.approveBtn.visibility = View.GONE
+                        }
+                        else{
+                            Glide.with(this).load(R.drawable.order_pending).into(binding.imageView)
+                        }
                         var fullName = "Not found"
                         val userId = documentSnapshot.getString("userId").toString()
                         collectionUser.document(userId)
@@ -161,14 +164,14 @@ class AdminEditOrderActivity : AppCompatActivity() {
                                         orderItemsList.add(it)
                                     }
                                 }
-//                                val recyclerView: RecyclerView = binding.rvlistOrderItem
-//                                val itemOffsetDecoration = ItemOffsetDecoration(16) // Set your desired gap here
-//                                recyclerView.addItemDecoration(itemOffsetDecoration)
-//
-//                                val layoutManager = LinearLayoutManager(this)
-//                                recyclerView.layoutManager = layoutManager
-//                                val adapter = OrderDetailItemAdapter(orderItemsList)
-//                                recyclerView.adapter = adapter
+                                val recyclerView: RecyclerView = binding.rvlistOrderItem
+                                val itemOffsetDecoration = ItemOffsetDecoration(16) // Set your desired gap here
+                                recyclerView.addItemDecoration(itemOffsetDecoration)
+
+                                val layoutManager = LinearLayoutManager(this)
+                                recyclerView.layoutManager = layoutManager
+                                val adapter = OrderDetailItemAdapter(orderItemsList)
+                                recyclerView.adapter = adapter
                                 orderAdapter.differ.submitList(orderItemsList)
                             }
                             .addOnFailureListener { exception ->
@@ -176,19 +179,8 @@ class AdminEditOrderActivity : AppCompatActivity() {
                             }
                     }
                 }
-
-
         } catch (t: Throwable) {
             Log.i("Err", "$t")
-        }
-    }
-
-    private fun setUpRecyclerViewOrder() {
-        orderAdapter = OrderAdapter(this)
-        binding.rvlistOrderItem.apply {
-            setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL ,false)
-            adapter = orderAdapter
         }
     }
 

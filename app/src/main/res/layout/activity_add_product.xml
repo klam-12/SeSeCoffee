@@ -135,7 +135,7 @@
         android:layout_width="wrap_content"
         android:layout_height="60dp"
         android:layout_marginTop="60dp"
-        android:backgroundTint="#E3BC9F"
+        android:backgroundTint="#FFDEC6"
         android:elevation="8dp"
         android:text="Choose image"
         android:textColor="@color/primary"

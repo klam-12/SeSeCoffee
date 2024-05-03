@@ -6,6 +6,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.Toast
@@ -57,14 +58,14 @@ class AddRedeemActivity : AppCompatActivity() {
             redeemItemViewModel.redeems.collectLatest {
                 when(it){
                     is Resource.Loading -> {
-
+                        showLoading()
                     }
                     is Resource.Success -> {
-//                        hideLoading()
+                        hideLoading()
                         Toast.makeText(applicationContext,"Success",Toast.LENGTH_SHORT).show()
                     }
                     is Resource.Error -> {
-//                        hideLoading()
+                        hideLoading()
                         Toast.makeText(applicationContext,it.message, Toast.LENGTH_SHORT).show()
                     }
                     else -> Unit
@@ -87,12 +88,16 @@ class AddRedeemActivity : AppCompatActivity() {
         binding.apply {
 
             backBtn.setOnClickListener(){
-                val intent = Intent(applicationContext,AdminMainActivity::class.java)
-                startActivity(intent)
+                finish()
             }
 
             submitBtn.setOnClickListener(){
                 addRedeem();
+                binding.apply {
+                    redeemInputPoint.setText("")
+                    redeemInputValid.setText("")
+                }
+                Toast.makeText(applicationContext,"Add successfully",Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -140,13 +145,6 @@ class AddRedeemActivity : AppCompatActivity() {
         }
         val redeem = Redeem(id,productId,productName,productImg,pointInt,validTime)
         redeemItemViewModel.addRedeem(redeem);
-
-        binding.apply {
-            redeemInputPoint.setText("")
-            redeemInputValid.setText("")
-        }
-        Toast.makeText(this,"Add successfully",Toast.LENGTH_SHORT).show()
-
     }
 
     private fun setUpSpinnerProduct(listPro : List<Product>){
@@ -179,16 +177,27 @@ class AddRedeemActivity : AppCompatActivity() {
             binding.redeemInputValid.setText(sdf.format(cal.time))
         }
 
+
         binding.redeemInputValid.setOnClickListener() {
-            DatePickerDialog(this, dateSetListener,
+            val datePickerDialog = DatePickerDialog(
+                this, dateSetListener,
                 cal.get(Calendar.YEAR),
                 cal.get(Calendar.MONTH),
-                cal.get(Calendar.DAY_OF_MONTH)).show()
+                cal.get(Calendar.DAY_OF_MONTH)
+            )
+
+            // Set minimum date to today's date
+            datePickerDialog.datePicker.minDate = cal.timeInMillis
+            datePickerDialog.show()
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        binding = null!!
+    private fun showLoading(){
+        binding.progressBarAddRedeem.visibility = View.VISIBLE
     }
+
+    private fun hideLoading(){
+        binding.progressBarAddRedeem.visibility = View.INVISIBLE
+    }
+
 }

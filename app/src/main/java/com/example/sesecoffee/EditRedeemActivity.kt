@@ -6,8 +6,10 @@ import android.content.DialogInterface
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
@@ -54,10 +56,10 @@ class EditRedeemActivity : AppCompatActivity() {
             redeemItemViewModel.updateRedeem.collectLatest {
                 when(it){
                     is Resource.Loading -> {
-//                        showLoading()
+                        showLoading()
                     }
                     is Resource.Success -> {
-//                        hideLoading()
+                        hideLoading()
                         if (it.data == null){
                             Toast.makeText(applicationContext,"Delete redeem successfully", Toast.LENGTH_SHORT).show()
                         } else {
@@ -66,7 +68,7 @@ class EditRedeemActivity : AppCompatActivity() {
                         finish()
                     }
                     is Resource.Error -> {
-//                        hideLoading()
+                        hideLoading()
                         Toast.makeText(applicationContext,it.message, Toast.LENGTH_SHORT).show()
                     }
                     else -> Unit
@@ -84,7 +86,6 @@ class EditRedeemActivity : AppCompatActivity() {
 
         saveRedeemBtn.setOnClickListener(){
             updateRedeem(position)
-
         }
 
         delRedeemBtn.setOnClickListener(){
@@ -130,10 +131,30 @@ class EditRedeemActivity : AppCompatActivity() {
         }
 
         inputValid.setOnClickListener() {
-            DatePickerDialog(this, dateSetListener,
+            val datePickerDialog = DatePickerDialog(
+                this, dateSetListener,
                 cal.get(Calendar.YEAR),
                 cal.get(Calendar.MONTH),
-                cal.get(Calendar.DAY_OF_MONTH)).show()
+                cal.get(Calendar.DAY_OF_MONTH)
+            )
+
+            // Set minimum date to today's date
+            datePickerDialog.datePicker.minDate = cal.timeInMillis
+            datePickerDialog.show()
+        }
+
+        val currentTimestamp = Timestamp.now()
+        // Compare timestamps
+        if(oldRedeem?.untilAt != null) {
+            if (currentTimestamp.seconds > oldRedeem?.untilAt!!.seconds) {
+                inputName.isFocusable = false
+                inputPoint.isFocusable = false
+                inputValid.isFocusable = false
+                inputValid.setOnClickListener {  }
+
+                saveRedeemBtn.visibility = View.GONE
+                findViewById<TextView>(R.id.overdueRedeem).visibility = View.VISIBLE
+            }
         }
     }
 
@@ -192,6 +213,14 @@ class EditRedeemActivity : AppCompatActivity() {
             validDateString = dateFormat.format(date)
         }
         return validDateString
+    }
+
+    private fun showLoading(){
+        findViewById<ProgressBar>(R.id.progressBar_editRedeem).visibility  = View.VISIBLE
+    }
+
+    private fun hideLoading(){
+        findViewById<ProgressBar>(R.id.progressBar_editRedeem).visibility  = View.INVISIBLE
     }
 
 }

@@ -41,6 +41,10 @@ class SignUpActivity : AppCompatActivity() {
 
         firebaseAuth = Firebase.auth
         nextStep.setOnClickListener(){
+            if(!validateInput()){
+                return@setOnClickListener
+            }
+
             val pass = passwordSignup.text
             val emailAddress = email.text
 
@@ -88,5 +92,40 @@ class SignUpActivity : AppCompatActivity() {
                     Log.d(it.toString(), it.message.toString())
                 }
         }
+
+        signIn.setOnClickListener{
+            val intent = Intent(this, SignInActivity::class.java)
+            startActivity(intent)
+        }
+    }
+
+    private fun validateInput() : Boolean{
+        var isValid = true
+        val fullName = username.text.toString()
+        val emailInput = email.text.toString()
+        val password = passwordSignup.text.toString()
+        val phoneNumber = phone.text.toString()
+
+        if(fullName == ""){
+            username.error = "Name can't be empty"
+            isValid = false
+        }
+
+        if(emailInput == ""){
+            email.error = "Email can't be empty"
+            isValid = false
+        }
+
+        if(password == ""){
+            passwordSignup.error = "Password can't be empty"
+            isValid = false
+        }
+
+        if(phoneNumber == ""){
+            phone.error = "Phone can't be empty"
+            isValid = false
+        }
+
+        return isValid
     }
 }
