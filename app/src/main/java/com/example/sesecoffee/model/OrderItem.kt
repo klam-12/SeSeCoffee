@@ -39,7 +39,7 @@ data class OrderItem(
         return "$productId $productName $hotCold $size $milk $quantity $price "
     }
     fun getReward(): Int? {
-        return (price?.toDouble() )?.div(1000)?.let { Math.round(it).toInt() }
+        return (price?.toDouble() )?.div(1)?.let { Math.round(it).toInt() }
     }
 
 

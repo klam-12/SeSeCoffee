@@ -1,5 +1,6 @@
 package com.example.sesecoffee
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -8,7 +9,6 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.RadioButton
-import android.widget.RadioGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -32,7 +32,7 @@ import com.stripe.android.paymentsheet.PaymentSheetResult
 import org.json.JSONObject
 
 
-class PaymentActivity : AppCompatActivity() {
+class PaymentReOrderActivity : AppCompatActivity() {
     private lateinit var userOrderId : String
     private lateinit var userName : String
     private lateinit var userPhone : String
@@ -57,6 +57,8 @@ class PaymentActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_payment)
 
+        val intent = intent
+        val orderId = intent.getStringExtra("orderId")
         PaymentConfiguration.init(this, PUBLISH_KEY)
         paymentSheet = PaymentSheet(this, ::onPaymentSheetResult)
 
@@ -68,8 +70,7 @@ class PaymentActivity : AppCompatActivity() {
         val amount = findViewById<TextView>(R.id.paymentAmount)
         setUpRadioButton()
 
-        val query = collectionOrders.whereEqualTo("userId", UserSingleton.instance?.id.toString())
-            .whereEqualTo("done",false)
+        val query = collectionOrders.whereEqualTo("id", orderId)
         query.get()
             .addOnSuccessListener { documentSnapshot->
                 if(!documentSnapshot.isEmpty){

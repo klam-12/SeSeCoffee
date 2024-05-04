@@ -30,6 +30,9 @@
             android:name=".RedeemPaymentActivity"
             android:exported="false" />
         <activity
+            android:name=".PaymentReOrderActivity"
+            android:exported="false" />
+        <activity
             android:name=".EditRedeemActivity"
             android:exported="false" />
         <activity

@@ -42,25 +42,23 @@ class OrderTrackingViewModel (app: Application) : AndroidViewModel(
         }
 
         fbSingleton.db.collection(Constant.ORDER_COLLECTION)
-            .whereEqualTo("userId", UserSingleton.instance?.id.toString())
+            .whereEqualTo("userId", UserSingleton.instance?.id)
             .whereEqualTo("done", true)
             .whereEqualTo("delivered", false)
             .get()
             .addOnSuccessListener { querySnapshot ->
                 val itemsList = mutableListOf<OrderItem>()
                 val ordersList = mutableListOf<Order>()
-                if (querySnapshot.documents.isEmpty())
-                {
+
+                if (querySnapshot.documents.isEmpty()) {
                     viewModelScope.launch {
                         _onGoingOrder.emit(Resource.Success(ordersList))
                     }
                 } else {
-                    val ordersList = mutableListOf<Order>()
                     val processedDocuments = AtomicInteger(0)
 
                     for (document in querySnapshot.documents) {
                         val order = document.toObject(Order::class.java)
-
                         val itemsCollection = document.reference.collection("OrderItem")
 
                         itemsCollection.get().addOnSuccessListener { subCollectionSnapshot ->
@@ -72,21 +70,26 @@ class OrderTrackingViewModel (app: Application) : AndroidViewModel(
                                     order?.userId = item?.quantity.toString()
                                     // You might need to adjust this logic based on your requirements
                                     order?.comment = subCollectionSnapshot.documents.size.toString()
-                                    order?.paymentMethod = order?.total?.let { format.formatToDollars(it) }
-                                }
-                            }
-
-
-                        order?.let {
-                                    ordersList.add(it)
-                                }
-
-                                if (processedDocuments.incrementAndGet() == querySnapshot.documents.size) {
-                                    viewModelScope.launch {
-                                        _onGoingOrder.emit(Resource.Success(ordersList))
+                                    if (order?.paymentMethod != "redeem") {
+                                        order?.paymentMethod = order?.total?.let { format.formatToDollars(it) }
+                                    } else {
+                                        order?.paymentMethod = "${order?.total.toString()} pts"
                                     }
                                 }
                             }
+
+                            order?.let {
+                                ordersList.add(it)
+                            }
+
+                            if (processedDocuments.incrementAndGet() == querySnapshot.documents.size) {
+                                // Sort ordersList based on creation timestamp
+                                ordersList.sortByDescending { it.createAt } // Assuming createAt is the field representing the creation timestamp
+                                viewModelScope.launch {
+                                    _onGoingOrder.emit(Resource.Success(ordersList))
+                                }
+                            }
+                        }
                             .addOnFailureListener { exception ->
                                 // Handle failure
                                 println("Error fetching subcollection: $exception")
@@ -97,13 +100,13 @@ class OrderTrackingViewModel (app: Application) : AndroidViewModel(
                                 }
                             }
                     }
-
                 }
             }
             .addOnFailureListener { exception ->
+                println(exception)
                 Toast.makeText(
                     getApplication(),
-                    "Errors happen when loading the database",
+                    exception.toString(),
                     Toast.LENGTH_LONG
                 ).show()
                 viewModelScope.launch {
@@ -145,7 +148,12 @@ class OrderTrackingViewModel (app: Application) : AndroidViewModel(
                                     order?.phoneNumber = item?.productName
                                     order?.userId = item?.quantity.toString()
                                     order?.comment = subCollectionSnapshot.documents.size.toString()
-                                    order?.paymentMethod = order?.total?.let { format.formatToDollars(it) }
+                                    if (order?.paymentMethod != "redeem"){
+                                        order?.paymentMethod = order?.total?.let { format.formatToDollars(it) }
+                                    }
+                                    else order?.paymentMethod = "${order?.total.toString()} pts"
+
+
                                 }
 
                                 order?.let {
@@ -153,6 +161,7 @@ class OrderTrackingViewModel (app: Application) : AndroidViewModel(
                                 }
 
                                 if (processedDocuments.incrementAndGet() == querySnapshot.documents.size) {
+                                    ordersList.sortByDescending { it.createAt }
                                     viewModelScope.launch {
                                         _historyOrder.emit(Resource.Success(ordersList))
                                     }
