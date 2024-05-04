@@ -14,6 +14,7 @@ import com.example.sesecoffee.R
 import com.example.sesecoffee.RedeemActivity
 import com.example.sesecoffee.adapters.RewardAdapter
 import com.example.sesecoffee.databinding.FragmentRewardBinding
+import com.example.sesecoffee.model.UserSingleton
 import com.example.sesecoffee.utils.Resource
 import com.example.sesecoffee.viewModel.RewardItemViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -43,6 +44,9 @@ class RewardFragment : Fragment(R.layout.fragment_reward) {
         super.onViewCreated(view, savedInstanceState)
         rewardItemViewModel = (activity as MainActivity).rewardViewModel
 
+
+
+
         setUpRecyclerViewOrders()
         lifecycleScope.launchWhenStarted {
             rewardItemViewModel.orders.collectLatest {
@@ -52,6 +56,8 @@ class RewardFragment : Fragment(R.layout.fragment_reward) {
                     }
 
                     is Resource.Success -> {
+                        val redeemPoint = UserSingleton.instance?.redeemPoint
+                        binding.textView5.text = redeemPoint.toString()
                         rewardAdapter.differ.submitList(it.data)
                         hideLoading()
                     }

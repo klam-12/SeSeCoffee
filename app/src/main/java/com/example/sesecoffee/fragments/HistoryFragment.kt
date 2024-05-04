@@ -36,7 +36,10 @@ class HistoryFragment : Fragment(R.layout.fragment_history) {
         super.onViewCreated(view, savedInstanceState)
         orderTrackingViewModel = (activity as MainActivity).orderTrackingViewModel
         orderTrackingViewModel.fetchAllHistoryOrderItems()
-//        setUpRecyclerViewOrders()
+
+
+
+
         lifecycleScope.launchWhenStarted {
             orderTrackingViewModel.historyOrderItems.collectLatest {
                 when(it) {

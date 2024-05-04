@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.sesecoffee.model.FirebaseSingleton
 import com.example.sesecoffee.model.Order
 import com.example.sesecoffee.model.OrderItem
+import com.example.sesecoffee.model.UserSingleton
 import com.example.sesecoffee.utils.Constant
 import com.example.sesecoffee.utils.Resource
 import com.google.firebase.Timestamp
@@ -33,13 +34,14 @@ class RewardItemViewModel ( app: Application) : AndroidViewModel(
         }
 
         fbSingleton.db.collection(Constant.ORDER_COLLECTION)
+            .whereEqualTo("userId", UserSingleton.instance?.id.toString())
             .whereEqualTo("done", true)
             .whereEqualTo("delivered", false)
             .get()
             .addOnSuccessListener { querySnapshot ->
                 val ordersList = mutableListOf<Order>()
                 val itemsList = mutableListOf<OrderItem>()
-                println("HELLO $querySnapshot")
+
 
                 for (document in querySnapshot.documents) {
                     val order = document.toObject(Order::class.java)
