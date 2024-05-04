@@ -29,12 +29,11 @@
             android:id="@+id/userImg"
             android:layout_width="70dp"
             android:layout_height="70dp"
-            android:src="@color/primary"
-            android:layout_marginLeft="16dp"
+
+            android:src="@drawable/default_ava"
+            android:layout_marginLeft="10dp"
             app:civ_border_color="#FF000000"
-            app:civ_border_width="0dp"
-            tools:layout_editor_absoluteX="16dp"
-            tools:layout_editor_absoluteY="234dp" />
+            app:civ_border_width="0dp" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
