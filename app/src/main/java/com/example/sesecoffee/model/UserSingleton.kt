@@ -1,7 +1,6 @@
 package com.example.sesecoffee.model
 
 import android.app.Application
-import java.util.Date
 
 class UserSingleton : Application() {
     var id:String? = null
@@ -9,10 +8,8 @@ class UserSingleton : Application() {
     var email:String? = null
     var address: String? = null
     var isAdmin : Int? = null
-    val createdAt: Date? = null
-    var updatedAt: Date? = null
     var phone: String?=null
-    var redeemPoint: Int?=null
+    var avatar:String?=null
     companion object{
         var instance : UserSingleton? = null
             get(){

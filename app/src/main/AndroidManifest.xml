@@ -18,6 +18,9 @@
         android:theme="@style/Theme.SeSeCoffee"
         tools:targetApi="31">
         <activity
+            android:name=".AdminChatActivity"
+            android:exported="false" />
+        <activity
             android:name=".AdminEditOrderActivity"
             android:exported="false" />
         <activity
@@ -40,10 +43,10 @@
             android:exported="false" />
         <activity
             android:name=".AdminMainActivity"
-            android:exported="true"/>
+            android:exported="true" />
         <activity
             android:name=".AddProductActivity"
-            android:exported="false"></activity>
+            android:exported="false" />
         <activity
             android:name=".ProfileActivity"
             android:exported="false" />
@@ -79,7 +82,7 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:exported="false"></activity>
+            android:exported="false" />
     </application>
 
 </manifest>
