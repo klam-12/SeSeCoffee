@@ -1,15 +1,17 @@
 package com.example.sesecoffee.model
 
 data class Message(
-    var message: String,
-    var userId: String,
-    var adminSend: Boolean,
-    var dateTime: String,
+    var message: String?=null,
+    var userName: String?=null,
+    var adminSend: Boolean?=false,
+    var dateTime: String?=null,
+    var userId: String?=null
 ){
-    constructor() :
-            this("","",false,"")
-    constructor(message: String):
-            this(message, UserSingleton.instance?.id.toString(),false, "")
-    constructor(message: String, isAdmin: Boolean):
-            this(message, UserSingleton.instance?.id.toString(),isAdmin, "")
+    constructor(message: String,dateTime: String):
+            this(message, UserSingleton.instance?.fullName.toString(),false, dateTime,UserSingleton.instance?.id.toString())
+
+    constructor(message: String,adminSend: Boolean,userName: String,dateTime: String,userId: String?):
+            this(message,userName,adminSend,dateTime,userId)
+//    constructor() : this(null)
+
 }

@@ -18,6 +18,9 @@
         android:theme="@style/Theme.SeSeCoffee"
         tools:targetApi="31">
         <activity
+            android:name=".AdminChatActivity"
+            android:exported="false" />
+        <activity
             android:name=".PersonalRatings"
             android:exported="false" />
         <activity
@@ -42,10 +45,10 @@
             android:name=".EditProductActivity"
             android:exported="false" />
         <activity
-            android:name=".RatingActivity"
+            android:name=".ForgotPasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".ForgotPasswordActivity"
+            android:name=".RatingActivity"
             android:exported="false" />
         <activity
             android:name=".AdminMainActivity"
@@ -83,12 +86,6 @@
             android:name=".SignUpActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
-            android:exported="false">
-
-
-        </activity>
-        <activity
             android:name=".SignInActivity"
             android:exported="true">
             <intent-filter>
@@ -97,8 +94,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-
+        <activity
+            android:name=".MainActivity"
+            android:exported="false"></activity>
     </application>
 
 </manifest>

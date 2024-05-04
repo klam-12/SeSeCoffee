@@ -12,20 +12,20 @@ import com.example.sesecoffee.MainActivity
 import com.example.sesecoffee.R
 import com.example.sesecoffee.adapters.MessageApdapter
 import com.example.sesecoffee.databinding.FragmentChatBinding
-import com.example.sesecoffee.model.FirebaseSingleton
 import com.example.sesecoffee.model.Message
+import com.example.sesecoffee.model.UserSingleton
 import com.example.sesecoffee.utils.Resource
 import com.example.sesecoffee.viewModel.MessageViewModel
 import kotlinx.coroutines.flow.collectLatest
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class ChatFragment : Fragment(R.layout.fragment_chat) {
     private var _binding : FragmentChatBinding?=null
-    private var fbSingleton = FirebaseSingleton.getInstance()
 
     private val binding get()= _binding!!
     lateinit var messageApdapter: MessageApdapter
     lateinit var messageViewModel: MessageViewModel
-    lateinit var messageList: MutableList<Message>
     override fun onCreateView(
 
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,38 +39,36 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
         super.onViewCreated(view, savedInstanceState)
         messageViewModel = (activity as MainActivity).messageViewModel
         setUpRecyclerView()
-//        lifecycleScope.launchWhenResumed {
-//            messageViewModel.fetchAllMessageAUser()
-//            messageViewModel.message.collectLatest {
-//                when(it){
-//                    is Resource.Loading -> {
-////                        showLoading()
-//                    }
-//                    is Resource.Success -> {
-//
-//                        messageApdapter.differ.submitList(it.data)
-////                        hideLoading()
-//                    }
-//                    is Resource.Error -> {
-////                        hideLoading()
-//                        Toast.makeText(requireContext(),it.message, Toast.LENGTH_SHORT).show()
-//                    }
-//                    else -> Unit
-//                }
-//            }
-//        }
+        lifecycleScope.launchWhenResumed {
+            messageViewModel.fetchAllMessageAUser(UserSingleton.instance?.id.toString(),messageApdapter)
+            messageViewModel.message.collectLatest {
+                when(it){
+                    is Resource.Loading -> {
+                    }
+                    is Resource.Success -> {
+                        messageApdapter.differ.submitList(it.data)
+                    }
+                    is Resource.Error -> {
+                        Toast.makeText(requireContext(),it.message, Toast.LENGTH_SHORT).show()
+                    }
+                    else -> Unit
+                }
+            }
+        }
 
         binding.layoutSend.setOnClickListener(){
             val mess=binding.inputMessage.text
-            var newMess= Message(mess.toString())
-            messageViewModel.addMessage(newMess)
-//            var test: List<Message> = listOf(newMess)
-//            messageApdapter.differ.submitList(test)
+            val currentDateTime = LocalDateTime.now()
+            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH:mm:ss")
+            val formattedDateTime = currentDateTime.format(formatter)
+            var newMess= Message(mess.toString(),formattedDateTime)
+            messageViewModel.addMessage(newMess, UserSingleton.instance?.id.toString())
+            messageApdapter.addFirst(newMess)
             binding.inputMessage.setText("")
         }
     }
     private fun setUpRecyclerView(){
-        messageApdapter = MessageApdapter()
+        messageApdapter = MessageApdapter(false)
 
         binding.chatRecyclerView.apply {
             setHasFixedSize(true)
@@ -82,7 +80,7 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
     override fun onResume() {
         super.onResume()
         lifecycleScope.launchWhenResumed {
-            messageViewModel.fetchAllMessageAUser()
+            messageViewModel.fetchAllMessageAUser(UserSingleton.instance?.id.toString(),messageApdapter)
             messageViewModel.message.collectLatest {
                 when(it){
                     is Resource.Loading -> {

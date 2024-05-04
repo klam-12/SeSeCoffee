@@ -1,6 +1,5 @@
 package com.example.sesecoffee
 
-import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -13,7 +12,6 @@ import android.widget.TextView
 import android.widget.Toast
 import com.example.sesecoffee.model.UserSingleton
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 
 class SignInActivity : AppCompatActivity() {
@@ -61,9 +59,10 @@ class SignInActivity : AppCompatActivity() {
                                     UserSingleton.instance?.fullName = userData?.get(key = "fullname").toString()
                                     UserSingleton.instance?.email = userData?.get(key = "email").toString()
                                     UserSingleton.instance?.address = userData?.get(key = "address").toString()
-                                    UserSingleton.instance?.phone = userData?.get(key = "phone").toString()
                                     UserSingleton.instance?.id = userId.toString()
                                     UserSingleton.instance?.isAdmin = Integer.parseInt(userData?.get(key = "isAdmin").toString())
+                                    UserSingleton.instance?.phone=userData?.get(key = "phone").toString()
+                                    UserSingleton.instance?.avatar=userData?.get(key = "avatar").toString()
                                     UserSingleton.instance?.redeemPoint = userData?.get(key = "redeemPoint").toString().toInt()
                                     //login vao man hinh admin or guess
                                     if(UserSingleton.instance?.isAdmin==1){
