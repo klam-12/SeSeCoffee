@@ -1,38 +1,20 @@
 package com.example.sesecoffee
 
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
-
 import android.os.Bundle
-import android.text.TextUtils
-import android.util.AttributeSet
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewModelScope
 import com.example.sesecoffee.databinding.ActivityAddProductBinding
-import com.example.sesecoffee.model.FirebaseSingleton
 import com.example.sesecoffee.model.Product
-import com.example.sesecoffee.model.UserSingleton
-import com.example.sesecoffee.utils.Constant.PRODUCT_COLLECTION
 import com.example.sesecoffee.utils.Resource
 import com.example.sesecoffee.viewModel.ProductsViewModel
 import com.google.firebase.Timestamp
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.firestore.CollectionReference
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.storage.StorageReference
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
-import java.security.AccessController.getContext
 import java.util.Date
 import java.util.UUID
 
@@ -89,7 +71,6 @@ class AddProductActivity : AppCompatActivity() {
                             )
                         }
                         binding.productImage.setImageURI(imageUri)
-
                     }
             }
 

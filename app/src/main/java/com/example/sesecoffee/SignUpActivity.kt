@@ -59,9 +59,8 @@ class SignUpActivity : AppCompatActivity() {
                             "email" to emailAddress.toString(),
                             "phone" to phone.text.toString(),
                             "redeemPoint" to 0,
-                            "isAdmin" to "0"
-
-
+                            "isAdmin" to "0",
+                            "avatar" to ""
                         )
                         if (user != null) {
                             db.collection("USER").document(user.uid)

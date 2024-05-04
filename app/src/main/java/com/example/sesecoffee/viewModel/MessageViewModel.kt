@@ -1,20 +1,23 @@
 package com.example.sesecoffee.viewModel
 
+import android.annotation.SuppressLint
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.sesecoffee.adapters.CustomerAdapter
+import com.example.sesecoffee.adapters.MessageApdapter
 import com.example.sesecoffee.model.Message
-import com.example.sesecoffee.model.UserSingleton
 import com.example.sesecoffee.utils.Resource
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 class MessageViewModel(app:Application):AndroidViewModel(app) {
     private val _message = MutableStateFlow<Resource<List<Message>>>(Resource.Unspecified())
@@ -29,52 +32,76 @@ class MessageViewModel(app:Application):AndroidViewModel(app) {
    private var messageList : MutableList<Message>? = null
 //    private val fbSingleton = FirebaseSingleton.getInstance()
     private lateinit var mDbRef: DatabaseReference
-    fun fetchAllMessageAUser()  {
-//        viewModelScope.launch { _message.emit(Resource.Loading()) }
-//
-//        fbSingleton.db.collection("message")
-//            .get()
-//            .addOnSuccessListener {
-//                    result ->
-//                messageList = result.toObjects(Message::class.java)
-//                viewModelScope.launch {
-//                    _message.emit(Resource.Success(messageList))
-//                }
-//                Log.i("hello","asdf")
-//
-//            }.addOnFailureListener() {
-//                Toast.makeText(
-//                    getApplication(),
-//                    "Errors happen when loading the database",
-//                    Toast.LENGTH_LONG
-//                ).show()
-//                viewModelScope.launch {
-//                    _message.emit(Resource.Error(it.message.toString()))
-//                }
-//
-//            }
-    }
-    fun addMessage(message: Message) {
+
+    fun addMessage(message: Message, userId :String) {
         mDbRef = FirebaseDatabase.getInstance("https://sese-coffee-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("chat")
 
         viewModelScope.launch { _message.emit(Resource.Loading()) }
-        val currentDateTime = LocalDateTime.now()
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH:mm:ss")
-        val formattedDateTime = currentDateTime.format(formatter)
-        mDbRef.child(UserSingleton.instance?.id.toString()).child(formattedDateTime.toString()).setValue(message)
+
+
+        mDbRef.child(userId).child(message.dateTime.toString()).setValue(message)
             .addOnSuccessListener {
-                viewModelScope.launch {
-                    _message.emit(Resource.Success(messageList))
-                    Log.i("dung","hehe")
-                }
+                    Log.i("dung","dung")
             }
             .addOnFailureListener() {
-                viewModelScope.launch {
-                    _message.emit(Resource.Error(it.message.toString()))
-                    Log.i("sai","hehe")
+                    Log.i("sai","sai")
+            }
+    }
+    fun fetchAllMessageAUser(userId: String,messageApdapter: MessageApdapter)  {
+        viewModelScope.launch { _message.emit(Resource.Loading()) }
+        mDbRef = FirebaseDatabase.getInstance("https://sese-coffee-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("chat")
+        val newDBRef = mDbRef.child(userId)
+        val messList = mutableListOf<Message>()
+        newDBRef.addValueEventListener(object: ValueEventListener{
+            @SuppressLint("NotifyDataSetChanged")
+            override fun onDataChange(snapshot: DataSnapshot) {
+                messList.clear()
+                for(postSnapshot in snapshot.children){
+                    val mess = postSnapshot.getValue(Message::class.java)
+                    messList.add(mess!!)
 
                 }
+                viewModelScope.launch {
+                    _message.emit(Resource.Success(messList))
+                }
+                messageApdapter.notifyDataSetChanged()
             }
 
+            override fun onCancelled(error: DatabaseError) {
+                Log.d("hsdf","sdjkfj")
+            }
+        })
+
+    }
+
+    fun fetchAMessageForEachUser(customerAdapter: CustomerAdapter){
+//        viewModelScope.launch { _message.emit(Resource.Loading()) }
+        val messList = mutableListOf<Message>()
+        mDbRef = FirebaseDatabase.getInstance("https://sese-coffee-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("chat")
+        mDbRef.addListenerForSingleValueEvent(object :ValueEventListener{
+            @SuppressLint("NotifyDataSetChanged")
+
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                for (userSnapshot in dataSnapshot.children) {
+//                    val userId = userSnapshot.key
+                    val messagesSnapshot = userSnapshot.children.iterator()
+                    if (messagesSnapshot.hasNext()) {
+                        val firstMessageSnapshot = messagesSnapshot.next()
+                        val firstMessageData = firstMessageSnapshot.getValue(Message::class.java)
+                        if (firstMessageData != null) {
+                            messList.add(firstMessageData)
+                        }
+                    }
+                }
+                viewModelScope.launch { _message.emit(Resource.Success(messList)) }
+                Log.i("zau","doc duoc data roi")
+                customerAdapter.notifyDataSetChanged()
+            }
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.i("zau","sai roi")
+
+                // Xử lý khi có lỗi xảy ra
+            }
+        })
     }
 }

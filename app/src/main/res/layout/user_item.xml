@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="userMessageItem"
+            type="com.example.sesecoffee.model.Message" />
+    </data>
+    <androidx.cardview.widget.CardView
+        android:id="@+id/customer_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="4dp"
+        android:layout_margin="8dp"
+        tools:layout_editor_absoluteX="123dp"
+        tools:layout_editor_absoluteY="16dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/userImg"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:src="@color/primary"
+            android:layout_marginLeft="16dp"
+            app:civ_border_color="#FF000000"
+            app:civ_border_width="0dp"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="234dp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/customer_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{userMessageItem.userName}"
+                android:textSize="18sp"
+                android:textStyle="bold"/>
+            <TextView
+                android:id="@+id/customer_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:gravity="start|top"
+                android:inputType="textMultiLine"
+                android:text="@{userMessageItem.message}"
+                android:textStyle="normal"
+                android:textSize="14sp"
+                android:textColor="@color/dark_grey" />
+        </LinearLayout>
+    </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+</layout>

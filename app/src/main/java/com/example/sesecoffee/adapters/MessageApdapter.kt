@@ -1,5 +1,6 @@
 package com.example.sesecoffee.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,15 +13,17 @@ import com.example.sesecoffee.model.Message
 
 private const val VIEW_TYPE_MY_MESSAGE = 10
 private const val VIEW_TYPE_OTHER_MESSAGE = 11
-class MessageApdapter()
+class MessageApdapter(isAdmin: Boolean)
     : RecyclerView.Adapter<MessageViewHolder>() {
-
-    fun loadMessages(messages: MutableList<Message>) {
+    private val flag: Boolean = isAdmin
+//    fun loadMessages(messages: MutableList<Message>) {
         //this.messList = messages
-    }
+//    }
 
     fun addFirst(message: Message) {
-        //messList.add(0, message)
+        val newList = differ.currentList.toMutableList()
+        newList.add(message)
+        differ.submitList(newList)
     }
 
 
@@ -45,20 +48,22 @@ class MessageApdapter()
     }
 
     override fun onBindViewHolder(holder: MessageViewHolder, position: Int) {
-        val message = differ.currentList.get(position)
+        val message = differ.currentList[position]
 
-        holder?.bind(message)
+        holder.bind(message)
 
 
     }
 
     inner class MyMessageViewHolder (view: View) : MessageViewHolder(view) {
         private var messageText: TextView = view.findViewById(R.id.MessageID)
+
         private var timeText: TextView = view.findViewById(R.id.MessageDateTime)
 
         override fun bind(message: Message) {
             messageText.text = message.message
-            timeText.text = message.dateTime.toString()
+            val time = message.dateTime?.substring(11,16)
+            timeText.text = time
         }
     }
 
@@ -68,15 +73,18 @@ class MessageApdapter()
 
         override fun bind(message: Message) {
             messageText.text = message.message
-            timeText.text = message.dateTime.toString()
+            val time = message.dateTime?.substring(11,16)
+            timeText.text = time
         }
     }
 
 
     override fun getItemViewType(position: Int): Int {
-        val message = differ.currentList.get(position)
-
-        return if(message.adminSend == false) {
+        val message = differ.currentList[position]
+        return if(message.adminSend == false && flag == false) {
+            VIEW_TYPE_MY_MESSAGE
+        }
+        else if (message.adminSend == true &&   flag == true){
             VIEW_TYPE_MY_MESSAGE
         }
         else {
