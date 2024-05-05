@@ -93,11 +93,8 @@ class AddRedeemActivity : AppCompatActivity() {
 
             submitBtn.setOnClickListener(){
                 addRedeem();
-                binding.apply {
-                    redeemInputPoint.setText("")
-                    redeemInputValid.setText("")
-                }
                 Toast.makeText(applicationContext,"Add successfully",Toast.LENGTH_SHORT).show()
+                finish()
             }
         }
     }
