@@ -49,11 +49,14 @@ class OrderViewModel(app: Application) : AndroidViewModel(
         viewModelScope.launch { _order.emit(Resource.Loading()) }
 
         fbSingleton.db.collection(Constant.ORDER_COLLECTION)
-            .orderBy("createAt", Query.Direction.DESCENDING)
+            .whereEqualTo("done",true)
             .get()
             .addOnSuccessListener {
                     result ->
                 ordersList = result.toObjects(Order::class.java)
+                if (ordersList != null){
+                    ordersList!!.sortByDescending { it.createAt }
+                }
                 viewModelScope.launch {
                     _order.emit(Resource.Success(ordersList))
                 }
@@ -75,6 +78,7 @@ class OrderViewModel(app: Application) : AndroidViewModel(
         viewModelScope.launch { _personalOrder.emit(Resource.Loading()) }
 
         fbSingleton.db.collection(Constant.ORDER_COLLECTION)
+            .whereEqualTo("done",true)
             .whereEqualTo("userId",userId)
             .get()
             .addOnSuccessListener {
