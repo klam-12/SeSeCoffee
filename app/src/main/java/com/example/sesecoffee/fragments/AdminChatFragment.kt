@@ -22,8 +22,6 @@ class AdminChatFragment : Fragment() {
     lateinit var customerAdapter:CustomerAdapter
     lateinit var messageViewModel: MessageViewModel
 
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

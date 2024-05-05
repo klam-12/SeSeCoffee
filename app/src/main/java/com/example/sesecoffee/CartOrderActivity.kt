@@ -45,6 +45,18 @@ class CartOrderActivity : AppCompatActivity() {
         orderAdapter = OrderAdapter(this)
         orderItemsViewModel = OrderItemsViewModel(application)
 
+        val cartEmptyImage = findViewById<ImageView>(R.id.cartEmptyImage)
+        val cartEmpty = findViewById<TextView>(R.id.cartEmpty)
+        val cartEmptyBtn = findViewById<Button>(R.id.cartEmptyBtn)
+        cartEmptyBtn.setOnClickListener {
+            val intent = Intent(
+                applicationContext,
+                MainActivity::class.java
+            )
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            startActivity(intent)
+        }
+
         val price = findViewById<TextView>(R.id.cartPrice)
         val orderRecyclerView = findViewById<RecyclerView>(R.id.cartItemList) as RecyclerView
         orderRecyclerView.setHasFixedSize(true)
@@ -74,13 +86,15 @@ class CartOrderActivity : AppCompatActivity() {
 
                                     if(it.data!!.isEmpty()){
                                         isEmpty = true
-                                        findViewById<TextView>(R.id.cartEmpty).visibility = View.VISIBLE
-                                        findViewById<ImageView>(R.id.cartEmptyImage).visibility = View.VISIBLE
+                                        cartEmpty.visibility = View.VISIBLE
+                                        cartEmptyImage.visibility = View.VISIBLE
+                                        cartEmptyBtn.visibility = View.VISIBLE
                                     }
                                     else{
                                         isEmpty = false
-                                        findViewById<TextView>(R.id.cartEmpty).visibility = View.GONE
-                                        findViewById<ImageView>(R.id.cartEmptyImage).visibility = View.GONE
+                                        cartEmpty.visibility = View.GONE
+                                        cartEmptyImage.visibility = View.GONE
+                                        cartEmptyBtn.visibility = View.GONE
                                     }
 
                                     val orderItems = it.data.toMutableList()
@@ -102,6 +116,9 @@ class CartOrderActivity : AppCompatActivity() {
                                             if(orderItems.isEmpty()){
                                                 isEmpty = true
                                                 price.text = "$0.00"
+                                                cartEmpty.visibility = View.VISIBLE
+                                                cartEmptyImage.visibility = View.VISIBLE
+                                                cartEmptyBtn.visibility = View.VISIBLE
                                             }
                                             else{
                                                 price.setText(format.formatToDollars(calculateTotalPrice(orderItems)))
@@ -155,8 +172,9 @@ class CartOrderActivity : AppCompatActivity() {
                     }
                 }
                 else{
-                    findViewById<TextView>(R.id.cartEmpty).visibility = View.VISIBLE
-                    findViewById<ImageView>(R.id.cartEmptyImage).visibility = View.VISIBLE
+                    cartEmpty.visibility = View.VISIBLE
+                    cartEmptyImage.visibility = View.VISIBLE
+                    cartEmptyBtn.visibility = View.VISIBLE
                     price.setText("$0.00")
                 }
 

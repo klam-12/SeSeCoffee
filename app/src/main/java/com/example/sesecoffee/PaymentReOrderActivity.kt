@@ -1,6 +1,5 @@
 package com.example.sesecoffee
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -12,9 +11,12 @@ import android.widget.RadioButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import com.example.sesecoffee.adapters.PaymentItemsAdapter
 import com.example.sesecoffee.enums.PaymentMethod
 import com.example.sesecoffee.model.Order
 import com.example.sesecoffee.model.OrderItem
@@ -22,6 +24,7 @@ import com.example.sesecoffee.model.UserSingleton
 import com.example.sesecoffee.utils.Constant.ORDER_COLLECTION
 import com.example.sesecoffee.utils.Constant.ORDER_ITEM_COLLECTION
 import com.example.sesecoffee.utils.Format
+import com.example.sesecoffee.viewModel.OrderItemsViewModel
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.CollectionReference
@@ -30,6 +33,7 @@ import com.stripe.android.PaymentConfiguration
 import com.stripe.android.paymentsheet.PaymentSheet
 import com.stripe.android.paymentsheet.PaymentSheetResult
 import org.json.JSONObject
+import java.util.UUID
 
 
 class PaymentReOrderActivity : AppCompatActivity() {
@@ -37,8 +41,10 @@ class PaymentReOrderActivity : AppCompatActivity() {
     private lateinit var userName : String
     private lateinit var userPhone : String
     private lateinit var userAddress : String
+    private lateinit var orderItemList: List<OrderItem>
+    private lateinit var orderAdapter: PaymentItemsAdapter
     private var totalPrice = 0
-
+    private lateinit var orderItemViewModel: OrderItemsViewModel
     var format: Format = Format()
 
     var db = FirebaseFirestore.getInstance()
@@ -56,18 +62,21 @@ class PaymentReOrderActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_payment)
+        orderItemViewModel = OrderItemsViewModel(application)
 
         val intent = intent
         val orderId = intent.getStringExtra("orderId")
         PaymentConfiguration.init(this, PUBLISH_KEY)
         paymentSheet = PaymentSheet(this, ::onPaymentSheetResult)
+        orderAdapter = PaymentItemsAdapter(this)
 
-        val avatar = findViewById<ShapeableImageView>(R.id.paymentAvatar)
         val name = findViewById<TextView>(R.id.paymentName)
         val phone = findViewById<TextView>(R.id.paymentPhone)
         val address = findViewById<TextView>(R.id.paymentAddress)
         val price = findViewById<TextView>(R.id.paymentPrice)
-        val amount = findViewById<TextView>(R.id.paymentAmount)
+        val paymentRecyclerView = findViewById<RecyclerView>(R.id.paymentItems)
+        paymentRecyclerView.setHasFixedSize(true)
+        paymentRecyclerView.layoutManager = LinearLayoutManager(this)
         setUpRadioButton()
 
         val query = collectionOrders.whereEqualTo("id", orderId)
@@ -82,10 +91,15 @@ class PaymentReOrderActivity : AppCompatActivity() {
 
                     collectionOrders.document(userOrderId).collection(ORDER_ITEM_COLLECTION).get()
                         .addOnSuccessListener { result ->
-                            val orderItemList = result.toObjects(OrderItem::class.java)
+
+                            orderItemList = result.toObjects(OrderItem::class.java)
+
+
+                            orderAdapter.differ.submitList(orderItemList)
+                            paymentRecyclerView.adapter = orderAdapter
+
                             totalPrice = calculateTotalPrice(orderItemList)
                             price.setText(format.formatToDollars(totalPrice))
-                            amount.setText(format.formatToDollars(totalPrice))
                         }.addOnFailureListener { exception ->
                             println("Error getting documents: $exception")
                         }
@@ -107,8 +121,10 @@ class PaymentReOrderActivity : AppCompatActivity() {
 
                         when(resources.getResourceEntryName(paymentMethodChoice)) {
                             "cash" -> {
+
+                                val id = UUID.randomUUID().toString()
                                 val paidOrder = Order(
-                                    userOrderId,
+                                    id,
                                     totalPrice,
                                     Timestamp.now(),
                                     userAddress,
@@ -126,12 +142,19 @@ class PaymentReOrderActivity : AppCompatActivity() {
                                 UserSingleton.instance?.redeemPoint = redeemPoint
 
 
-                                collectionOrders.document(userOrderId).set(paidOrder)
+
+                                collectionOrders.document(id).set(paidOrder)
+                                var newOrder = copyOrderItemList(orderItemList)
+
+                                for (orderItem in newOrder) {
+                                        orderItemViewModel.addOrderItem(orderItem, id)
+                                }
+
                                 val intent = Intent(
                                     applicationContext,
                                     SuccessOrderActivity::class.java
                                 )
-                                intent.putExtra("orderId", userOrderId)
+                                intent.putExtra("orderId", id)
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                                 startActivity(intent)
                             }
@@ -149,6 +172,28 @@ class PaymentReOrderActivity : AppCompatActivity() {
         findViewById<ImageButton>(R.id.paymentBackBtn).setOnClickListener {
             finish()
         }
+    }
+
+    fun copyOrderItemList(originalList: List<OrderItem>): List<OrderItem> {
+        val copiedList = mutableListOf<OrderItem>()
+        for (item in originalList) {
+            val newId = UUID.randomUUID().toString() // Tạo một ID mới cho mỗi mục đơn hàng sao chép
+            val copiedItem = OrderItem(
+                newId,
+                item.productId,
+                item.productName,
+                item.productImage,
+                item.description,
+                item.hotCold,
+                item.size,
+                item.milk,
+                item.quantity,
+                item.price,
+                false
+            )
+            copiedList.add(copiedItem)
+        }
+        return copiedList
     }
 
     private fun showLoading() {
@@ -193,6 +238,7 @@ class PaymentReOrderActivity : AppCompatActivity() {
         }
         return price
     }
+
 
     private fun createCustomerId(){
         val request = object : StringRequest(
@@ -337,8 +383,9 @@ class PaymentReOrderActivity : AppCompatActivity() {
     }
 
     private fun handleSuccessfulPayment() {
+        val id = UUID.randomUUID().toString()
         val paidOrder = Order(
-            userOrderId,
+            id,
             totalPrice,
             Timestamp.now(),
             userAddress,
@@ -355,12 +402,18 @@ class PaymentReOrderActivity : AppCompatActivity() {
         collectionUser.document(UserSingleton.instance?.id.toString()).update("redeemPoint", redeemPoint)
         UserSingleton.instance?.redeemPoint = redeemPoint
 
-        collectionOrders.document(userOrderId).set(paidOrder)
+        collectionOrders.document(id).set(paidOrder)
+        var newOrder = copyOrderItemList(orderItemList)
+
+        for (orderItem in newOrder) {
+            orderItemViewModel.addOrderItem(orderItem, id)
+        }
+
         val intent = Intent(
             applicationContext,
             SuccessOrderActivity::class.java
         )
-        intent.putExtra("orderId", userOrderId)
+        intent.putExtra("orderId", id)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         startActivity(intent)
     }

@@ -7,6 +7,7 @@
     android:background="@color/white"
     tools:context=".RedeemPaymentActivity">
 
+
     <ImageButton
         android:id="@+id/redeemPaymentBackBtn"
         android:layout_width="wrap_content"
@@ -19,7 +20,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/backbtn" />
-
 
     <TextView
         android:id="@+id/redeemPaymentLabel"
@@ -34,18 +34,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
     <LinearLayout
         android:id="@+id/linearLayout"
-        android:layout_width="220dp"
+        android:layout_width="240dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="52dp"
-        android:layout_marginEnd="56dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="44dp"
         android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.842"
         app:layout_constraintStart_toEndOf="@+id/redeemPaymentAvatar"
-        app:layout_constraintTop_toBottomOf="@+id/redeemPaymentLabel">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.202">
 
         <TextView
             android:id="@+id/redeemPaymentName"
@@ -73,17 +75,17 @@
             tools:layout_editor_absoluteY="213dp" />
     </LinearLayout>
 
-    <com.google.android.material.imageview.ShapeableImageView
+    <ImageView
         android:id="@+id/redeemPaymentAvatar"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="52dp"
-        android:scaleType="centerCrop"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:src="@drawable/order_info"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.126"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/redeemPaymentLabel"
-        app:shapeAppearanceOverlay="@style/circle"
-        app:srcCompat="@drawable/order" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.241" />
 
     <TextView
         android:id="@+id/redeemPaymentPrice"
@@ -130,20 +132,35 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.855" />
 
+    <TextView
+        android:id="@+id/textView15"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="56dp"
+        android:text="Your redeem item"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.155"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/redeemPaymentAvatar"
+        app:layout_constraintVertical_bias="0.011" />
+
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
-        android:layout_width="190dp"
-        android:layout_height="222dp"
+        android:layout_width="197dp"
+        android:layout_height="226dp"
         android:layout_margin="10dp"
         android:background="@color/white"
         app:cardCornerRadius="10dp"
         app:cardElevation="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/redeemPaymentTotalPrice"
+        app:layout_constraintBottom_toTopOf="@+id/redeemPaymentProceedBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/redeemPaymentLabel"
-        app:layout_constraintVertical_bias="0.62">
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        app:layout_constraintVertical_bias="0.5">\
 
         <LinearLayout
             android:layout_width="match_parent"

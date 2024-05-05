@@ -45,7 +45,8 @@ class RewardFragment : Fragment(R.layout.fragment_reward) {
         rewardItemViewModel = (activity as MainActivity).rewardViewModel
 
 
-
+        val redeemPoint = UserSingleton.instance?.redeemPoint
+        binding.textView5.text = redeemPoint.toString()
 
         setUpRecyclerViewOrders()
         lifecycleScope.launchWhenStarted {
@@ -56,9 +57,14 @@ class RewardFragment : Fragment(R.layout.fragment_reward) {
                     }
 
                     is Resource.Success -> {
-                        val redeemPoint = UserSingleton.instance?.redeemPoint
-                        binding.textView5.text = redeemPoint.toString()
-                        rewardAdapter.differ.submitList(it.data)
+                        hideLoading()
+                        if(it.data?.isEmpty() == true) {
+                            Toast.makeText(
+                                context,
+                                "No rewards yet",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        } else  rewardAdapter.differ.submitList(it.data)
                         hideLoading()
                     }
 

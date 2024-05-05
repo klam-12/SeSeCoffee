@@ -82,11 +82,11 @@ class OrderItemsViewModel(app: Application) : AndroidViewModel(
         val subCollectionRef = collectionOrders.document(orderId).collection("OrderItem")
         subCollectionRef.document(orderItem.id!!).set(orderItem)
             .addOnSuccessListener {
-                Toast.makeText(
-                    getApplication(),
-                    "Add to cart successfully",
-                    Toast.LENGTH_LONG
-                ).show()
+//                Toast.makeText(
+//                    getApplication(),
+//                    "",
+//                    Toast.LENGTH_LONG
+//                ).show()
             }.addOnFailureListener() {
                 Toast.makeText(
                     getApplication(),

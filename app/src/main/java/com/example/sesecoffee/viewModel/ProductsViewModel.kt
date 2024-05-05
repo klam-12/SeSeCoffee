@@ -107,6 +107,8 @@ class ProductsViewModel(app: Application) : AndroidViewModel(
                 .addOnSuccessListener() {
                     filePath.downloadUrl
                         .addOnSuccessListener {
+                            var imageUriString : String = it.toString()
+                            product.imageUrl = imageUriString
                             collectionReference.document(product.id!!).set(product)
                                 .addOnSuccessListener {
 

@@ -28,7 +28,7 @@ class AdminOrderAdapter
         fun bind(order: Order,username: String){
             itemBinding.orderItem = order
             itemBinding.timeOrder.text = order.createAt?.let { format.timestampToFormattedString(it) }
-            itemBinding.totalBill.text = "BYN: " + order.total?.let { format.formatNumber(it) }
+            itemBinding.totalBill.text = order.total?.let { format.formatToDollars(it) }
             itemBinding.username.text = username
 
             if(order.delivered){

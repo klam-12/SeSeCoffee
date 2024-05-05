@@ -43,7 +43,6 @@ class RedeemPaymentActivity : AppCompatActivity() {
         val productId = intent.getStringExtra("productId")
         val orderId = intent.getStringExtra("orderId")
 
-        val avatar = findViewById<ShapeableImageView>(R.id.redeemPaymentAvatar)
         val name = findViewById<TextView>(R.id.redeemPaymentName)
         val phone = findViewById<TextView>(R.id.redeemPaymentPhone)
         val address = findViewById<TextView>(R.id.redeemPaymentAddress)
@@ -124,5 +123,15 @@ class RedeemPaymentActivity : AppCompatActivity() {
             collectionOrders.document(orderId!!).delete()
             finish()
         }
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        collectionOrders.document(intent.getStringExtra("orderId")!!).delete()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        collectionOrders.document(intent.getStringExtra("orderId")!!).delete()
     }
 }
