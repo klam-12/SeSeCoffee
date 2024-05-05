@@ -74,8 +74,10 @@ class AdminHomeFragment : Fragment(R.layout.fragment_admin_home) {
         }
 
         binding.signOutBtn.setOnClickListener(){
+
             val alertDialog: AlertDialog? = this.let {
                 val builder = AlertDialog.Builder(requireContext())
+
                 builder.apply {
                     setPositiveButton("Yes", DialogInterface.OnClickListener { dialog, id ->
                         val intent = Intent(requireContext(), SignInActivity::class.java)
@@ -87,6 +89,7 @@ class AdminHomeFragment : Fragment(R.layout.fragment_admin_home) {
                     // Set other dialog properties
                     setIcon(R.drawable.ic_warning_yellow)
                     setTitle("Do you want to exit?")
+
                 }
                 // Create the AlertDialog
                 builder.create()
@@ -95,6 +98,7 @@ class AdminHomeFragment : Fragment(R.layout.fragment_admin_home) {
             if (alertDialog != null) {
                 alertDialog!!.show()
             }
+
         }
 
     }
