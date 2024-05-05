@@ -5,6 +5,7 @@ import android.graphics.Canvas
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
@@ -41,7 +42,13 @@ class RedeemActivity : AppCompatActivity() {
                 when(it){
                     is Resource.Success -> {
 //                        price.setText("${calculateTotalPrice(it.data!!)}VNĐ")
-                        print(it.data)
+                        if(it.data?.isEmpty() == true) {
+                            Toast.makeText(
+                                applicationContext,
+                                "No redeem yet",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        } else
                         redeemAdapter.differ.submitList(it.data)
                     }
                     else -> {

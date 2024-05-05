@@ -43,9 +43,16 @@ class RedeemItemViewModel(app:Application) : AndroidViewModel(app) {
             .get()
             .addOnSuccessListener {
                     result ->
-                redeemsList = result.toObjects(Redeem::class.java)
-                viewModelScope.launch {
-                    _redeems.emit(Resource.Success(redeemsList))
+
+                if (result.documents.isEmpty()) {
+                    viewModelScope.launch {
+                        _redeems.emit(Resource.Success(redeemsList))
+                    }
+                } else {
+                    redeemsList = result.toObjects(Redeem::class.java)
+                    viewModelScope.launch {
+                        _redeems.emit(Resource.Success(redeemsList))
+                    }
                 }
             }
             .addOnFailureListener{

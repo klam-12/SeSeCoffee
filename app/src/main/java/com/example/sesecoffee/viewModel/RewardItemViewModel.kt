@@ -41,6 +41,11 @@ class RewardItemViewModel ( app: Application) : AndroidViewModel(
             .addOnSuccessListener { querySnapshot ->
                 val ordersList = mutableListOf<Order>()
                 val itemsList = mutableListOf<OrderItem>()
+                if (querySnapshot.documents.isEmpty()) {
+                    viewModelScope.launch {
+                        _orderItems.emit(Resource.Success(itemsList))
+                    }
+                } else {
 
 
                 for (document in querySnapshot.documents) {
@@ -73,7 +78,7 @@ class RewardItemViewModel ( app: Application) : AndroidViewModel(
                                 }
                             }
                         }
-
+                }
                 }
             }
             .addOnFailureListener { exception ->
