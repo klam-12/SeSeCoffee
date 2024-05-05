@@ -21,7 +21,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp"
+        android:padding="4dp"
         android:gravity="center"
         android:orientation="horizontal">
 
@@ -49,7 +49,7 @@
             <TextView
                 android:id="@+id/customer_message"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:ems="10"
                 android:gravity="start|top"
                 android:inputType="textMultiLine"

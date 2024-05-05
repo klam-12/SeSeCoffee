@@ -11,6 +11,8 @@ import com.bumptech.glide.Glide
 import com.example.sesecoffee.databinding.ActivityProfileBinding
 import com.example.sesecoffee.model.FirebaseSingleton
 import com.example.sesecoffee.model.UserSingleton
+import com.example.sesecoffee.utils.Constant
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.storage.StorageReference
 
 class ProfileActivity : AppCompatActivity() {
@@ -27,7 +29,7 @@ class ProfileActivity : AppCompatActivity() {
         binding.profileInputEmail.setText(UserSingleton.instance?.email )
         binding.profileInputPhone.setText(UserSingleton.instance?.phone )
         binding.profileInputAddress.setText(UserSingleton.instance?.address )
-        if (UserSingleton.instance?.avatar !=""){
+        if (UserSingleton.instance?.avatar != ""){
             Glide.with(applicationContext).load(UserSingleton.instance?.avatar)
                 .into(binding.avatar)
         }
@@ -43,7 +45,6 @@ class ProfileActivity : AppCompatActivity() {
             UserSingleton.instance?.address = binding.profileInputAddress.text.toString()
 
             saveInfoToDB()
-
         }
         binding.profileSignOutBtn.setOnClickListener(){
             val intent = Intent(this, SignInActivity::class.java)
@@ -110,14 +111,13 @@ class ProfileActivity : AppCompatActivity() {
                 startActivity(intent)
             }
             .addOnFailureListener { exception ->
-                Log.i("R","sai roi")
                 println("Error updating fields: $exception")
             }
     }
 
     private fun saveImageAva() {
         if (imageUri != null) {
-            val documentRef = fbSingleton.db.collection("USER").document(UserSingleton.instance?.id.toString())
+            val documentRef = fbSingleton.db.collection(Constant.USER_COLLECTION).document(UserSingleton.instance?.id.toString())
 
             val filePath: StorageReference = fbSingleton.storageReference.child("user_img")
                 .child(UserSingleton.instance?.fullName + "_" + UserSingleton.instance?.id)
@@ -127,10 +127,10 @@ class ProfileActivity : AppCompatActivity() {
                     .addOnSuccessListener() { it ->
                         it.storage.downloadUrl.addOnSuccessListener { uri ->
                             imgUrl = uri.toString()
-
-                            documentRef.update("avatar",imgUrl).addOnSuccessListener {
-                                Log.i("urrlll", imgUrl.toString())
-                            }
+                            documentRef.update("avatar",imgUrl)
+                                .addOnSuccessListener {
+                                    UserSingleton.instance?.avatar = imgUrl
+                                }
                         }
                     }
             }

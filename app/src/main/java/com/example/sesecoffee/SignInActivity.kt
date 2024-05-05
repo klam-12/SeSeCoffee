@@ -11,6 +11,7 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import com.example.sesecoffee.model.UserSingleton
+import com.example.sesecoffee.utils.Constant
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -44,6 +45,20 @@ class SignInActivity : AppCompatActivity() {
         nextStep.setOnClickListener(){
             val email=emailLogin.text
             val pass=passwordLogin.text
+            if(email.toString() == "" || pass.toString() == ""){
+                val layout: ViewGroup = layoutInflater.inflate(R.layout.customtoast_layout,
+                    null) as ViewGroup
+                val text: TextView = layout.findViewById(R.id.toast_text)
+                text.text = "Email and password are required "
+                with (Toast(applicationContext)) {
+                    setGravity(Gravity.CENTER_VERTICAL, 0, 900)
+                    duration = Toast.LENGTH_LONG
+                    view = layout
+                    show()
+                }
+                return@setOnClickListener
+            }
+
             auth.signInWithEmailAndPassword(email.toString(), pass.toString())
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
@@ -51,7 +66,7 @@ class SignInActivity : AppCompatActivity() {
                         val user = auth.currentUser
                         val userId= user?.uid.toString()
 
-                        db.collection("USER").document(userId)
+                        db.collection(Constant.USER_COLLECTION).document(userId)
                             .get()
                             .addOnSuccessListener { document->
                                 if (document != null && document.exists()) {

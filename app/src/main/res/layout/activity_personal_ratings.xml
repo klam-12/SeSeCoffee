@@ -14,7 +14,7 @@
         android:layout_marginStart="76dp"
         android:text="Your Ratings"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:textSize="20sp"
+        android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/backBtnPRating"
         app:layout_constraintStart_toEndOf="@+id/backBtnPRating"
