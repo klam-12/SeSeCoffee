@@ -170,7 +170,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="10dp"
                         android:background="@null"
-                        android:button="@drawable/sl_hot"
+                        android:button="@drawable/hot"
                         app:useMaterialThemeColors="false"
                         tools:layout_editor_absoluteX="157dp"
                         tools:layout_editor_absoluteY="426dp" />
@@ -180,7 +180,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@null"
-                        android:button="@drawable/sl_cold"
+                        android:button="@drawable/cold"
                         app:useMaterialThemeColors="false"
                         tools:layout_editor_absoluteX="157dp"
                         tools:layout_editor_absoluteY="426dp" />
@@ -231,7 +231,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@null"
-                        android:button="@drawable/sl_small_size"
+                        android:button="@drawable/small"
                         app:useMaterialThemeColors="false"
                         android:paddingBottom="15dp"
                         tools:layout_editor_absoluteX="157dp"
@@ -244,7 +244,7 @@
                         android:layout_marginRight="5dp"
                         android:background="@null"
                         app:useMaterialThemeColors="false"
-                        android:button="@drawable/sl_medium_size"
+                        android:button="@drawable/medium"
                         android:paddingBottom="6dp"
                         tools:layout_editor_absoluteX="157dp"
                         tools:layout_editor_absoluteY="426dp" />
@@ -255,7 +255,7 @@
                         android:layout_height="wrap_content"
                         android:background="@null"
                         app:useMaterialThemeColors="false"
-                        android:button="@drawable/sl_large_size"
+                        android:button="@drawable/large"
                         tools:layout_editor_absoluteX="157dp"
                         tools:layout_editor_absoluteY="426dp" />
                 </RadioGroup>
@@ -308,7 +308,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="4dp"
                         android:background="@null"
-                        android:button="@drawable/sl_no_milk"
+                        android:button="@drawable/cancel"
                         app:useMaterialThemeColors="false"
                         android:paddingBottom="20dp"
                         tools:layout_editor_absoluteX="157dp"
@@ -320,7 +320,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="6dp"
                         android:background="@null"
-                        android:button="@drawable/sl_small_milk"
+                        android:button="@drawable/milk_small"
                         app:useMaterialThemeColors="false"
                         android:paddingBottom="9dp"
                         tools:layout_editor_absoluteX="157dp"
@@ -331,7 +331,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@null"
-                        android:button="@drawable/sl_large_milk"
+                        android:button="@drawable/milk_large"
                         app:useMaterialThemeColors="false"
                         tools:layout_editor_absoluteX="157dp"
                         tools:layout_editor_absoluteY="426dp" />

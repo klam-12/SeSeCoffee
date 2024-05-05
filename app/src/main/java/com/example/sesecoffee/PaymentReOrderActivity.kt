@@ -12,9 +12,12 @@ import android.widget.RadioButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import com.example.sesecoffee.adapters.PaymentItemsAdapter
 import com.example.sesecoffee.enums.PaymentMethod
 import com.example.sesecoffee.model.Order
 import com.example.sesecoffee.model.OrderItem
@@ -37,6 +40,7 @@ class PaymentReOrderActivity : AppCompatActivity() {
     private lateinit var userName : String
     private lateinit var userPhone : String
     private lateinit var userAddress : String
+    private lateinit var orderAdapter: PaymentItemsAdapter
     private var totalPrice = 0
 
     var format: Format = Format()
@@ -61,13 +65,15 @@ class PaymentReOrderActivity : AppCompatActivity() {
         val orderId = intent.getStringExtra("orderId")
         PaymentConfiguration.init(this, PUBLISH_KEY)
         paymentSheet = PaymentSheet(this, ::onPaymentSheetResult)
+        orderAdapter = PaymentItemsAdapter(this)
 
-        val avatar = findViewById<ShapeableImageView>(R.id.paymentAvatar)
         val name = findViewById<TextView>(R.id.paymentName)
         val phone = findViewById<TextView>(R.id.paymentPhone)
         val address = findViewById<TextView>(R.id.paymentAddress)
         val price = findViewById<TextView>(R.id.paymentPrice)
-        val amount = findViewById<TextView>(R.id.paymentAmount)
+        val paymentRecyclerView = findViewById<RecyclerView>(R.id.paymentItems)
+        paymentRecyclerView.setHasFixedSize(true)
+        paymentRecyclerView.layoutManager = LinearLayoutManager(this)
         setUpRadioButton()
 
         val query = collectionOrders.whereEqualTo("id", orderId)
@@ -83,9 +89,12 @@ class PaymentReOrderActivity : AppCompatActivity() {
                     collectionOrders.document(userOrderId).collection(ORDER_ITEM_COLLECTION).get()
                         .addOnSuccessListener { result ->
                             val orderItemList = result.toObjects(OrderItem::class.java)
+
+                            orderAdapter.differ.submitList(orderItemList)
+                            paymentRecyclerView.adapter = orderAdapter
+
                             totalPrice = calculateTotalPrice(orderItemList)
                             price.setText(format.formatToDollars(totalPrice))
-                            amount.setText(format.formatToDollars(totalPrice))
                         }.addOnFailureListener { exception ->
                             println("Error getting documents: $exception")
                         }
@@ -124,7 +133,6 @@ class PaymentReOrderActivity : AppCompatActivity() {
                                 val redeemPoint = UserSingleton.instance?.redeemPoint!! + totalPrice
                                 collectionUser.document(UserSingleton.instance?.id.toString()).update("redeemPoint", redeemPoint)
                                 UserSingleton.instance?.redeemPoint = redeemPoint
-
 
                                 collectionOrders.document(userOrderId).set(paidOrder)
                                 val intent = Intent(
