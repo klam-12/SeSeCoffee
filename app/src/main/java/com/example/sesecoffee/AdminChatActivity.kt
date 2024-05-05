@@ -46,14 +46,24 @@ class AdminChatActivity : AppCompatActivity() {
         }
         binding?.apply {
             layoutSend.setOnClickListener(){
+
                 val mess= binding!!.inputMessage.text
-                val currentDateTime = LocalDateTime.now()
-                val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH:mm:ss")
-                val formattedDateTime = currentDateTime.format(formatter)
-                var newMess= Message(mess.toString(),true,userName.toString(),formattedDateTime,userId,avatar)
-                messageViewModel.addMessage(newMess,userId.toString())
-                messageApdapter.addFirst(newMess)
-                binding!!.inputMessage.setText("")
+                if (mess.toString() != null) {
+                    val currentDateTime = LocalDateTime.now()
+                    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH:mm:ss")
+                    val formattedDateTime = currentDateTime.format(formatter)
+                    var newMess = Message(
+                        mess.toString(),
+                        true,
+                        userName.toString(),
+                        formattedDateTime,
+                        userId,
+                        avatar
+                    )
+                    messageViewModel.addMessage(newMess, userId.toString())
+                    messageApdapter.addFirst(newMess)
+                    binding!!.inputMessage.setText("")
+                }
             }
         }
     }

@@ -84,13 +84,18 @@ class MessageViewModel(app:Application):AndroidViewModel(app) {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 for (userSnapshot in dataSnapshot.children) {
 //                    val userId = userSnapshot.key
-                    val messagesSnapshot = userSnapshot.children.iterator()
-                    if (messagesSnapshot.hasNext()) {
-                        val firstMessageSnapshot = messagesSnapshot.next()
-                        val firstMessageData = firstMessageSnapshot.getValue(Message::class.java)
-                        if (firstMessageData != null) {
-                            messList.add(firstMessageData)
-                        }
+                    val messageSnapshot=userSnapshot.children.lastOrNull()
+                    val lastMessageData = messageSnapshot?.getValue(Message::class.java)
+//                    val messagesSnapshot = userSnapshot.children.iterator()
+//                    if (messagesSnapshot.hasNext()) {
+//                        val firstMessageSnapshot = messagesSnapshot.next()
+//                        val firstMessageData = firstMessageSnapshot.getValue(Message::class.java)
+//                        if (firstMessageData != null) {
+//                            messList.add(firstMessageData)
+//                        }
+//                    }
+                    if (lastMessageData != null) {
+                        messList.add(lastMessageData)
                     }
                 }
                 viewModelScope.launch { _message.emit(Resource.Success(messList)) }

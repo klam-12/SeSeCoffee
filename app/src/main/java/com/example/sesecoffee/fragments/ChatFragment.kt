@@ -58,13 +58,16 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
 
         binding.layoutSend.setOnClickListener(){
             val mess=binding.inputMessage.text
-            val currentDateTime = LocalDateTime.now()
-            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH:mm:ss")
-            val formattedDateTime = currentDateTime.format(formatter)
-            var newMess= Message(mess.toString(),formattedDateTime, UserSingleton.instance?.avatar)
-            messageViewModel.addMessage(newMess, UserSingleton.instance?.id.toString())
-            messageApdapter.addFirst(newMess)
-            binding.inputMessage.setText("")
+            if (mess.toString() != "") {
+                val currentDateTime = LocalDateTime.now()
+                val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH:mm:ss")
+                val formattedDateTime = currentDateTime.format(formatter)
+                var newMess =
+                    Message(mess.toString(), formattedDateTime, UserSingleton.instance?.avatar)
+                messageViewModel.addMessage(newMess, UserSingleton.instance?.id.toString())
+                messageApdapter.addFirst(newMess)
+                binding.inputMessage.setText("")
+            }
         }
     }
     private fun setUpRecyclerView(){

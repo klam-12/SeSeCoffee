@@ -1,15 +1,11 @@
 package com.example.sesecoffee
 
-import android.app.Activity
 import android.app.DatePickerDialog
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
-import android.widget.Button
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import com.example.sesecoffee.databinding.ActivityAddRedeemBinding
@@ -20,7 +16,6 @@ import com.example.sesecoffee.viewModel.ProductsViewModel
 import com.example.sesecoffee.viewModel.RedeemItemViewModel
 import com.google.firebase.Timestamp
 import kotlinx.coroutines.flow.collectLatest
-import java.lang.NumberFormatException
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -92,17 +87,18 @@ class AddRedeemActivity : AppCompatActivity() {
             }
 
             submitBtn.setOnClickListener(){
-                addRedeem();
-                binding.apply {
-                    redeemInputPoint.setText("")
-                    redeemInputValid.setText("")
+                var isSuccess= addRedeem();
+                if (isSuccess == true) {
+                    Toast.makeText(applicationContext, "Add successfully", Toast.LENGTH_SHORT)
+                        .show()
+                    finish()
                 }
-                Toast.makeText(applicationContext,"Add successfully",Toast.LENGTH_SHORT).show()
+
             }
         }
     }
 
-    private fun addRedeem(){
+    private fun addRedeem():Boolean{
         val id = UUID.randomUUID().toString();
         val productName = binding.spinnerProduct.selectedItem.toString()
         val productId = listProducts?.find { it.name == productName}?.id
@@ -111,7 +107,7 @@ class AddRedeemActivity : AppCompatActivity() {
         val validTimeString = binding.redeemInputValid.text.toString()
         if(productId == null){
             Toast.makeText(this,"productId not found",Toast.LENGTH_SHORT).show()
-            return
+            return false
         }
 
         val pointInt : Int
@@ -119,15 +115,15 @@ class AddRedeemActivity : AppCompatActivity() {
             pointInt = Integer.parseInt(point)
         }catch (e: NumberFormatException){
             binding.redeemInputPoint.error = "Invalid point"
-            return
+            return false
         }
         if(pointInt <= 0){
             binding.redeemInputPoint.error = "Point must be a positive integer"
-            return
+            return false
         }
         if(validTimeString == ""){
             binding.redeemInputValid.error = "Invalid date"
-            return
+            return false
         }
 
         val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.US)
@@ -141,10 +137,11 @@ class AddRedeemActivity : AppCompatActivity() {
             validTime = date?.let { Timestamp(it) }!!
         } catch (e: Exception) {
             binding.redeemInputValid.error = "Invalid date"
-            return
+            return false
         }
         val redeem = Redeem(id,productId,productName,productImg,pointInt,validTime)
         redeemItemViewModel.addRedeem(redeem);
+        return true
     }
 
     private fun setUpSpinnerProduct(listPro : List<Product>){
