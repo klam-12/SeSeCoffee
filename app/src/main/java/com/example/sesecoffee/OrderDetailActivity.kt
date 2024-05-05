@@ -93,7 +93,11 @@ class OrderDetailActivity : AppCompatActivity() {
                         val paymentMethod = documentSnapshot.getString("paymentMethod")
                         binding.paymentMethod.text = paymentMethod
                         val total = documentSnapshot.getLong("total")?.toString()?.toInt()
-                        binding.price.text = total?.let { format.formatToDollars(it) }
+                        if (paymentMethod != "Redeem") {
+                            binding.price.text = total?.let { format.formatToDollars(it) }
+                        } else {
+                            binding.price.text = "${total.toString()} pts"
+                        }
 
 
                         // Retrieve order items from subcollection

@@ -127,9 +127,6 @@ class PaymentActivity : AppCompatActivity() {
                                     0F,
                                     ""
                                 )
-                                val redeemPoint = UserSingleton.instance?.redeemPoint!! + totalPrice
-                                collectionUser.document(UserSingleton.instance?.id.toString()).update("redeemPoint", redeemPoint)
-                                UserSingleton.instance?.redeemPoint = redeemPoint
 
 
                                 collectionOrders.document(userOrderId).set(paidOrder)
@@ -357,9 +354,6 @@ class PaymentActivity : AppCompatActivity() {
             0F,
             ""
         )
-        val redeemPoint = UserSingleton.instance?.redeemPoint!! + totalPrice
-        collectionUser.document(UserSingleton.instance?.id.toString()).update("redeemPoint", redeemPoint)
-        UserSingleton.instance?.redeemPoint = redeemPoint
 
         collectionOrders.document(userOrderId).set(paidOrder)
         val intent = Intent(

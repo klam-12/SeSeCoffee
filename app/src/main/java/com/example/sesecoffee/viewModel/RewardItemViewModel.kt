@@ -36,7 +36,7 @@ class RewardItemViewModel ( app: Application) : AndroidViewModel(
         fbSingleton.db.collection(Constant.ORDER_COLLECTION)
             .whereEqualTo("userId", UserSingleton.instance?.id.toString())
             .whereEqualTo("done", true)
-            .whereEqualTo("delivered", false)
+            .whereEqualTo("delivered", true)
             .get()
             .addOnSuccessListener { querySnapshot ->
                 val ordersList = mutableListOf<Order>()
@@ -56,6 +56,14 @@ class RewardItemViewModel ( app: Application) : AndroidViewModel(
                         .addOnSuccessListener { subCollectionSnapshot ->
                             for (subDocument in subCollectionSnapshot.documents) {
                                 val item = subDocument.toObject(OrderItem::class.java)
+                                if (order?.paymentMethod == "Redeem"){
+                                    item?.productImage =  "- ${order.total?.toString()} pts"
+                                }
+                                else if (order != null) {
+                                    if (item != null) {
+                                        item?.productImage =  "+ ${item.price!!} pts"
+                                    }
+                                }
 
                                 item?.productId = order?.createAt?.let {
                                     timestampToFormattedString(
@@ -73,6 +81,7 @@ class RewardItemViewModel ( app: Application) : AndroidViewModel(
                             }
 
                             if (ordersList.size == querySnapshot.documents.size) {
+                                itemsList.sortByDescending { it.productId }
                                 viewModelScope.launch {
                                     _orderItems.emit(Resource.Success(itemsList))
                                 }

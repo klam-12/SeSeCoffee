@@ -101,10 +101,6 @@ class RedeemPaymentActivity : AppCompatActivity() {
                         )
                         collectionOrders.document(orderId!!).set(paidOrder)
 
-                        val redeemPoint = UserSingleton.instance?.redeemPoint!! - redeem.point!!
-                        collectionUser.document(UserSingleton.instance?.id.toString()).update("redeemPoint", redeemPoint)
-                        UserSingleton.instance?.redeemPoint = redeemPoint
-
                         val intent = Intent(
                             applicationContext,
                             SuccessOrderActivity::class.java
@@ -123,15 +119,5 @@ class RedeemPaymentActivity : AppCompatActivity() {
             collectionOrders.document(orderId!!).delete()
             finish()
         }
-    }
-
-    override fun onBackPressed() {
-        super.onBackPressed()
-        collectionOrders.document(intent.getStringExtra("orderId")!!).delete()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        collectionOrders.document(intent.getStringExtra("orderId")!!).delete()
     }
 }

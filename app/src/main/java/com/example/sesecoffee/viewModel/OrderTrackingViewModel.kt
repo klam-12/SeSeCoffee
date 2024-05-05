@@ -70,7 +70,7 @@ class OrderTrackingViewModel (app: Application) : AndroidViewModel(
                                     order?.userId = item?.quantity.toString()
                                     // You might need to adjust this logic based on your requirements
                                     order?.comment = subCollectionSnapshot.documents.size.toString()
-                                    if (order?.paymentMethod != "redeem") {
+                                    if (order?.paymentMethod != "Redeem") {
                                         order?.paymentMethod = order?.total?.let { format.formatToDollars(it) }
                                     } else {
                                         order?.paymentMethod = "${order?.total.toString()} pts"
@@ -148,7 +148,7 @@ class OrderTrackingViewModel (app: Application) : AndroidViewModel(
                                     order?.phoneNumber = item?.productName
                                     order?.userId = item?.quantity.toString()
                                     order?.comment = subCollectionSnapshot.documents.size.toString()
-                                    if (order?.paymentMethod != "redeem"){
+                                    if (order?.paymentMethod != "Redeem"){
                                         order?.paymentMethod = order?.total?.let { format.formatToDollars(it) }
                                     }
                                     else order?.paymentMethod = "${order?.total.toString()} pts"
