@@ -2,29 +2,24 @@ package com.example.sesecoffee
 
 import android.content.Intent
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.viewModelScope
 import com.bumptech.glide.Glide
 import com.example.sesecoffee.databinding.ActivityProfileBinding
 import com.example.sesecoffee.model.FirebaseSingleton
 import com.example.sesecoffee.model.UserSingleton
-import com.example.sesecoffee.utils.Resource
+import com.example.sesecoffee.utils.Constant
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.storage.StorageReference
-import com.stripe.model.PaymentMethod.Boleto
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
-import java.util.UUID
 
 class ProfileActivity : AppCompatActivity() {
 
     lateinit var binding : ActivityProfileBinding
     private var imageUri: Uri? = null
-
+    private var imgUrl:String ?= null
     private  val fbSingleton = FirebaseSingleton.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,8 +29,11 @@ class ProfileActivity : AppCompatActivity() {
         binding.profileInputEmail.setText(UserSingleton.instance?.email )
         binding.profileInputPhone.setText(UserSingleton.instance?.phone )
         binding.profileInputAddress.setText(UserSingleton.instance?.address )
-//        Glide.with(applicationContext).load("https://firebasestorage.googleapis.com/v0/b/sese-coffee.appspot.com/o/product_images%2FMocha_3fc87f1e-5d84-4813-ba83-7edcc220e442?alt=media&token=4aafc2d5-ff81-4bfb-9be7-b0375b9971eb")
-//            .into(binding.avatar)
+        if (UserSingleton.instance?.avatar != ""){
+            Glide.with(applicationContext).load(UserSingleton.instance?.avatar)
+                .into(binding.avatar)
+        }
+
 
         binding.profileSaveBtn.setOnClickListener() {
             if(!validateInput()){
@@ -47,7 +45,6 @@ class ProfileActivity : AppCompatActivity() {
             UserSingleton.instance?.address = binding.profileInputAddress.text.toString()
 
             saveInfoToDB()
-
         }
         binding.profileSignOutBtn.setOnClickListener(){
             val intent = Intent(this, SignInActivity::class.java)
@@ -100,13 +97,13 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private fun saveInfoToDB(){
-//        saveImageAva()
+        saveImageAva()
         val documentRef = fbSingleton.db.collection("USER").document(UserSingleton.instance?.id.toString())
         val updates = hashMapOf(
             "fullname" to binding.profileInputFullName.text.toString(),
             "email" to binding.profileInputEmail.text.toString(),
             "phone" to binding.profileInputPhone.text.toString(),
-            "address" to binding.profileInputAddress.text.toString()
+            "address" to binding.profileInputAddress.text.toString(),
         )
         documentRef.update(updates as Map<String, Any>)
             .addOnSuccessListener {
@@ -114,18 +111,29 @@ class ProfileActivity : AppCompatActivity() {
                 startActivity(intent)
             }
             .addOnFailureListener { exception ->
-                // Handle any errors that occur
-                Log.i("R","sai roi")
                 println("Error updating fields: $exception")
             }
     }
 
-    private fun saveImageAva() : String {
-        var imageUrl = ""
-        if(imageUri != null){
-            //save to db
-        }
+    private fun saveImageAva() {
+        if (imageUri != null) {
+            val documentRef = fbSingleton.db.collection(Constant.USER_COLLECTION).document(UserSingleton.instance?.id.toString())
 
-        return imageUrl
+            val filePath: StorageReference = fbSingleton.storageReference.child("user_img")
+                .child(UserSingleton.instance?.fullName + "_" + UserSingleton.instance?.id)
+            //save to db
+            if (imageUri != null) {
+                filePath.putFile(imageUri!!)
+                    .addOnSuccessListener() { it ->
+                        it.storage.downloadUrl.addOnSuccessListener { uri ->
+                            imgUrl = uri.toString()
+                            documentRef.update("avatar",imgUrl)
+                                .addOnSuccessListener {
+                                    UserSingleton.instance?.avatar = imgUrl
+                                }
+                        }
+                    }
+            }
+        }
     }
 }

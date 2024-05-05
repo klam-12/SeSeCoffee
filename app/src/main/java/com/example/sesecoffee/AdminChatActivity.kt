@@ -24,6 +24,7 @@ class AdminChatActivity : AppCompatActivity() {
         val intent = intent
         val userId = intent.getStringExtra("userId")
         val userName= intent.getStringExtra("userName")
+        val avatar= intent.getStringExtra("avatar")
         binding = DataBindingUtil.setContentView(this,R.layout.fragment_chat)
         messageViewModel = MessageViewModel(application)
         setUpRecyclerView()
@@ -49,7 +50,7 @@ class AdminChatActivity : AppCompatActivity() {
                 val currentDateTime = LocalDateTime.now()
                 val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH:mm:ss")
                 val formattedDateTime = currentDateTime.format(formatter)
-                var newMess= Message(mess.toString(),true,userName.toString(),formattedDateTime,userId)
+                var newMess= Message(mess.toString(),true,userName.toString(),formattedDateTime,userId,avatar)
                 messageViewModel.addMessage(newMess,userId.toString())
                 messageApdapter.addFirst(newMess)
                 binding!!.inputMessage.setText("")

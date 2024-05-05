@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.sesecoffee.AdminChatActivity
 import com.example.sesecoffee.R
 import com.example.sesecoffee.databinding.UserItemBinding
@@ -21,8 +22,14 @@ class CustomerAdapter(val context: Context) : RecyclerView.Adapter<CustomerAdapt
         fun bind(message: Message){
             Log.i("message",message.toString())
             binding.userMessageItem = message
-//            binding.customerName.text = message.userName
-            binding.userImg.setImageResource(R.drawable.default_ava)
+            if (message.avatar != ""){
+                Glide.with(context).load(message.avatar)
+                    .into(binding.userImg)
+            }
+            else{
+                binding.userImg.setImageResource(R.drawable.default_ava)
+
+            }
         }
     }
     private val diffCallback = object : DiffUtil.ItemCallback<Message>(){
@@ -57,6 +64,7 @@ class CustomerAdapter(val context: Context) : RecyclerView.Adapter<CustomerAdapt
             val intent = Intent(context, AdminChatActivity::class.java)
             intent.putExtra("userId", message.userId)
             intent.putExtra("userName",message.userName)
+            intent.putExtra("avatar",message.avatar)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             context.startActivity(intent)
         }

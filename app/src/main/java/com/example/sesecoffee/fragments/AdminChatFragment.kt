@@ -22,8 +22,6 @@ class AdminChatFragment : Fragment() {
     lateinit var customerAdapter:CustomerAdapter
     lateinit var messageViewModel: MessageViewModel
 
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -31,6 +29,7 @@ class AdminChatFragment : Fragment() {
         _binding = FragmentAdminChatBinding.inflate(inflater,container,false)
         return binding.root
     }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
