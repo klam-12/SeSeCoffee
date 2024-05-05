@@ -32,6 +32,10 @@ import kotlinx.coroutines.flow.collectLatest
 class AdminEditOrderActivity : AppCompatActivity() {
     private var orderId: String? = null
     private var position: Int?=null
+    private var userId : String = ""
+    private var total : Int = 0
+    private var payment: String= ""
+
     lateinit var binding: ActivityAdminEditOrderBinding
     lateinit var orderViewModel: OrderViewModel
     lateinit var orderItemsViewModel: OrderItemsViewModel
@@ -82,7 +86,7 @@ class AdminEditOrderActivity : AppCompatActivity() {
                 val builder = AlertDialog.Builder(this)
                 builder.apply {
                     setPositiveButton("Yes", DialogInterface.OnClickListener { dialog, id ->
-                        orderViewModel.approveOrder(orderId,position!!)
+                        orderViewModel.approveOrder(orderId,position!!,userId,total,payment)
                     })
                     setNegativeButton("No", DialogInterface.OnClickListener { dialog, id ->
 
@@ -126,8 +130,8 @@ class AdminEditOrderActivity : AppCompatActivity() {
                             Glide.with(this).load(R.drawable.order_pending).into(binding.imageView)
                         }
                         var fullName = "Not found"
-                        val userId = documentSnapshot.getString("userId").toString()
-                        collectionUser.document(userId)
+                        userId = documentSnapshot.getString("userId").toString()
+                        collectionUser.document(userId!!)
                             .get()
                             .addOnSuccessListener { userDocument ->
                                 if (userDocument.exists()) {
@@ -147,10 +151,15 @@ class AdminEditOrderActivity : AppCompatActivity() {
                         binding.address.text = "Address: $address"
                         val phoneNumber = documentSnapshot.getString("phoneNumber")
                         binding.phoneNumber.text = "Phone Number: $phoneNumber"
-                        val paymentMethod = documentSnapshot.getString("paymentMethod")
-                        binding.paymentMethod.text = paymentMethod
-                        val total = documentSnapshot.getLong("total")?.toString()?.toInt()
+                        payment = documentSnapshot.getString("paymentMethod")!!
+                        binding.paymentMethod.text = payment
+                        total = documentSnapshot.getLong("total")!!.toInt()
                         binding.totalBill.text = total?.let { format.formatToDollars(it) }
+                        if (payment != "Redeem") {
+                            binding.totalBill.text = total?.let { format.formatToDollars(it) }
+                        } else {
+                            binding.totalBill.text = "${total} pts"
+                        }
 
 
                         // Retrieve order items from subcollection

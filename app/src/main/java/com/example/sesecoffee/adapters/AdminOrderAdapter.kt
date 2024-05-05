@@ -28,8 +28,13 @@ class AdminOrderAdapter
         fun bind(order: Order,username: String){
             itemBinding.orderItem = order
             itemBinding.timeOrder.text = order.createAt?.let { format.timestampToFormattedString(it) }
-            itemBinding.totalBill.text = order.total?.let { format.formatToDollars(it) }
             itemBinding.username.text = username
+
+            if (order.paymentMethod != "Redeem") {
+                itemBinding.totalBill.text = order.total?.let { format.formatToDollars(it) }
+            } else {
+                itemBinding.totalBill.text = "${order.total.toString()} pts"
+            }
 
             if(order.delivered){
                 itemBinding.chipStatus.text = "Done"

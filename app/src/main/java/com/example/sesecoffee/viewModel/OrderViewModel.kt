@@ -122,17 +122,20 @@ class OrderViewModel(app: Application) : AndroidViewModel(
             }
     }
 
-    fun approveOrder(id: String?,position: Int){
+    fun approveOrder(id: String?,position: Int,userId: String,total: Int,payment: String){
         viewModelScope.launch {
             _updateOrder.emit(Resource.Loading())
             _order.emit(Resource.Loading())
         }
+        val collectionUser = fbSingleton.db.collection(Constant.USER_COLLECTION)
+        Log.i("KL",ordersList?.get(position).toString())
 
         val documentRef = fbSingleton.db.collection(Constant.ORDER_COLLECTION).document(id!!)
         fbSingleton.db.runTransaction { transaction ->
             val snapshot = transaction.get(documentRef)
             if(snapshot.exists()){
                 transaction.update(documentRef, "delivered", true)
+                editRedeemForUser(userId,total,payment)
             }
         } .addOnSuccessListener {
 
@@ -147,8 +150,38 @@ class OrderViewModel(app: Application) : AndroidViewModel(
                 _order.emit(Resource.Error(it.message.toString()))
             }
         }
-
     }
+
+    private fun editRedeemForUser(userId: String, total: Int,payment:String) {
+        fbSingleton.db.collection(Constant.USER_COLLECTION).document(userId)
+            .get()
+            .addOnSuccessListener { document ->
+                val oldRedeemPoint = document.getLong("redeemPoint")?.toInt() ?: 0
+                var redeemPoint = 0;
+                if(payment == "Redeem"){
+                    redeemPoint = oldRedeemPoint.toInt() - total
+                } else{
+                    redeemPoint = oldRedeemPoint.toInt() + total
+                }
+                UserSingleton.instance?.redeemPoint = redeemPoint
+
+                // Update the redeemPoint in the database after the value has been retrieved and updated
+                fbSingleton.db.collection(Constant.USER_COLLECTION).document(userId)
+                    .update("redeemPoint", redeemPoint)
+                    .addOnSuccessListener {
+
+                    }
+                    .addOnFailureListener { e ->
+                        Log.e("Err", "Error updating redeemPoint: $e")
+                    }
+            }
+            .addOnFailureListener { e ->
+                // Handle any errors that may occur while fetching the document
+                // You may want to add logging or further handling here
+                Log.e("Err", "Error fetching document: $e")
+            }
+    }
+
 
     fun findOrderById(id: String, callback: (Order?) -> Unit) {
         fbSingleton.db.collection(Constant.ORDER_COLLECTION).document(id)
