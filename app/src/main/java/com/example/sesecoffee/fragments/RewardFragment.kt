@@ -50,6 +50,7 @@ class RewardFragment : Fragment(R.layout.fragment_reward) {
 
         setUpRecyclerViewOrders()
         lifecycleScope.launchWhenStarted {
+            rewardItemViewModel.fetchAllOrders()
             rewardItemViewModel.orders.collectLatest {
                 when(it) {
                     is Resource.Loading -> {

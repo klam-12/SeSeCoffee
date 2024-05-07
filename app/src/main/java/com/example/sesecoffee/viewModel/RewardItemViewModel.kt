@@ -28,7 +28,7 @@ class RewardItemViewModel ( app: Application) : AndroidViewModel(
         fetchAllOrders()
     }
 
-    private fun fetchAllOrders() {
+    public fun fetchAllOrders() {
         viewModelScope.launch {
             _orderItems.emit(Resource.Loading())
         }
@@ -108,7 +108,4 @@ class RewardItemViewModel ( app: Application) : AndroidViewModel(
     }
 
 
-    fun fetchAProduct(proName: String){
-
-    }
 }

@@ -137,9 +137,6 @@ class PaymentReOrderActivity : AppCompatActivity() {
                                     0F,
                                     ""
                                 )
-                                val redeemPoint = UserSingleton.instance?.redeemPoint!! + totalPrice
-                                collectionUser.document(UserSingleton.instance?.id.toString()).update("redeemPoint", redeemPoint)
-                                UserSingleton.instance?.redeemPoint = redeemPoint
 
 
 
@@ -398,9 +395,7 @@ class PaymentReOrderActivity : AppCompatActivity() {
             0F,
             ""
         )
-        val redeemPoint = UserSingleton.instance?.redeemPoint!! + totalPrice
-        collectionUser.document(UserSingleton.instance?.id.toString()).update("redeemPoint", redeemPoint)
-        UserSingleton.instance?.redeemPoint = redeemPoint
+
 
         collectionOrders.document(id).set(paidOrder)
         var newOrder = copyOrderItemList(orderItemList)
