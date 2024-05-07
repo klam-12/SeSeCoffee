@@ -43,12 +43,10 @@ class RewardFragment : Fragment(R.layout.fragment_reward) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         rewardItemViewModel = (activity as MainActivity).rewardViewModel
-
-
-        val redeemPoint = UserSingleton.instance?.redeemPoint
-        binding.textView5.text = redeemPoint.toString()
+        rewardItemViewModel.fetchAllOrders()
 
         setUpRecyclerViewOrders()
+
         lifecycleScope.launchWhenStarted {
             rewardItemViewModel.fetchAllOrders()
             rewardItemViewModel.orders.collectLatest {
@@ -58,6 +56,8 @@ class RewardFragment : Fragment(R.layout.fragment_reward) {
                     }
 
                     is Resource.Success -> {
+                        val redeemPoint = UserSingleton.instance?.redeemPoint
+                        binding.textView5.text = redeemPoint.toString()
                         hideLoading()
                         if(it.data?.isEmpty() == true) {
                             Toast.makeText(

@@ -1,9 +1,13 @@
 package com.example.sesecoffee.viewModel
 
 import android.app.Application
+import android.content.Intent
+import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.sesecoffee.AdminMainActivity
+import com.example.sesecoffee.MainActivity
 import com.example.sesecoffee.model.FirebaseSingleton
 import com.example.sesecoffee.model.Order
 import com.example.sesecoffee.model.OrderItem
@@ -24,13 +28,24 @@ class RewardItemViewModel ( app: Application) : AndroidViewModel(
     val orders : StateFlow<Resource<List<OrderItem>>> = _orderItems
     private val fbSingleton = FirebaseSingleton.getInstance()
 
-    init {
-        fetchAllOrders()
-    }
+//    init {
+//        fetchAllOrders()
+//    }
 
-    public fun fetchAllOrders() {
+     fun fetchAllOrders() {
         viewModelScope.launch {
             _orderItems.emit(Resource.Loading())
+        }
+
+        UserSingleton.instance?.id?.let {
+            fbSingleton.db.collection(Constant.USER_COLLECTION).document(it)
+                .get()
+                .addOnSuccessListener { document ->
+                    UserSingleton.instance?.redeemPoint = document.getLong("redeemPoint")?.toInt()
+                }
+                .addOnFailureListener { exception ->
+                    println("Error getting user document: $exception")
+                }
         }
 
         fbSingleton.db.collection(Constant.ORDER_COLLECTION)
